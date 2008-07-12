@@ -1,1 +1,13 @@
-= Krai Framework Changelog =
+= Krai Framework Changelog Version 1.0b1 =
+
+commit 165733e3f10df36b5f9e6fd9155084fb3a6c127d
+Author: Greg McWhirter <greg@hallofkvasir.org>
+Date:   Sat Jul 12 15:46:53 2008 -0400
+
+    Adding the equivalent codebase as KvFramework 2.0b7 would have been.
+
+commit 1d0b2b36397a68706771fe6abe2df73c34863fd9
+Author: Greg McWhirter <greg@hallofkvasir.org>
+Date:   Fri Jul 11 14:29:54 2008 -0400
+
+    Initial commit
