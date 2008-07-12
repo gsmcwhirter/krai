@@ -1,0 +1,93 @@
+<div id="body">
+
+<div class="content_box">
+  <div class="cb_header"><span class="text">User Preferences</span></div>
+  <div class="cb_subheader"><span class="text">Please use the following form to update your account preferences.</span></div>
+  <div class="cb_content">
+    <div class="cb_content_actual">
+      <form method="post" action="<?php echo self::$ROUTER->UrlFor('user','edit') ?>">
+      <fieldset>
+      <table>
+        <tbody>
+          <tr>
+            <td class="action" colspan="2"><span style="color: #800000;">*</span> indicates required fields.</td>
+          </tr>
+          <tr>
+            <td class="label">Username</td>
+            <td class="field"><?php echo $this->_parent->USER->username ?></td>
+          </tr>
+          <tr>
+            <td class="label">Password</td>
+            <td class="field"><a href="<?php echo self::$ROUTER->UrlFor("user","changepass") ?>">change</a></td>
+          </tr>
+          <?php if(array_key_exists("displayname", $this->_errorfields))
+          { ?>
+          <tr>
+            <td class="action" colspan="2"><span style="color: #800000">Display name <?php echo $this->_errorfields["displayname"] ?></span></td>
+          </tr>
+          <?php } ?>
+          <tr>
+            <td class="label"><label for="displayname">Display name<span style="color: #800000;">*</span></label></td>
+            <td class="field"><input type="text" name="displayname" id="displayname" class="txtbox" value="<?php echo array_key_exists("displayname",self::$POST) ? self::$POST["displayname"] : $this->_parent->USER->displayname ?>" /></td>
+          </tr>
+          <?php if(array_key_exists("email", $this->_errorfields))
+          { ?>
+          <tr>
+            <td class="action" colspan="2"><span style="color: #800000">E-mail address <?php echo $this->_errorfields["email"] ?></span></td>
+          </tr>
+          <?php } ?>
+          <tr>
+            <td class="label"><label for="email">E-mail<span style="color: #800000;">*</span></label></td>
+            <td class="field"><input type="text" name="email" id="email" class="txtbox" value="<?php echo array_key_exists("email",self::$POST) ? self::$POST["email"] : $this->_parent->USER->email ?>" /></td>
+          </tr>
+          <?php if($this->_parent->USER->new_email != ""){ ?>
+          <tr>
+            <td class="label">E-mail Pending</td>
+            <td class="field"><?php echo $this->_parent->USER->new_email ?> (<span style="color:#800000;">To save other preferences before confirming this, make sure to replace this into the e-mail box.</span>)</td>
+          </tr>
+          <?php } ?>
+          <tr>
+            <td class="action" colspan="2"><?php echo ($this->_parent->USER->password == "") ? "<span style=\"color: #800000;\">OpenID is required as you have not set a password.</span>" : "&nbsp;" ?></td>
+          </tr>
+          <?php if(array_key_exists("directory_list", $this->_errorfields))
+          { ?>
+          <tr>
+            <td class="action" colspan="2"><span style="color: #800000">User Directory <?php echo $this->_errorfields["directory_list"] ?></span></td>
+          </tr>
+          <?php } ?>
+          <tr>
+            <td class="label"><label for="directory_list">User Directory<span style="color: #800000;">*</span></label></td>
+            <td class="field">
+              <select name="directory_list" id="directory_list" class="selectbox single">
+                <option value="yes" <?php echo (array_key_exists("directory_list", self::$POST) && in_array(self::$POST["directory_list"], array("yes","no"))) ? ((self::$POST["directory_list"] == "yes") ? "selected='selected'" : "") : (($this->_parent->USER->directory_list == "yes") ? "selected='selected'" : "") ?>>Please List Me</option>
+                <option value="no" <?php echo (array_key_exists("directory_list", self::$POST) && in_array(self::$POST["directory_list"], array("yes","no"))) ? ((self::$POST["directory_list"] == "no") ? "selected='selected'" : "") : (($this->_parent->USER->directory_list == "no") ? "selected='selected'" : "") ?>>Don't List Me</option>
+              </select>
+            </td>
+          </tr>
+          <?php if(array_key_exists("display_email", $this->_errorfields))
+          { ?>
+          <tr>
+            <td class="action" colspan="2"><span style="color: #800000">E-mail Display <?php echo $this->_errorfields["display_email"] ?></span></td>
+          </tr>
+          <?php } ?>
+          <tr>
+            <td class="label"><label for="directory_list">E-Mail Display<span style="color: #800000;">*</span></label></td>
+            <td class="field">
+              <select name="display_email" id="display_email" class="selectbox single">
+                <option value="yes" <?php echo (array_key_exists("display_email", self::$POST) && in_array(self::$POST["display_email"], array("yes","no"))) ? ((self::$POST["display_email"] == "yes") ? "selected='selected'" : "") : (($this->_parent->USER->display_email == "yes") ? "selected='selected'" : "") ?>>Display my e-mail</option>
+                <option value="no" <?php echo (array_key_exists("display_email", self::$POST) && in_array(self::$POST["display_email"], array("yes","no"))) ? ((self::$POST["display_email"] == "no") ? "selected='selected'" : "") : (($this->_parent->USER->display_email == "no") ? "selected='selected'" : "") ?>>Hide my e-mail</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" class="action"><input type="submit" value="save" class="submit" /></td>
+          </tr>
+        </tbody>
+      </table>
+      </fieldset>
+      </form>
+    </div>
+  </div>
+</div>
+
+</div>

@@ -1,0 +1,574 @@
+@CHARSET "UTF-8";
+
+/*
+Copyright (c) 2007, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+version: 2.2.2
+*/
+body {font:13px arial,helvetica,clean,sans-serif;*font-size:small;*font:x-small;}table {font-size:inherit;font:100%;}select, input, textarea {font:99% arial,helvetica,clean,sans-serif;}pre, code {font:115% monospace;*font-size:100%;}body * {line-height:1.22em;}
+/*Font Size Guide
+
+  Px    Pct
+  ---------
+  10    77
+  11    85
+  12    93
+  13    100
+  14    108
+  15    116
+  16    123.1
+  17    131
+  18    138.5
+  19    146.5
+  20    153.9
+  21    161.6
+  22    167
+  23    174
+  24    182
+  25    189
+  26    197
+
+*/
+
+/*****************************************\
+ General Definitions
+\*****************************************/
+html, body
+{
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  color: #000;
+  background-color: #888;
+}
+
+pre, code
+{
+  font-size: 100%;
+}
+
+.print_only
+{
+  display: none;
+}
+
+img
+{
+  border: 0;
+  vertical-align: middle;
+}
+
+a
+{
+  outline: none;
+  color: #000;
+  text-decoration: none;
+  font-weight: normal;
+  border-bottom: 1px dotted #000;
+  font-size: 93%;
+}
+
+a:hover
+{
+  border-bottom: 1px dotted #800;
+}
+
+.smalltext
+{
+  font-size: 85%;
+}
+
+/*****************************************\
+ The biggest div
+\*****************************************/
+
+#everything
+{
+  background-color: #fff;
+  border-top: 1px solid #000;
+  border-bottom: 1px solid #000;
+  margin: 5px auto;
+  padding: 0;
+}
+
+/*****************************************\
+ The header div
+\*****************************************/
+
+#header
+{
+  height: 30Px;
+  text-align: left;
+  margin: 0 auto;
+  background-color: #fff;
+  padding: 3px 1px;
+}
+
+/*****************************************\
+ Content
+\*****************************************/
+
+#content
+{
+  font-size: 112%;
+  margin: 0 auto;
+  background-color: #fff;
+  overflow: auto;
+  width: 98%;
+  padding: 3px 1px;
+}
+
+
+/*****************************************\
+ The footer
+\*****************************************/
+
+#footer
+{
+  text-align: center;
+  padding: .25em 0;
+  background-color: #fff;
+  margin: 0 auto;
+  font-size: 85%;
+}
+
+#footer .left
+{
+  float: left;
+  padding-left: 1em;
+}
+
+#footer .right
+{
+  float: right;
+  padding-right: 1em;
+}
+
+/*****************************************\
+ The subfooter
+\*****************************************/
+
+#subfooter
+{
+  text-align: center;
+  padding: 1px;
+  margin: 10Px auto;
+  font-size: 93%;
+  color: #000;
+}
+
+#subfooter a,
+a.subfooter
+{
+  color: #000;
+  margin: 0 5px;
+}
+
+#subfooter a:hover,
+a.subfooter:hover
+{
+  border-bottom: 1px dotted #800;
+}
+
+/*****************************************\
+ Top divs - where the logo, login and date are
+\*****************************************/
+
+#logo
+{
+  float: left;
+  height: 100%;
+  vertical-align: middle;
+  margin-left: .25em;
+  width: 250Px;
+}
+
+#topright
+{
+  float:right;
+  height: 30Px;
+  padding: 4px 0;
+  padding-right: 1em;
+  font-size: 77%;
+  line-height: 12px;
+  vertical-align: bottom;
+}
+
+/*****************************************\
+ The menu bar
+\*****************************************/
+
+#menuBar{
+  float: left;
+  padding: 0 20Px;
+  border-top: 0px;
+}
+
+#menuBarContents{
+  overflow:hidden !important;
+  margin: 0px auto;
+  padding: 4px 0px;
+}
+
+#menuBarContentsInner div
+{
+  font-size: 93%;
+  vertical-align: middle;
+  float: left;
+  margin: .2em;
+  color:#000;
+}
+
+#menuBar a
+{
+  padding: 0px 10px;
+  border: 1px dashed #888;
+  border-top: 1px dashed #fff;
+  border-right: 1px dashed #fff;
+  text-decoration:none;
+  color: inherit;
+  font-weight: bold;
+}
+
+#menuBar a:hover
+{
+  color: #800;
+  border: 1px dashed #800;
+}
+
+div.menu_button
+{
+  font-size: 93%;
+  vertical-align: middle;
+  float: left;
+  margin: .2em;
+  color:#000;
+}
+
+div.menu_button a
+{
+  padding: 0px 10px;
+  border: 1px dashed #888;
+  border-top: 1px dashed #fff;
+  border-right: 1px dashed #fff;
+  text-decoration:none;
+  padding: 0;
+  color: inherit;
+  font-weight: bold;
+}
+
+div.menu_button a:hover
+{
+  color: #800;
+  border: 1px dashed #800;
+}
+
+/*****************************************\
+ Content messages
+\*****************************************/
+
+#messages
+{
+  margin: .5em auto;
+  width: 75%;
+  border: 1px dashed #888;
+  padding: .5em .25em;
+}
+
+#messages .notice
+{
+  color: #4b1;
+}
+
+#messages .error
+{
+  color: #f11;
+}
+
+/*****************************************\
+ Content innermenu
+\*****************************************/
+#innermenu
+{
+  float: left;
+  clear: left;
+  width: 20%;
+
+}
+
+.innermenu
+{
+  width: 100%;
+  border-left: 1px dashed #888;
+  border-bottom: 1px dashed #888;
+  margin-top: 1em;
+}
+
+.innermenu a,
+.innermenu span
+{
+  border: none;
+  font-size: 93%;
+  display: block;
+  width: 100%;
+}
+
+.innermenu a span
+{
+  padding: 0px;
+  display: block;
+  width: 92%;
+  padding: 0 4%;
+}
+
+.innermenu a
+{
+  border: 0;
+  text-decoration:none;
+  padding: 0;
+  color:#000;
+}
+
+.innermenu a:hover
+{
+  text-decoration: none;
+  background-color: #800;
+  color: #ccc;
+}
+
+.innermenu span.header
+{
+  font-weight: bold;
+  padding: 0 2%;
+  width: 96%;
+  border-bottom: 1px dashed #888;
+  color: #800;
+}
+
+/*****************************************\
+ Content body
+\*****************************************/
+
+#body
+{
+  width: 96%;
+  margin: 0 auto;
+  padding-bottom: 1em;
+  overflow: auto;
+}
+
+.content_box
+{
+  width: 100%;
+  margin-top: 1em;
+  padding: 0;
+  float: right;
+  clear: right;
+}
+
+.with_innermenu
+{
+  width: 77%;
+  margin-left: 2%;
+  clear: right;
+}
+
+.content_box .cb_header,
+.content_box .cb_subheader,
+.content_box .cb_content
+{
+  width: 98%;
+  margin: 0 auto;
+  padding-bottom: 2px;
+}
+
+.content_box .cb_header
+{
+  font-size: 108%;
+  line-height: 1.5em;
+  vertical-align: middle;
+  border-left: 1px dashed #888;
+  color: #800;
+}
+
+.content_box .cb_header .text
+{
+  font-weight: bold;
+  padding-left: 10px;
+}
+
+.content_box .cb_subheader
+{
+  font-size: 85%;
+  border-left: 1px dashed #888;
+  line-height: 1.2em;
+  vertical-align: middle;
+}
+.content_box .cb_subheader .text
+{
+  padding-left: 20px;
+  padding-right: 20px;
+  font-style: italic;
+}
+
+.content_box .cb_content
+{
+  border: 1px dashed #888;
+  border-right: 0;
+  overflow: auto;
+}
+
+.content_box .cb_content_actual
+{
+  padding: 5px 5px;
+  overflow: auto;
+}
+
+.content_box .blog_comments
+{
+  width: 97%;
+}
+
+.blog_draft
+{
+  background-color: #ccc;
+}
+
+input,
+select
+{
+  padding: .1em .2em;
+  border: 1px solid #888;
+}
+
+input.txtbox,
+textarea.txtarea,
+select.selectbox
+{
+  width: 80%;
+}
+
+textarea.txtarea
+{
+  width: 80%;
+  height: 20em;
+}
+
+select.single
+{ }
+
+select.multi
+{ }
+
+.content_box .cb_content table
+{
+  padding: 1px;
+}
+
+.content_box .cb_content table td,
+.content_box .cb_content table th
+{
+  border: 1px solid #808080;
+  padding: 1px;
+}
+
+.content_box .cb_content fieldset,
+.content_box .cb_content fieldset table,
+.content_box .cb_content table.fldst,
+.content_box .cb_content .doc_list,
+.content_box .cb_content .doc_list table
+{
+  width: 95%;
+  margin: 0 auto;
+  border: none;
+}
+
+.content_box .cb_content fieldset legend
+{
+  font-weight: bold;
+  padding: 0 1em;
+}
+
+.content_box .cb_content fieldset table
+{
+  width: 100%;
+}
+
+.content_box .cb_content fieldset table td,
+.content_box .cb_content fieldset table th,
+.content_box .cb_content table.fldst td,
+.content_box .cb_content table.fldst th,
+.content_box .cb_content .doc_list table td,
+.content_box .cb_content .doc_list table th
+{
+  border: none;
+}
+
+.content_box .cb_content fieldset table td.label,
+.content_box .cb_content table.fldst .label,
+.content_box .cb_content .doc_list table td.label
+{
+  border-right: 1px solid #888;
+  padding-right: .2em;
+  text-align: right;
+  width: 30%;
+  vertical-align: top;
+  font-weight: bold;
+}
+
+.content_box .cb_content .doc_list table td.label
+{
+  background-color: #ccc;
+}
+
+.content_box .cb_content fieldset table td.field,
+.content_box .cb_content table.fldst .field,
+.content_box .cb_content .doc_list table td.field
+{
+  padding-left: .2em;
+  text-align: left;
+}
+
+.content_box .cb_content fieldset table td.action,
+.content_box .cb_content table.fldst .action
+{
+  padding-left: 30%;
+}
+
+.content_box .cb_content .doc_list table
+{
+  border: 1px solid #888;
+}
+
+.content_box .cb_content .doc_list table td.action
+{
+  vertical-align: top;
+  width: 20%;
+  background-color: #ccc;
+  border-left: 1px solid #888;
+  padding-left: .2em;
+}
+
+dt
+{
+  font-weight: bold;
+}
+
+div.grippie
+{
+  background: #eee url("/h/images/grippie.png") no-repeat scroll center 2px;
+  border-color: #ddd;
+  border-style: solid;
+  border-width: 0px 1px 1px;
+  cursor: s-resize;
+  height: 9px;
+  overflow: hidden;
+}
+
+.resizable-textarea textarea
+{
+  display: block;
+  margin-bottom: 0;
+}

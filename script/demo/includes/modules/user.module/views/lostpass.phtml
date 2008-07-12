@@ -1,0 +1,36 @@
+<div id="body">
+
+<div class="content_box">
+  <div class="cb_header"><span class="text">Password Reset</span></div>
+  <div class="cb_subheader"><span class="text">Please fill in the following form in order to initiate a password reset.</span></div>
+  <div class="cb_content">
+    <div class="cb_content_actual">
+      <form method="post" action="<?php echo self::$ROUTER->UrlFor('user','lostpass') ?>">
+      <fieldset>
+      <table>
+        <tbody>
+          <tr>
+            <td class="action" colspan="2"><span style="color: #800000;">*</span> indicates required fields.</td>
+          </tr>
+          <?php if(array_key_exists("username", $this->_errorfields))
+          { ?>
+          <tr>
+            <td class="action" colspan="2"><span style="color: #800000">Username <?php echo $this->_errorfields["username"] ?></span></td>
+          </tr>
+          <?php } ?>
+          <tr>
+            <td class="label"><label for="username">Username<span style="color: #800000;">*</span></label></td>
+            <td class="field"><input type="text" name="username" id="username" class="txtbox" value="<?php echo array_key_exists("username", self::$POST) ? self::$POST["username"] : "" ?>" /></td>
+          </tr>
+          <tr>
+            <td colspan="2" class="action"><input type="submit" value="reset password" class="submit" /></td>
+          </tr>
+        </tbody>
+      </table>
+      </fieldset>
+      </form>
+    </div>
+  </div>
+</div>
+
+</div>

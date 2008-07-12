@@ -1,0 +1,25 @@
+<div id="body">
+
+<div class="content_box">
+  <div class="cb_header" style="border: 1px dashed #808080; border-bottom: none;">
+    <span class="text">Page Index</span>
+  </div>
+  <div class="cb_subheader" style="border: 1px dashed #808080; border-top: none;">
+    <div class="text">
+      This is a list of all pages which you are allowed to view given your current user permissions.
+    </div>
+  </div>
+</div>
+
+<?php
+foreach($this->_page_list as $page)
+{
+?>
+<div class="content_box">
+  <div class="cb_header"><span class="text"><a href="<?php echo self::$ROUTER->UrlFor("page","view",array("pid" => $page->page_id)) ?>"><?php echo $page->rev_page_name ?></a></span></div>
+  <div class="cb_subheader"><span class="text"> <?php echo $page->rev_page_tagline ?></span></div>
+</div>
+<?php
+}
+?>
+</div>

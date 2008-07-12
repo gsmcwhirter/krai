@@ -1,0 +1,28 @@
+<div id="body">
+
+<div class="content_box">
+  <div class="cb_header"><span class="text">User Profile</span> <a href="<?php echo self::$ROUTER->UrlFor("user","directory") ?>" class="subfooter">user directory</a></div>
+  <div class="cb_subheader"><span class="text"> </span></div>
+  <div class="cb_content">
+    <div class="cb_content_actual">
+      <table class="fldst">
+        <tbody>
+          <tr>
+            <td class="label">Username</td>
+            <td class="field"><?php echo $this->_user->username ?></td>
+          </tr>
+          <tr>
+            <td class="label">Display name</td>
+            <td class="field"><?php echo $this->_user->displayname ?></td>
+          </tr>
+          <tr>
+            <td class="label">E-mail</td>
+            <td class="field"><?php echo ($this->_user->display_email == "yes") ? "<a href=\"mailto:".$this->_user->email."\">".HideEmail($this->_user->email)."</a>" : "{hidden}" ?></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+</div>

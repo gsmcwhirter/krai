@@ -1,0 +1,284 @@
+@CHARSET "UTF-8";
+body
+{
+	font-size: 16Px;
+	font-family: Arial, Helvetica, sans-serif;
+	margin: 0;
+	padding: 0;
+	color: #000000;
+	background-color: #ffffff;
+}
+
+img
+{
+	border: 0;
+	vertical-align: middle;
+}
+
+a, a:link, a:visited, a:active
+{
+	color: #000080;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+a:hover
+{
+	color: #0000c0;
+	font-weight: bold;
+}
+
+.print_only
+{}
+
+#header
+{
+	height: 24Px;
+	width: 100%;
+	padding: 0;
+	border-bottom: 1px solid #c0c0c0;
+	position: fixed;
+	top: 0;
+	bottom: auto;
+	text-align: left;
+	margin: 0;
+	background-color: #ffffff;
+	display: none;
+}
+
+#header #logo
+{
+	float: left;
+	height: 100%;
+	vertical-align: middle;
+	margin-left: .25em;
+	width: 250Px;
+}
+
+#header #menu
+{
+  height: 20Px;
+  padding: 4Px 1em;
+  padding-bottom: 0;
+}
+
+#header #menu .link
+{
+  padding-left: .25em;
+  padding-right: .25em;
+  border: 1px solid #c0c0c0;
+  border-bottom: 0;
+  color: #000080; 
+  height: 20Px;
+  line-height: 24Px;
+  vertical-align: middle;
+}
+
+#footer
+{
+	height: 1em;
+	text-align: center;
+	width: 100%;
+	padding: .25em 0;
+	border-top: 1px solid #c0c0c0;
+	position: fixed;
+	bottom: 0;
+	top: auto;
+	font-size: 13px;
+	background-color: #ffffff;
+	display: none;
+}
+
+#footer .left
+{
+  float: left; 
+  padding-left: 1em;
+}
+
+#footer .right
+{
+  float: right;
+  padding-right: 1em;
+}
+
+#content
+{
+	width: 100%;
+	padding: 0;
+	height: 100%;
+	/*margin-top: 24Px;
+	margin-bottom: 24Px;*/
+	padding-top: 24px;
+	padding-bottom: 24px;
+}
+
+#content #messages
+{
+  display: none;
+  margin-left: auto;
+  margin-right: auto;
+  width: 75%;
+  border: 1px solid #c0c0c0;
+  border-top: 0;
+  padding: .5em .25em;
+}
+
+#content #messages .notice
+{
+	color: #40bb0c;
+}
+
+#content #messages .error
+{
+	color: #ff1010;
+}
+
+#content #body
+{
+  width: 95%;
+  padding: .5em 0;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#content #body .content_box
+{
+  border: 1px solid #c0c0c0;
+  background-color: #eeeeee;
+  width: 100%;
+  margin-bottom: 1em;
+  padding: 2Px;
+}
+
+#content #body .form
+{
+  display: none; 
+}
+
+#content #body .content_box .cb_header
+{
+  background-color: #dddddd;
+  width: 100%;
+  font-weight: bold;
+  font-variant: small-caps;
+}
+
+#content #body .content_box .cb_content
+{
+  border-top: 1px solid #c0c0c0;
+  width: 100%;
+  padding-bottom: 1em;
+}
+
+#content #body .content_box .cb_content table
+{
+  width: 95%;
+  background-color: #ffffff;
+  margin-left: auto;
+  margin-right: auto;
+  border: 1px solid #c0c0c0;
+}
+
+#content #body .content_box .cb_content table.captionless
+{
+	margin-top: 1.5em;
+}
+
+#content #body .content_box .cb_content table .header
+{
+  font-weight: bold;
+  border-bottom: 1px solid #c0c0c0;
+}
+
+#content #body .content_box .cb_content table .label
+{
+  border-right: 1px solid #c0c0c0;
+  padding-right: .2em;
+  text-align: right;
+  width: 30%;
+  vertical-align: top;
+}
+
+#content #body .content_box .cb_content table .field
+{
+  padding-left: .2em;
+  text-align: left;
+}
+
+#content #body .content_box .cb_content table .action
+{
+  padding-left: 30%;
+}
+
+#content #body .content_box .cb_content .caption
+{
+  width: 100%;
+  text-align: left;
+  font-weight: bold;
+  padding: .25em 0;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 1.5em;
+}
+
+#content #body .content_box .cb_content .button
+{
+  border: 1px solid #000000;
+  padding-left: .5em;
+  padding-right: .5em;
+}
+
+#content #body .content_box .cb_content .txtbox
+{
+  width: 20em;
+  border: 1px solid #c0c0c0;
+  height: 1.5em;
+  padding-top: .1em;
+  padding-bottom: .1em;
+}
+
+#content #body .content_box .cb_content .selectbox
+{
+  width: 20em;
+  border: 1px solid #c0c0c0;
+  height: 1.5em;
+  padding-top: .1em;
+  padding-bottom: .1em;
+}
+
+.shift_covered
+{
+/*  background-color: #c06600;*/
+  background-color: #e6ffe6;
+}
+
+.shift_request
+{
+  background-color: #ff0000;
+}
+
+.shift_perm
+{
+  /*background-color: #ffff00;*/
+  background-color: #a0b2a0;
+}
+
+.shift_open_perm
+{
+  background-color: #800000; 
+}
+
+.shift_open_cover
+{
+  background-color: #ff9900;
+}
+
+.list_dark
+{
+  background-color: #eeeeee;
+}
+
+.list_light
+{
+  background-color: #ffffff;
+}

@@ -1,0 +1,8 @@
+#Options +FollowSymLinks +MultiViews
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  #RewriteBase /apppath
+
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteRule .* default.php [QSA,L]
+</IfModule>

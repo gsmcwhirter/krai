@@ -1,0 +1,20 @@
+<div id="body">
+
+<div id="innermenu">
+<div class="innermenu">
+  <span class="header">Links</span>
+  <a href="<?php echo self::$ROUTER->UrlFor("page","list") ?>"><span>Page Index</span></a>
+  <a href="<?php echo self::$ROUTER->UrlFor("user","directory") ?>"><span>User Directory</span></a>
+  <a href="http://Krai.googlecode.com" rel="external"><span>Krai @ GoogleCode</span></a>
+  <a href="http://www.hallofkvasir.org/krai-doc/index.html" rel="external"><span>Krai Docs</span></a>
+</div>
+</div>
+
+<?php
+$page = $this->_thepage;
+$pagetype = "with_innermenu";
+$a_id = "";
+include Krai::$MODULES."/page.module/views/entry.phtml";
+?>
+
+</div>

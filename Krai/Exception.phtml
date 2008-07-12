@@ -1,0 +1,18 @@
+<div id="krai_exception_base" style="width: 100%; border: 1px solid #000000; background-color: #dddddd; color: #000000; font-size: 14Px;">
+<div id="krai_exception_header" style="font-size: 18Px; font-weight: bold; margin-left: auto; margin-right: auto; text-decoration: underline;">Uncaught Exception</div>
+<div id="krai_exception_body" style="width: 100%;">
+<span style="font-weight: bold;">An uncaught <?php echo get_class($e) ?> occurred.</span><br />
+<br />
+<span style="font-weight: bold;">Messages</span>:
+<?php echo ($e instanceOf Krai_Base_Exception && count($e->Errors) > 1) ? "<pre>".implode("\n\t", $e->Errors)."</pre>" : $e->getMessage() ?><br />
+<span style="font-weight: bold;">File</span>: <?php echo $e->getFile() ?><br />
+<span style="font-weight: bold;">Code</span>: <?php echo $e->getCode() ?><br />
+<span style="font-weight: bold;">Request</span>: <?php echo Krai::$REQUEST ?><br />
+<br />
+<a href="#krai_exception_bta" id="krai_exception_bta"
+  onclick="document.getElementById('krai_exception_bt').style.display = (document.getElementById('krai_exception_bt').style.display == 'none') ? '' : 'none' ;">[backtrace]</a>
+<div id="krai_exception_bt" style="display: none;"><pre>
+<?php echo $e->getTraceAsString() ?>
+</pre></div></div>
+Please email this information and a description of what you were trying to do to <a href="mailto:<?php echo Krai::GetConfig("ADMIN_EMAIL") ?>"><?php echo Krai::GetConfig("ADMIN_EMAIL") ?></a>.
+</div>

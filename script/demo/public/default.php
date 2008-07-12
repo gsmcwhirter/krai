@@ -1,0 +1,21 @@
+<?php
+/**
+ * Krai application skeleton root script
+ * @package Demo
+ * @author Greg McWhirter <gsmcwhirter@gmail.com>
+ * @copyright Copyright (c) 2008, Greg McWhirter
+ */
+
+/**
+ * Includes the framework.  Call Krai::Setup() and Krai::Run() to set things in motion.
+ */
+require_once "../Krai.php";
+
+Krai::Setup("../includes/configs/krai.yml");
+
+Krai::Uses(
+  Krai::$INCLUDES."/configs/application.config.php"
+);
+
+// 321go
+Krai::Run();

@@ -1,0 +1,60 @@
+= Krai Framework =
+
+License: MIT License (see COPYING file)
+Author: Greg McWhirter <gsmcwhirter@gmail.com>
+Copyright: 2008 Greg McWhirter
+
+== DESCRIPTION ==
+
+Krai Framework is a MVC-inspired framework. The main concept is modularity.
+Modules are individual units of an appliation. The modules hold together
+some actions, which are the elements that are executed on a typical page
+request. Both modules and actions provide before- and after-filter capability,
+and both can hold various other methods. Actions proceed in the pattern
+Validate - Process - Display, and everything in the action and the module is
+available to the rendering call (whether as an instance method or through
+$this->_parent for things in the module).
+
+== SETUP / USAGE - Blank Application Skeleton ==
+
+1. tar xzf krai-XXXXX.tar.gz (you probably already did this if you are reading
+    the README file)
+2. ./krai-XXXXX/script/newapp.sh [-l] [-w] [-p] -d /path/to/application/place -n appname
+3. cd /path/to/application/place/appname
+4. Edit includes/configs/krai.yml to the correct settings (especially lines with
+    "#EDIT ME" at the end)
+5. Edit public/.htaccess to correct the RewriteBase (if necessary)
+6. ln -s /path/to/application/place/appname/public/ /path/to/public_html/appname
+7. Visit http://example.com/appname/ (should see "Yay! Online!)
+
+This is a bare outline. Far more things are possible, though not nearly well
+documented yet. Try setting up the demo application and seeing how it works for
+an example (see below).
+
+== SETUP / USAGE - Demo Application ==
+
+1. tar xzf krai-XXXXX.tar.gz (you probably already did this if you are reading
+    the README file)
+2. ./krai-XXXXX/script/newapp.sh [-l] [-p] -w -d /path/to/application/place -n appname
+3. cd /path/to/application/place/appname
+4. Create a database and import sql/schema.sql
+5. Edit the users table entry for "root" to have a valid e-mail address
+6. Edit includes/configs/krai.yml to the correct settings (especially lines with
+    "#EDIT ME" at the end)
+7. Edit includes/configs/application.config.php to the correct settings
+8. Edit public/.htaccess to correct the RewriteBase (if necessary)
+9. ln -s /path/to/application/place/appname/public/ /path/to/public_html/appname
+10. Visit http://example.com/appname/
+11. Try logging in with username: root, password: default
+12. The demo application should be running.
+
+== BUGS / REQUESTS ==
+
+Please file an Issue at http://krai.googlecode.com if you find any bugs
+or if you would like to request any new features.
+
+== COMPONENT GENERATOR ==
+
+There is a component generator script in the script directory of each
+application. Call it to see usage. It generates empty files in the right places,
+but may eventually add code into those files.

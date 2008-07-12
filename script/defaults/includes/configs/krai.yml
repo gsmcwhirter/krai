@@ -1,0 +1,80 @@
+---
+##### Things you most likely want to edit
+
+BASEURI: k
+ROOTURL: http://example.com
+DOMAIN: example.com
+ADMIN_EMAIL: system@example.com
+SYSTEM_NAME: Example App
+
+CONFIG_DB:
+  USE_PDO: false
+  DATA:
+    db1:
+      _type: mysql
+      _user: user
+      _pass:
+      _host: localhost
+      _name: dbase_name
+      #_port:
+    #db2:
+      #_type:
+      #_user:
+      #_pass:
+      #_host:
+      #_name:
+      #_port:
+  DEBUG: false
+
+CONFIG_MAIL:
+  SEND_MAIL: true
+  FROM_ADDR: admin@example.com
+  FROM_NAME: Example App Mailer
+
+##### Things you might want to edit
+
+#APPDIR: /path/to/app #Path to your application in the filesystem
+#DISABLE_OB: false
+#USE_OB_GZHANDLER: false
+#DISABLE_SESSION: false
+#DEFAULT_TIMEZONE: America/New_York
+USE_DB: true
+USE_LOG: true
+USE_MAIL: true
+USE_CACHE: false
+
+CONFIG_MODULE:
+  USE_LAYOUT: true
+  DEFAULT_LAYOUT: default
+
+##### Things you probably do not want to edit unless you really know what you are doing
+
+CONFIG_LOG:
+  CONFS:
+    n:requests:
+      LocalSetLogfileName: requests.log
+    n:sql:
+      LocalSetLogfileName: sql.log
+    n:maillog:
+      LocalSetLogfileName: mail.log
+    t:local:
+      EnableQueueMode:
+      SetThresh: 6 #For info mode
+      #SetThresh: 7 #For debug mode
+      SetErrorConditionTriggerThresh: 3
+      SetErrorConditionThresh: 7
+    t:email:
+      EnableQueueMode:
+      SetThresh: 3 #For info mode
+      SetErrorConditionTriggerThresh: 2
+      SetErrorConditionThresh: 7
+  TYPES:
+    requests: local
+    sql: local
+    maillog: local
+    email: email
+  DEFAULT: requests
+
+CONFIG_CACHE:
+  DIR: .
+  TIMEOUT: 3600

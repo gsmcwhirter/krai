@@ -1,0 +1,97 @@
+<div id="body">
+
+<script language="javascript" type="text/javascript">
+  OnPageLoad(function(){ LoadRevChooser('<?php echo urlencode($this->_pageid) ?>'); });
+</script>
+
+<div class="content_box">
+<div class="cb_header" id="rev_chooser" style="display: none; border: 1px dashed #808080; padding-top: 2px; padding-bottom: 2px;">
+&nbsp;
+</div>
+</div>
+
+<div id="rev_content">
+<?php
+$page = $this->_thepage;
+$pagetype = "";
+$a_id = "";
+include Krai::$MODULES."/page.module/views/entry.phtml";
+?>
+</div>
+
+<div class="content_box">
+  <div class="cb_header"><span class="text">Editing a Page</span></div>
+  <div class="cb_subheader"><span class="text">Page ID: <?php echo $this->_pageid ?></span></div>
+  <div class="cb_content">
+    <div class="cb_content_actual">
+    <form method="post" id="page_edit_form" action="<?php echo self::$ROUTER->UrlFor("page","edit",array("id" => urlencode($this->_pageid))) ?>">
+    <fieldset>
+    <input type="hidden" name="postaction" id="postaction" value="" />
+    <table>
+      <tbody>
+        <?php if(array_key_exists("page_name", $this->_errorfields))
+        { ?>
+        <tr>
+          <td class="action" colspan="2"><span style="color: #800000">Page Name <?php echo $this->_errorfields["page_name"] ?></span></td>
+        </tr>
+        <?php } ?>
+        <tr>
+          <td class="label"><label for="page_name">Page Name</label></td>
+          <td class="field"><input type="text" name="page_name" id="page_name" class="txtbox" value="<?php echo (array_key_exists("page_name", self::$POST)) ? self::$POST["page_name"] : $this->_thepage->rev_page_name ?>" /></td>
+        </tr>
+        <?php if(array_key_exists("page_tagline", $this->_errorfields))
+        { ?>
+        <tr>
+          <td class="action" colspan="2"><span style="color: #800000">Page Tagline <?php echo $this->_errorfields["page_tagline"] ?></span></td>
+        </tr>
+        <?php } ?>
+        <tr>
+          <td class="label"><label for="page_tagline">Page Tagline</label></td>
+          <td class="field"><input type="text" name="page_tagline" id="page_tagline" class="txtbox" value="<?php echo (array_key_exists("page_tagline", self::$POST)) ? self::$POST["page_tagline"] : $this->_thepage->rev_page_tagline ?>" /></td>
+        </tr>
+        <?php if(array_key_exists("page_content", $this->_errorfields))
+        { ?>
+        <tr>
+          <td class="action" colspan="2"><span style="color: #800000">Page Content <?php echo $this->_errorfields["page_content"] ?></span></td>
+        </tr>
+        <?php } ?>
+        <tr>
+          <td class="label"><label for="page_content">Page Content</label><br /><a href="<?php echo Krai_Base::$ROUTER->UrlFor("page","view",array("pid" => "wiki_markup")) ?>" rel="external" class="subfooter">markup help</a></td>
+          <td class="field"><textarea cols="40" rows="6" name="page_content" id="page_content" class="txtarea"><?php echo (array_key_exists("page_content", self::$POST)) ? self::$POST["page_content"] : $this->_thepage->rev_page_content ?></textarea></td>
+        </tr>
+        <tr>
+          <td colspan="2" class="action">
+            <input type="submit" value="save changes" class="button" onclick="page_edit_commit_changes();" />
+            <input type="submit" value="preview" class="button" onclick="page_edit_preview();" />
+            <input type="submit" value="cancel" class="button" onclick="page_edit_cancel();" /></td>
+        </tr>
+      </tbody>
+    </table>
+    </fieldset>
+    </form>
+    </div>
+  </div>
+</div>
+
+<?php
+if($this->_preview && !self::IsErrors())
+{ ?>
+<div class="content_box">
+  <div class="cb_header">
+    <span class="text"><?php echo self::$POST["page_name"] ?></span>
+  </div>
+  <div class="cb_subheader"><span class="text"><?php echo self::$POST["page_tagline"] ?></span></div>
+  <div class="cb_content">
+    <div class="cb_content_actual">
+      <?php echo $this->_parent->WikiParser->transform(self::$POST["page_content"],'Xhtml') ?>
+      <div class="smalltext" style="float: right;">
+      &nbsp;
+      </div>
+    </div>
+  </div>
+  </div>
+<?php
+}
+?>
+
+</div>

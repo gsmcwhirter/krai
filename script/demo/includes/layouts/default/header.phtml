@@ -1,0 +1,64 @@
+<?php echo '<?xml version="1.0" encoding="utf-8" ?>' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+  <title>Krai Framework Demo Application</title>
+  <meta name="author" content="Greg McWhirter (gsmcwhirter@gmail.com)" />
+  <meta name="date" content="2008-07-05T15:02:59-0400" />
+  <meta name="copyright" content="Copyright (c) 2008 Greg McWhirter" />
+  <meta name="keywords" content="Krai Demo" />
+  <meta name="description" content="A demonstration application for the Krai" />
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+  <meta http-equiv="content-type"
+    content="application/xhtml+xml; charset=UTF-8" />
+  <meta http-equiv="content-style-type" content="text/css" />
+  <meta http-equiv="expires" content="0" />
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+  <?php echo Krai_Markup::StylesheetTag(array("default_print.css"), "print") ?>
+  <?php echo Krai_Markup::StylesheetTag(array("default.css"), "screen") ?>
+
+  <?php echo Krai_Markup::JavascriptTag(array("jquery/jquery-1.2.6.min.js", "jquery/jquery.domec-0.3.1.min.js",
+                                            "jquery/jquery.chili-2.1.1.min.js", "jquery/jquery.textarearesizer.compressed.js")) ?>
+  <script type="text/javascript">
+    function OnPageLoad(cback)
+    {
+      $(document).ready(cback);
+    }
+
+    ChiliBook.recipeFolder = "<?php echo ((Krai::GetConfig("BASEURI") == "") ? "" : "/".Krai::GetConfig("BASEURI"))."/javascripts/jquery/chili-2.1/" ?>";
+  </script>
+  <?php echo Krai_Markup::JavascriptTag(array("application.js")) ?>
+  <script type="text/javascript">
+    CONFIG.BASEURI = "<?php echo Krai::GetConfig("BASEURI") == "" ? "/" : "/".Krai::GetConfig("BASEURI")."/" ?>";
+  </script>
+</head>
+<body>
+<div id="everything">
+  <div id="header">
+    <div id="logo" style="font-weight: bold; font-size: 123%;">Krai Framework Demo <a href="<?php echo self::$ROUTER->UrlFor("page","index") ?>">home</a></div>
+    <div id="topright" style="text-align: right;">
+      <?php
+      if($this->_parent->USER)
+      {
+        echo $this->_parent->USER->displayname." (".$this->_parent->USER->username.") ".((User::HasPrivilege($this->_parent->USER->user_id, "user:active")) ? "<a href=\"".Krai_Base::$ROUTER->UrlFor("user","edit")."\">Edit</a> | " : "")."<a href=\"".Krai_Base::$ROUTER->UrlFor("user","logout")."\">Log Out</a>";
+      }
+      else
+      {
+        echo "Welcome, Guest <a href=\"". Krai_Base::$ROUTER->UrlFor("user","login") ."\">Log In</a>";
+      }
+      ?>
+    </div>
+  </div>
+
+  <div id="content">
+    <div id="messages" style="<?php echo (Krai_Base::IsNotices() || Krai_Base::IsErrors()) ? "" : "display: none;" ?>">
+      <?php foreach(Krai_Base::GetNotices() as $msg)
+      { ?>
+        <span class="notice"><?php echo $msg ?></span><br />
+      <?php }?>
+      <?php foreach(Krai_Base::GetErrors() as $msg)
+      { ?>
+        <span class="error"><?php echo $msg ?></span><br />
+      <?php }?>
+    </div>

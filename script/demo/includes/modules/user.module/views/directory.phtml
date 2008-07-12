@@ -1,0 +1,18 @@
+<div id="body">
+
+<div class="content_box">
+  <div class="cb_header" style="border: 1px dashed #808080;"><span class="text">User Directory</span></div>
+</div>
+
+<?php
+foreach($this->_users as $user)
+{
+?>
+<div class="content_box">
+  <div class="cb_header"><span class="text"><a href="<?php echo self::$ROUTER->UrlFor("user","profile",array("id" => $user->username)) ?>"><?php echo $user->displayname ?> (<?php echo $user->username ?>)</a></span></div>
+</div>
+<?php
+}
+?>
+
+</div>

@@ -1,0 +1,56 @@
+<div id="body">
+
+<div class="content_box">
+  <div class="cb_header"><span class="text">User Preferences</span></div>
+  <div class="cb_subheader"><span class="text">Please use the following form to update your account preferences.</span></div>
+  <div class="cb_content">
+    <div class="cb_content_actual">
+      <form method="post" action="<?php echo self::$ROUTER->UrlFor('user','changepass') ?>">
+      <fieldset>
+      <table>
+        <tbody>
+          <tr>
+            <td class="action" colspan="2"><span style="color: #800000;">*</span> indicates required fields.</td>
+          </tr>
+          <?php if(array_key_exists("oldpass", $this->_errorfields))
+          { ?>
+          <tr>
+            <td class="action" colspan="2"><span style="color: #800000">Current password <?php echo $this->_errorfields["oldpass"] ?></span></td>
+          </tr>
+          <?php } ?>
+          <tr>
+            <td class="label"><label for="oldpass">Old Password<span style="color: #800000;">*</span></label></td>
+            <td class="field"><input type="password" name="oldpass" id="oldpass" class="txtbox" /></td>
+          </tr>
+          <?php if(array_key_exists("password", $this->_errorfields))
+          { ?>
+          <tr>
+            <td class="action" colspan="2"><span style="color: #800000">New password <?php echo $this->_errorfields["password"] ?></span></td>
+          </tr>
+          <?php } ?>
+          <tr>
+            <td class="label"><label for="password">New Password<span style="color: #800000;">*</span></label></td>
+            <td class="field"><input type="password" name="password" id="password" class="txtbox" /></td>
+          </tr>
+          <?php if(array_key_exists("password_confirm", $this->_errorfields))
+          { ?>
+          <tr>
+            <td class="action" colspan="2"><span style="color: #800000">New password confirmation <?php echo $this->_errorfields["password_confirm"] ?></span></td>
+          </tr>
+          <?php } ?>
+          <tr>
+            <td class="label"><label for="password_confirm">Confirm New Password<span style="color: #800000;">*</span></label></td>
+            <td class="field"><input type="password" name="password_confirm" id="password_confirm" class="txtbox" /></td>
+          </tr>
+          <tr>
+            <td colspan="2" class="action"><input type="submit" value="save" class="submit" /></td>
+          </tr>
+        </tbody>
+      </table>
+      </fieldset>
+      </form>
+    </div>
+  </div>
+</div>
+
+</div>

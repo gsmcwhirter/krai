@@ -1,0 +1,42 @@
+<div id="body">
+
+<div class="content_box" id="local_login_box">
+  <div class="cb_header"><span class="text">Local Login</span></div>
+  <div class="cb_subheader"><span class="text">Use your site username and password to log in.</span></div>
+  <div class="cb_content">
+    <div class="cb_content_actual">
+    <form method="post" id="local_login_form" action="<?php echo self::$ROUTER->UrlFor('user','login') ?>">
+    <fieldset>
+    <input type="hidden" name="action" id="action_local" value="login" />
+    <input type="hidden" name="referrer" id="referrer_local" value="<?php echo $this->_referrer ?>" />
+    <table>
+      <tbody>
+        <tr>
+          <td class="label"><label for="username">Username</label></td>
+          <td class="field"><input type="text" name="username" id="username" class="txtbox" /></td>
+        </tr>
+        <tr>
+          <td class="label"><label for="password">Password</label></td>
+          <td class="field"><input type="password" name="password" id="password" class="txtbox" /></td>
+        </tr>
+        <tr>
+          <td class="label"><label for="remember_me_local">Remember Login?</label></td>
+          <td class="field"><input type="checkbox" name="remember_me" id="remember_me_local" value="yes" /></td>
+        </tr>
+        <tr>
+          <td class="label">Help</td>
+          <td class="field">
+            <a href="<?php echo self::$ROUTER->UrlFor("user","lostpass") ?>">Forgot Password?</a>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2" class="action"><input type="submit" value="login" class="submit" onclick="disable_button(this, 'processing...'); $('local_login_form').submit();" /></td>
+        </tr>
+      </tbody>
+    </table>
+    </fieldset>
+    </form>
+    </div>
+  </div>
+</div>
+</div>

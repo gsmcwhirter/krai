@@ -1,0 +1,7 @@
+You can probably get away with dropping Krai.php and the Krai directory into the
+php include path somewhere (like the pear lib directory, for instance), and
+generating an application skeleton with the "-p" flag (see ./script/newapp.sh -h).
+
+Otherwise, you can use the framework in the same directory as your application.
+
+Please see the README file for complete details.

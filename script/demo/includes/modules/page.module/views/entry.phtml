@@ -1,0 +1,27 @@
+<?php
+if($page)
+  { ?>
+  <div class="content_box<?php echo ($pagetype == "") ? "" : " ".$pagetype ?>">
+  <div class="cb_header">
+    <?php echo ($a_id != "") ? "<a id=\"".$a_id."\"> </a>" : "" ?>
+    <span class="text"><?php echo $page->rev_page_name ?></span>
+  </div>
+  <div class="cb_subheader"><span class="text"><?php echo $page->rev_page_tagline ?></span></div>
+  <div class="cb_content">
+    <div class="cb_content_actual">
+      <?php echo $this->_parent->WikiParser->transform($page->rev_page_content,'Xhtml') ?>
+      <div class="smalltext" style="float: right;">
+      Page Updated: <?php echo date(SETTINGS::DATE_STRING, $page->page_updated) ?><br />
+      Content Updated: <?php echo date(SETTINGS::DATE_STRING,$page->rev_date) ?> by <?php echo $page->displayname ?> (<a href="<?php echo self::$ROUTER->UrlFor("user","profile",array("id" => $page->username)) ?>"><?php echo $page->username ?></a>)
+      <?php
+      if($this->_parent->UserCanEdit($page->page_id))
+      { ?>
+        | <a href="<?php echo self::$ROUTER->UrlFor("page","edit",array("id" => urlencode($page->page_id))) ?>">edit</a>
+      <?php
+      } ?>
+      </div>
+    </div>
+  </div>
+  </div>
+<?php }
+?>

@@ -1,0 +1,5 @@
+== From KvFramework 2.0b6 ==
+
+Renamed most things.
+Removed CONFIG::COOKIENAME and CONFIG::COOKIEDOMAIN equivalents
+Instituted YAML config file instead of framework.config.php

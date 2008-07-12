@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<refentry id="{@id modules}">
+	<refnamediv>
+		<refname>Modules</refname>
+		<refpurpose>This manual provides examples and explanations for functionality in the Krai PHP demo application.</refpurpose>
+	</refnamediv>
+	<refsynopsisdiv>
+		<author>Greg McWhirter
+			<authorblurb>
+			{@link mailto:gsmcwhirter@gmail.com Greg McWhirter}
+			</authorblurb>
+		</author>
+	</refsynopsisdiv>
+	{@toc}
+	<refsect1 id="{@id modules_intro}">
+		<title>Introduction</title>
+		<para>The user manual and whatnot.</para>
+	</refsect1>
+</refentry>
