@@ -1,4 +1,10 @@
-= Krai Framework Changelog Version 1.0b1 =
+= Krai Framework Changelog Version 1.0b1 and 1.0b1a =
+
+commit dae35cfeab7ad676458cebc3fd0edc760689683a
+Author: Greg McWhirter <greg@hallofkvasir.org>
+Date:   Sat Jul 12 16:21:29 2008 -0400
+
+    Fixing problems with missed translation bits in the demo application.
 
 commit 165733e3f10df36b5f9e6fd9155084fb3a6c127d
 Author: Greg McWhirter <greg@hallofkvasir.org>
