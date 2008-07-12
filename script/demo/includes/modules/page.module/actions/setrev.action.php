@@ -43,7 +43,7 @@ class PageModule_SetrevAction extends Krai_Module_Action
   {
     if(!array_key_exists("id", self::$PARAMS))
     {
-      throw new Krai_ModuleException("No page ID was supplied.", Krai_ModuleException::ValidationError);
+      throw new Krai_Module_Exception("No page ID was supplied.", Krai_Module_Exception::ValidationError);
     }
     else
     {
@@ -52,7 +52,7 @@ class PageModule_SetrevAction extends Krai_Module_Action
 
     if(!$this->_parent->UserCanEdit($this->_pageid))
     {
-      throw new Krai_ModuleException("You are not allowed to edit that page", Krai_ModuleException::ValidationError);
+      throw new Krai_Module_Exception("You are not allowed to edit that page", Krai_Module_Exception::ValidationError);
     }
 
     if($this->_RequestMethod == "POST")
@@ -61,7 +61,7 @@ class PageModule_SetrevAction extends Krai_Module_Action
 
       if(!array_key_exists("revision_select", self::$POST))
       {
-        throw new Krai_ModuleException("Revision to set was not specified.", Krai_ModuleException::ValidationError);
+        throw new Krai_Module_Exception("Revision to set was not specified.", Krai_Module_Exception::ValidationError);
       }
 
     }
@@ -90,7 +90,7 @@ class PageModule_SetrevAction extends Krai_Module_Action
       else
       {
         self::$DB->Query("ROLLBACK");
-        throw new Krai_ModuleException("Unable to save the revision.", Krai_ModuleException::ProcessingError);
+        throw new Krai_Module_Exception("Unable to save the revision.", Krai_Module_Exception::ProcessingError);
       }
     }
   }

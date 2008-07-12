@@ -50,7 +50,7 @@ class UserModule_LoginAction extends Krai_Module_Action
     {
       if(!array_key_exists("action", self::$POST))
       {
-        throw new Krai_ModuleException("Action not found in request.", Krai_ModuleException::ValidationError);
+        throw new Krai_Module_Exception("Action not found in request.", Krai_Module_Exception::ValidationError);
       }
       elseif(self::$POST["action"] == "login")
       {
@@ -58,11 +58,11 @@ class UserModule_LoginAction extends Krai_Module_Action
 	$this->_processtype = self::ProcessLocal;
         if(!array_key_exists("username", self::$POST) || !array_key_exists("password", self::$POST))
         {
-          throw new Krai_ModuleException("Username or password was not present.", Krai_ModuleException::ValidationError);
+          throw new Krai_Module_Exception("Username or password was not present.", Krai_Module_Exception::ValidationError);
         }
 	elseif(array_key_exists("remember_me", self::$POST) && !in_array(self::$POST["remember_me"],array("yes","no")))
 	{
-	  throw new Krai_ModuleException("Remember option did not have a valid value.", Krai_ModuleException::ValidationError);
+	  throw new Krai_Module_Exception("Remember option did not have a valid value.", Krai_Module_Exception::ValidationError);
 	}
 	elseif(array_key_exists("remember_me", self::$POST))
 	{
@@ -73,7 +73,7 @@ class UserModule_LoginAction extends Krai_Module_Action
       }
       else
       {
-        throw new Krai_ModuleException("Requested action was not understood.", Krai_ModuleException::ValidationError);
+        throw new Krai_Module_Exception("Requested action was not understood.", Krai_Module_Exception::ValidationError);
       }
     }
     else
@@ -98,7 +98,7 @@ class UserModule_LoginAction extends Krai_Module_Action
 
       if(!$res)
       {
-        throw new Krai_ModuleException("Log-in failed.", Krai_ModuleException::ProcessingError);
+        throw new Krai_Module_Exception("Log-in failed.", Krai_Module_Exception::ProcessingError);
       }
 
       $this->CreateSession($res->user_id);

@@ -31,7 +31,7 @@ class PageModule_IndexAction extends Krai_Module_Action
     $this->_thepage = $this->_parent->GetPageContent($this->_pageid);
     if(!$this->_thepage)
     {
-      throw new Krai_ModuleException("Unable to find one or more required pages in the database.", Krai_ModuleException::ProcessingError);
+      throw new Krai_Module_Exception("Unable to find one or more required pages in the database.", Krai_Module_Exception::ProcessingError);
     }
 
   }

@@ -36,7 +36,7 @@ class UserModule_DirectoryAction extends Krai_Module_Action
     }
     else
     {
-      throw new Krai_ModuleException("Unable to locate the user records in the database.", Krai_ModuleException::ProcessingError);
+      throw new Krai_Module_Exception("Unable to locate the user records in the database.", Krai_Module_Exception::ProcessingError);
     }
   }
 

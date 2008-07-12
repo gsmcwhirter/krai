@@ -75,7 +75,7 @@ class PageModule_EditAction extends Krai_Module_Action
     if(!array_key_exists("id", self::$PARAMS))
     {
       $this->_milderrors = false;
-      throw new Krai_ModuleException("No page ID was supplied.", Krai_ModuleException::ValidationError);
+      throw new Krai_Module_Exception("No page ID was supplied.", Krai_Module_Exception::ValidationError);
     }
     else
     {
@@ -84,7 +84,7 @@ class PageModule_EditAction extends Krai_Module_Action
 
     if(!$this->_parent->UserCanEdit($this->_pageid))
     {
-      throw new Krai_ModuleException("You are not allowed to edit that page", Krai_ModuleException::ValidationError);
+      throw new Krai_Module_Exception("You are not allowed to edit that page", Krai_Module_Exception::ValidationError);
     }
 
     if($this->_RequestMethod == "POST")
@@ -93,7 +93,7 @@ class PageModule_EditAction extends Krai_Module_Action
 
       if(!array_key_exists("postaction", self::$POST) || !in_array(self::$POST["postaction"], array("publish","preview","cancel")))
       {
-        throw new Krai_ModuleException("Unrecognized post-action was passed. Please file a bug report.", Krai_ModuleException::ValidationError);
+        throw new Krai_Module_Exception("Unrecognized post-action was passed. Please file a bug report.", Krai_Module_Exception::ValidationError);
       }
       elseif(self::$POST["postaction"] == "preview")
       {
@@ -141,7 +141,7 @@ class PageModule_EditAction extends Krai_Module_Action
         $this->_thepage = $this->_parent->GetPageContent($this->_pageid);
         if(!$this->_thepage)
         {
-          throw new Krai_ModuleException("Unable to locate the necessary page in the database.", Krai_ModuleException::ProcessingError);
+          throw new Krai_Module_Exception("Unable to locate the necessary page in the database.", Krai_Module_Exception::ProcessingError);
         }
       }
 
@@ -186,19 +186,19 @@ class PageModule_EditAction extends Krai_Module_Action
               else
               {
                 self::$DB->Query("ROLLBACK");
-                throw new Krai_ModuleException("Unable to save the revision.", Krai_ModuleException::ProcessingError);
+                throw new Krai_Module_Exception("Unable to save the revision.", Krai_Module_Exception::ProcessingError);
               }
             }
             else
             {
               self::$DB->Query("ROLLBACK");
-              throw new Krai_ModuleException("Unable to save the revision.", Krai_ModuleException::ProcessingError);
+              throw new Krai_Module_Exception("Unable to save the revision.", Krai_Module_Exception::ProcessingError);
             }
           }
           else
           {
             self::$DB->Query("ROLLBACK");
-            throw new Krai_ModuleException("You cannot save a published post as a draft.", Krai_ModuleException::ProcessingError);
+            throw new Krai_Module_Exception("You cannot save a published post as a draft.", Krai_Module_Exception::ProcessingError);
           }
         }
       }

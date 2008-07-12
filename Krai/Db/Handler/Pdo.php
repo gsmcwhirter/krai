@@ -464,7 +464,7 @@ class Krai_Db_Handler_Pdo extends Krai_Db_Handler
    * Generates DSN strings for a variety of databases from the $dbinfo
    * @param array $dbinfo Database connection information
    * @return string
-   * @throws Krai_DbException
+   * @throws Krai_Db_Exception
    */
   public static function GetDSN(array $dbinfo)
   {

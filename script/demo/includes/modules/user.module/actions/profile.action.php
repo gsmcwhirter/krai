@@ -24,7 +24,7 @@ class UserModule_ProfileAction extends Krai_Module_Action
   {
     if(!array_key_exists("id", self::$PARAMS) || empty(self::$PARAMS["id"]))
     {
-      throw new Krai_ModuleException("Username was not provided.", Krai_ModuleException::ValidationError);
+      throw new Krai_Module_Exception("Username was not provided.", Krai_Module_Exception::ValidationError);
     }
   }
 
@@ -43,7 +43,7 @@ class UserModule_ProfileAction extends Krai_Module_Action
     }
     else
     {
-      throw new Krai_ModuleException("Unable to locate the user record in the database.", Krai_ModuleException::ProcessingError);
+      throw new Krai_Module_Exception("Unable to locate the user record in the database.", Krai_Module_Exception::ProcessingError);
     }
   }
 

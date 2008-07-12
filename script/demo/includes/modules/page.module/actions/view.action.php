@@ -31,7 +31,7 @@ class PageModule_ViewAction extends Krai_Module_Action
   {
     if(!array_key_exists("pid", self::$PARAMS))
     {
-      throw new Krai_ModuleException("Page ID was not provided.", Krai_ModuleException::ValidationError);
+      throw new Krai_Module_Exception("Page ID was not provided.", Krai_Module_Exception::ValidationError);
     }
     else
     {
@@ -44,7 +44,7 @@ class PageModule_ViewAction extends Krai_Module_Action
     $this->_thepage = $this->_parent->GetPageContent($this->_pid);
     if(!$this->_thepage)
     {
-      throw new Krai_ModuleException("Unable to find one or more required pages in the database.", Krai_ModuleException::ProcessingError);
+      throw new Krai_Module_Exception("Unable to find one or more required pages in the database.", Krai_Module_Exception::ProcessingError);
     }
 
     if($this->_thepage->page_read_access != "")

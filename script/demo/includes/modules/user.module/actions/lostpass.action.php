@@ -51,7 +51,7 @@ class UserModule_LostpassAction extends Krai_Module_Action
 
       if(count($this->_errorfields) > 0)
       {
-        throw new Krai_ModuleException("There were problems with your submission.",Krai_ModuleException::ValidationError);
+        throw new Krai_Module_Exception("There were problems with your submission.",Krai_Module_Exception::ValidationError);
       }
     }
   }
@@ -79,7 +79,7 @@ class UserModule_LostpassAction extends Krai_Module_Action
       if(!$res2)
       {
         self::$DB->Query("ROLLBACK");
-        throw new Krai_ModuleException("No user with that username was found in the database.", Krai_ModuleException::ProcessingError);
+        throw new Krai_Module_Exception("No user with that username was found in the database.", Krai_Module_Exception::ProcessingError);
       }
 
       //Update the user in the database
@@ -108,13 +108,13 @@ class UserModule_LostpassAction extends Krai_Module_Action
         else
         {
           self::$DB->Query("ROLLBACK");
-          throw new Krai_ModuleException("Password reset failed. E-mail was not sent.", Krai_ModuleException::ProcessingError);
+          throw new Krai_Module_Exception("Password reset failed. E-mail was not sent.", Krai_Module_Exception::ProcessingError);
         }
       }
       else
       {
         self::$DB->Query("ROLLBACK");
-        throw new Krai_ModuleException("Password reset failed. Unable to update user in the database.", Krai_ModuleException::ProcessingError);
+        throw new Krai_Module_Exception("Password reset failed. Unable to update user in the database.", Krai_Module_Exception::ProcessingError);
       }
 
     }

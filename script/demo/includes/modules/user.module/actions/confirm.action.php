@@ -19,17 +19,17 @@ class UserModule_ConfirmAction extends Krai_Module_Action
   {
     if(!array_key_exists("id", self::$GET) || empty(self::$GET["id"]))
     {
-      throw new Krai_ModuleException("The ID parameter was missing for confirmation.", Krai_ModuleException::ValidationError);
+      throw new Krai_Module_Exception("The ID parameter was missing for confirmation.", Krai_Module_Exception::ValidationError);
     }
 
     if(!array_key_exists("code", self::$GET) || empty(self::$GET["code"]))
     {
-      throw new Krai_ModuleException("The activation code parameter was missing for confirmation.", Krai_ModuleException::ValidationError);
+      throw new Krai_Module_Exception("The activation code parameter was missing for confirmation.", Krai_Module_Exception::ValidationError);
     }
 
     if(!array_key_exists("type", self::$GET) || empty(self::$GET["type"]))
     {
-      throw new Krai_ModuleException("The activation type was missing.", Krai_ModuleException::ValidationError);
+      throw new Krai_Module_Exception("The activation type was missing.", Krai_Module_Exception::ValidationError);
     }
   }
 
@@ -81,7 +81,7 @@ class UserModule_ConfirmAction extends Krai_Module_Action
             else
             {
               self::$DB->Query("ROLLBACK");
-              throw new Krai_ModuleException("Account activation failed.", Krai_ModuleException::ProcessingError);
+              throw new Krai_Module_Exception("Account activation failed.", Krai_Module_Exception::ProcessingError);
             }
           }
           break;
@@ -118,11 +118,11 @@ class UserModule_ConfirmAction extends Krai_Module_Action
           else
           {
             self::$DB->Query("ROLLBACK");
-            throw new Krai_ModuleException("E-mail confirmation failed.", Krai_ModuleException::ProcessingError);
+            throw new Krai_Module_Exception("E-mail confirmation failed.", Krai_Module_Exception::ProcessingError);
           }
           break;
         default:
-          throw new Krai_ModuleException("Activation failed. Un-recognized activation type passed.", Krai_ModuleException::ProcessingError);
+          throw new Krai_Module_Exception("Activation failed. Un-recognized activation type passed.", Krai_Module_Exception::ProcessingError);
       }
     }
   }

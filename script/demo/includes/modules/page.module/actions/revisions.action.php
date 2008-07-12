@@ -45,12 +45,12 @@ class PageModule_RevisionsAction extends Krai_Module_Action
     $as = new AccessScheme(array('requires' => array("user:active")));
     if(!$this->_parent->ValidateAccess($as, true))
     {
-      throw new Krai_ModuleException("Access Denied.", Krai_ModuleException::ValidationError);
+      throw new Krai_Module_Exception("Access Denied.", Krai_Module_Exception::ValidationError);
     }
 
     if(!array_key_exists("id", self::$PARAMS))
     {
-      throw new Krai_ModuleException("No page ID was supplied.", Krai_ModuleException::ValidationError);
+      throw new Krai_Module_Exception("No page ID was supplied.", Krai_Module_Exception::ValidationError);
     }
     else
     {
@@ -59,7 +59,7 @@ class PageModule_RevisionsAction extends Krai_Module_Action
 
     if(!$this->_parent->UserCanEdit($this->_pageid))
     {
-      throw new Krai_ModuleException("You are not allowed to edit that page", Krai_ModuleException::ValidationError);
+      throw new Krai_Module_Exception("You are not allowed to edit that page", Krai_Module_Exception::ValidationError);
     }
 
     if(array_key_exists("rid", self::$GET))
@@ -77,7 +77,7 @@ class PageModule_RevisionsAction extends Krai_Module_Action
         $this->_thepage = $this->_parent->GetPageContent($this->_pageid, $this->_rev_id);
         if(!$this->_thepage)
         {
-          throw new Krai_ModuleException("Unable to locate the necessary page in the database.", Krai_ModuleException::ProcessingError);
+          throw new Krai_Module_Exception("Unable to locate the necessary page in the database.", Krai_Module_Exception::ProcessingError);
         }
       }
       else
@@ -85,7 +85,7 @@ class PageModule_RevisionsAction extends Krai_Module_Action
         $this->_thepage = $this->_parent->GetAllRevisions($this->_pageid, "pr.rev_date desc");
         if(!is_array($this->_thepage) || count($this->_thepage) == 0)
         {
-          throw new Krai_ModuleException("Unable to locate page revisions in the database.", Krai_ModuleException::ProcessingError);
+          throw new Krai_Module_Exception("Unable to locate page revisions in the database.", Krai_Module_Exception::ProcessingError);
         }
       }
     }

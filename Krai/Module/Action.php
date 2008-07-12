@@ -62,14 +62,14 @@ abstract class Krai_Module_Action extends Krai_Base
 
   /**
    * Validate some data
-   * @throws Krai_ModuleException
+   * @throws Krai_Module_Exception
    */
   public function Validate()
   { }
 
   /**
    * Process data
-   * @throws Krai_ModuleException
+   * @throws Krai_Module_Exception
    */
   public function Process()
   { }
