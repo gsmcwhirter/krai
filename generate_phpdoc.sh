@@ -1,13 +1,27 @@
 #!/bin/sh
 
-if [ -z $1 ]
+function gendoc()
+{
+	if [ -z $2 ]
+	then
+		ver='edge'
+	else
+		ver=$2
+	fi
+
+	phpdoc -c $1
+	mv doc krai-doc-$ver
+	tar czf krai-doc-$ver.tar.gz krai-doc-$ver/
+	rm -r krai-doc-$ver
+}
+
+
+if [ -z $2 ]
 then
-	ver='edge'
+	echo "Missing configuration parameter. Using default."
+	conf=phpdoc_archive.ini
 else
-	ver=$1
+	conf=$2
 fi
 
-phpdoc -o HTML:Smarty:HandS -d Krai/,script/demo/,tutorials/ -f Krai.php,README,COPYING,INSTALL,MIGRATION,CHANGELOG -t doc -ti "Krai Framework Documentation" -dn Krai -i *.phtml,*wiki_parser/ --quiet on --sourcecode on --parseprivate on -ric README,COPYING,INSTALL,CHANGELOG,MIGRATION
-mv doc krai-doc-$ver
-tar czf krai-doc-$ver.tar.gz krai-doc-$ver/
-rm -r krai-doc-$ver
+gendoc $conf $1
