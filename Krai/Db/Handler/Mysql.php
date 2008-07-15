@@ -186,6 +186,39 @@ class Krai_Db_Handler_Mysql extends Krai_Db_Handler
   }
 
   /**
+   * Works on aspects of a transaction (starting, committing, rolling back)
+   * @param string $_action One of "start", "commit", or "rollback"
+   * @throws Krai_Db_Exception
+   *
+   */
+  public function Transaction($_action)
+  {
+    switch(strtolower($_action))
+    {
+      case "start":
+        if(!$this->Query("START TRANSACTION"))
+        {
+          throw new Krai_Db_Exception("Unable to start transaction.");
+        }
+        break;
+      case "commit":
+        if(!$this->Query("COMMIT"))
+        {
+          throw new Krai_Db_Exception("Unable to commit transaction.");
+        }
+        break;
+      case "rollback":
+        if(!$this->Query("ROLLBACK"))
+        {
+          throw new Krai_Db_Exception("Unable to rollback transaction.");
+        }
+        break;
+      default:
+        throw new Krai_Db_Exception("Un-recognized transaction command.");
+    }
+  }
+
+  /**
    * Parse the query parameters, escaping and whatnot
    *
    * @param array $params The raw parameters

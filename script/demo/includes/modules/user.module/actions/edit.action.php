@@ -131,9 +131,9 @@ class UserModule_EditAction extends Krai_Module_Action
         {
           $mail = Mailer::NewMail();
           $mail->recipients = array(self::$POST["email"]);
-          $mail->subject = "Krai Demo App E-Mail Change";
+          $mail->subject = Krai::GetConfig("SYSTEM_NAME")." E-Mail Change";
           $mail->content =  "Greets.\n\n".
-                            "An e-mail change request has been initiated for the Krai Demo App.".
+                            "An e-mail change request has been initiated for the ".Krai::GetConfig("SYSTEM_NAME").
                             "To activate the new e-mail, please go to the following URL.\n".
                             "If you did NOT request this e-mail change, please do not visit the link.\n\n".
                             "http://".Krai::GetConfig("DOMAIN").self::$ROUTER->UrlFor("user","confirm",array("id" => $this->_parent->USER->user_id,"code" => $thecode,"type"=>"email"), false)."\n\n";

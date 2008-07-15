@@ -207,7 +207,7 @@ class Krai_Db_Handler_Pdo extends Krai_Db_Handler
 
     if(!$query)
     {
-      throw new Krai_Db_Exception($this->error("text"), $this->error("number"));
+      throw new Krai_Db_Exception($this->Error("text"), is_integer($this->Error("number")) ? $this->Error("number") : 0);
     }
 
     if(preg_match("#^SELECT\s#i",$sql))
@@ -374,15 +374,15 @@ class Krai_Db_Handler_Pdo extends Krai_Db_Handler
 
     if($ret == "text")
     {
-      return $einfo[2];
+      return array_key_exists(2, $einfo) ? $einfo[2] : "Unknown error.";
     }
     elseif($ret == "number")
     {
-      return $einfo[0];
+      return array_key_exists(0, $einfo) ? $einfo[0] : "Unknown error.";
     }
     elseif($ret == "array")
     {
-      return array($einfo[2], $einfo[1]);
+      return array(array_key_exists(2, $einfo) ? $einfo[2] : "Unknown error.", array_key_exists(1, $einfo) ? $einfo[1] : "Unknown error.");
     }
     else
     {

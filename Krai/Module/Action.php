@@ -108,11 +108,17 @@ abstract class Krai_Module_Action extends Krai_Base
     if ($_templated)
     {
       $mconf = Krai::GetConfig("CONFIG_MODULE");
-      $layout = (defined("self::UseLayout")) ? self::UseLayout : true;
-      $layout = (is_string($layout)) ? $layout : $mconf["DEFAULT_LAYOUT"];
-      include Krai::$LAYOUTS."/".$layout."/header.phtml";
-      include Krai::$MODULES."/".$_file;
-      include Krai::$LAYOUTS."/".$layout."/footer.phtml";
+      $layout = (is_string($_templated)) ? $_templated : $mconf["DEFAULT_LAYOUT"];
+      if($layout)
+      {
+        include Krai::$LAYOUTS."/".$layout."/header.phtml";
+        include Krai::$MODULES."/".$_file;
+        include Krai::$LAYOUTS."/".$layout."/footer.phtml";
+      }
+      else
+      {
+        include Krai::$MODULES."/".$_file;
+      }
     }
     else
     {
@@ -176,11 +182,17 @@ abstract class Krai_Module_Action extends Krai_Base
     if ($_templated)
     {
       $mconf = Krai::GetConfig("CONFIG_MODULE");
-      $layout = (defined("self::UseLayout")) ? self::UseLayout : true;
-      $layout = (is_string($layout)) ? $layout : $mconf["DEFAULT_LAYOUT"];
-      include Krai::$LAYOUTS."/".$layout."/header.phtml";
-      echo $_text;
-      include Krai::$LAYOUTS."/".$layout."/footer.phtml";
+      $layout = (is_string($_templated)) ? $_templated : $mconf["DEFAULT_LAYOUT"];
+      if($layout)
+      {
+        include Krai::$LAYOUTS."/".$layout."/header.phtml";
+        echo $_text;
+        include Krai::$LAYOUTS."/".$layout."/footer.phtml";
+      }
+      else
+      {
+        echo $_text;
+      }
     }
     else
     {
