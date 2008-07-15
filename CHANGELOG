@@ -1,19 +1,25 @@
-= Krai Framework Changelog Version 1.0b1 and 1.0b1a =
+= Krai Framework ChangeLog Version 1.0b2 =
+
+commit 01b5ff6525341bd206c0f94813bdd4d66c360a5b
+Author: Greg McWhirter <greg@hallofkvasir.org>
+Date:   Tue Jul 15 16:57:38 2008 -0500
+
+    Fixing bugs in the database handlers, the Krai_Module_Action rendering routines, and the demo and skeleton applications
+
+commit bb2f7c70c83d5bd02f4b7b966521a118a480ca76
+Author: Greg McWhirter <greg@hallofkvasir.org>
+Date:   Sun Jul 13 16:35:33 2008 -0400
+
+    Updates
+
+commit e32634274b097d95fdc95a353272e1b99411c4e3
+Author: Greg McWhirter <greg@hallofkvasir.org>
+Date:   Sat Jul 12 16:22:31 2008 -0400
+
+    Updating version number.
 
 commit dae35cfeab7ad676458cebc3fd0edc760689683a
 Author: Greg McWhirter <greg@hallofkvasir.org>
 Date:   Sat Jul 12 16:21:29 2008 -0400
 
     Fixing problems with missed translation bits in the demo application.
-
-commit 165733e3f10df36b5f9e6fd9155084fb3a6c127d
-Author: Greg McWhirter <greg@hallofkvasir.org>
-Date:   Sat Jul 12 15:46:53 2008 -0400
-
-    Adding the equivalent codebase as KvFramework 2.0b7 would have been.
-
-commit 1d0b2b36397a68706771fe6abe2df73c34863fd9
-Author: Greg McWhirter <greg@hallofkvasir.org>
-Date:   Fri Jul 11 14:29:54 2008 -0400
-
-    Initial commit
