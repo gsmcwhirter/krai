@@ -1,6 +1,10 @@
 <?php
 /**
  * A Struct type abstract class
+ *
+ * This file contains the Krai_Struct class, which is a sort of approximation
+ * of the struct types of other languages.
+ *
  * @package Krai
  * @subpackage Struct
  * @author Greg McWhirter <gsmcwhirter@gmail.com>
@@ -13,6 +17,14 @@ Krai::Uses(
 
  /**
   * A struct type abstract class
+  *
+  * This class provides a sort of approximation of a struct type from some other
+  * languages. The {@link Krai_Struct::$FIELDS} variable holds the names and
+  * default values of the allowed properties. The default values are also used to
+  * determine what type the values of those properties must have.
+  *
+  * The class uses the PHP overloading functions to control the public behavior.
+  *
   * @package Krai
   * @subpackage Struct
   */
@@ -22,19 +34,19 @@ abstract class Krai_Struct
   /**
    * Array of allowed properties of the struct
    *
+   * This variable holds the names and
+   * default values of the allowed properties. The default values are also used to
+   * determine what type the values of those properties must have.
+   *
    * @var array
    */
   protected $FIELDS = array();
 
   /**
-   * Array of allowed variable of the struct
-   *
-   * @var array
-   */
-  protected $VARS = array();
-
-  /**
    * Array of current values of the Fields
+   *
+   * This variable holds the data that currently resides in each of the allowed
+   * properties.
    *
    * @var array
    */
@@ -43,7 +55,11 @@ abstract class Krai_Struct
   /**
    * Constructor
    *
-   * @param array $new_defaults Override the allowed fields
+   * This function initializes the struct instance. It accepts overrides of the
+   * default values, in lieu of setting those values after initialization, for
+   * convenience.
+   *
+   * @param array $new_defaults Override the default values of the allowed fields
    */
   public function __construct(array $new_defaults = array())
   {
@@ -62,8 +78,11 @@ abstract class Krai_Struct
    *
    * PHP magic function for getting a property value
    *
-   * @param mixed $m
-   * @return mixed
+   * Returns the current value of a property, or throws a Krai_Struct_Exception
+   * if that property is not valid.
+   *
+   * @param mixed $m The name of the property of which to get the value
+   * @return mixed The value of the property
    * @throws Krai_Struct_Exception
    */
   public function __get($m)
@@ -128,7 +147,7 @@ abstract class Krai_Struct
    */
   protected function VarAllowed($m)
   {
-    return((in_array($m, array_keys($this->FIELDS)) || in_array($m, $this->VARS)) ? true : false );
+    return (in_array($m, array_keys($this->FIELDS))) ? true : false;
   }
 
 }
