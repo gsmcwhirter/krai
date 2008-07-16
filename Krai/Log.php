@@ -1,10 +1,15 @@
 <?php
 /**
  * Logging interface for the Krai.
+ *
+ * Apologies, but I am not going to document this well since it will be replaced
+ * by version 1.1.
+ *
  * @package Krai
  * @subpackage Log
  * @author Greg McWhirter <gsmcwhirter@gmail.com>
  * @copyright Copyright (c) 2008, Greg McWhirter
+ * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
 Krai::Uses(

@@ -8,6 +8,7 @@
  * @package Krai
  * @author Greg McWhirter <gsmcwhirter@gmail.com>
  * @copyright Copyright (c) 2008, Greg McWhirter
+ * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
 define_syslog_variables();
@@ -440,10 +441,13 @@ final class Krai
 
         self::Uses(self::$FRAMEWORK."/Mail.php");
 
+        $mconfstruct = new Krai_Struct_Mailconf($mconf["MAILER_CONFIG"]);
+
         Krai_Mail::Configure(
           $mconf["SEND_MAIL"],
           $mconf["FROM_ADDR"],
-          $mconf["FROM_NAME"]
+          $mconf["FROM_NAME"],
+          $mconfstruct
         );
 
       }
@@ -541,15 +545,6 @@ final class Krai
     //get rid of the query string for these purposes
     $the_request = preg_replace("#\?.*$#", "", $_SERVER['REQUEST_URI']);
 
-    /*
-    //get rid of the query string on the script name, as well
-    $the_handling_script = preg_replace("#\?.*$#", "", $_SERVER['SCRIPT_NAME']);
-    //drop the default.php from the handling script thing
-    $the_handling_script_path = str_replace("/default.php","",$the_handling_script);
-    $the_request_actual = preg_replace("#$the_handling_script_path/#", "/", $the_request);
-    return ($the_request_actual == "/" || $the_request_actual == "") ? "/index" : $the_request_actual;
-    */
-
     $the_request_actual = preg_replace(array("#^/*#","#^".self::GetConfig("BASEURI")."#"),array("",""),$the_request);
     return ($the_request_actual == "") ? "/" : $the_request_actual;
   }
@@ -572,22 +567,28 @@ final class Krai
   public static function Uses()
   {
     $args = func_get_args();
-    if(count($args) > 0 && is_bool($args[0]))
-    {
-      $autoload = array_shift($args);
-    }
-    else
-    {
-      $autoload = false;
-    }
 
     foreach($args as $filename)
     {
+      if(preg_match("#^pear://#"), $filename))
+      {
+        try
+        {
+          $pp = self::GetConfig("PEAR_PATH");
+        }
+        catch(Exception $e)
+        {
+          $pp = "";
+        }
+        $filename = $pp.substr($filename, 7);
+      }
+
+
       if(!(@include_once $filename))
       {
         Krai::WriteLog("Failed loading file: ".$filename);
 
-        throw new Exception(($autoload ? "" : "Auto" )."Load files failed for ".$filename);
+        throw new Exception("Load files failed for ".$filename);
         return false;
       }
 

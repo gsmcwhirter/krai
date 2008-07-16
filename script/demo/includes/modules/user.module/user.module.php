@@ -5,6 +5,7 @@
  * @subpackage Modules
  * @author Greg McWhirter <gsmcwhirter@gmail.com>
  * @copyright Copyright (c) 2008, Greg McWhirter
+ * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
 /**
@@ -35,10 +36,10 @@ class UserModule extends ApplicationModule
     }
     elseif($source != "post" && $source != "session")
     {
-      $parts = ((array_key_exists("HTTP_REFERER", self::$SERVER) && self::$SERVER["HTTP_REFERER"] != "")) ? parse_url(self::$SERVER["HTTP_REFERER"], PHP_URL_HOST) : null;
-      if(!is_null($parts) && preg_match("#".Krai::GetConfig("DOMAIN")."$#", $parts) && !preg_match("#user/login#",self::$SERVER["HTTP_REFERER"]))
+      $parts = ((array_key_exists("HTTP_REFERER", $_SERVER) && $_SERVER["HTTP_REFERER"] != "")) ? parse_url($_SERVER["HTTP_REFERER"], PHP_URL_HOST) : null;
+      if(!is_null($parts) && preg_match("#".Krai::GetConfig("DOMAIN")."$#", $parts) && !preg_match("#user/login#", $_SERVER["HTTP_REFERER"]))
       {
-        return self::$SERVER["HTTP_REFERER"];
+        return $_SERVER["HTTP_REFERER"];
       }
       else
       {

@@ -15,6 +15,11 @@ Validate - Process - Display, and everything in the action and the module is
 available to the rendering call (whether as an instance method or through
 $this->_parent for things in the module).
 
+== DEPENDENCIES ==
+
+- Krai_Mail depends on the PEAR Mail library
+- The Demo Application depends on the PEAR Text_Wiki library
+
 == SETUP / USAGE - Blank Application Skeleton ==
 
 1. tar xzf krai-XXXXX.tar.gz (you probably already did this if you are reading

@@ -5,6 +5,7 @@
  * @subpackage Actions
  * @author Greg McWhirter <gsmcwhirter@gmail.com>
  * @copyright Copyright (c) 2008, Greg McWhirter
+ * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
 /**
@@ -174,8 +175,8 @@ class UserModule_LoginAction extends Krai_Module_Action
 			  "user_id" => $_user_id,
 			  "started" => time(),
 			  "lastact" => time(),
-			  "useragent" => self::$SERVER["HTTP_USER_AGENT"],
-			  "ipaddr" => self::$SERVER["REMOTE_ADDR"]
+			  "useragent" => $_SERVER["HTTP_USER_AGENT"],
+			  "ipaddr" => $_SERVER["REMOTE_ADDR"]
 			);
 
       self::$DB->Process($q);

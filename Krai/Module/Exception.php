@@ -5,10 +5,13 @@
  * @subpackage Module
  * @author Greg McWhirter <gsmcwhirter@gmail.com>
  * @copyright Copyright (c) 2008, Greg McWhirter
+ * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
 /**
  * Framework module handler exception
+ *
+ * This is the exception thrown within the Krai_Module and Krai_Action classes.
  *
  * @package Krai
  * @subpackage Module

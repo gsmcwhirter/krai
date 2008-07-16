@@ -5,6 +5,7 @@
  * @subpackage Router
  * @author Greg McWhirter <gsmcwhirter@gmail.com>
  * @copyright Copyright (c) 2008, Greg McWhirter
+ * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
 Krai::Uses(
@@ -15,6 +16,13 @@ Krai::Uses(
 /**
  * The framework router
  *
+ * This class controls parsing request uris into the execution of module actions.
+ * It also generates uris from module and action data that will get back to that
+ * module and action when re-parsed. It also has functionality to load files in
+ * which live certain modules and actions.
+ *
+ * Implements the Singleton pattern via {@link Krai_Router::Instance()}.
+ *
  * @package Krai
  * @subpackage Router
  */
@@ -24,6 +32,8 @@ final class Krai_Router
   /**
    * Holds the singleton instance
    *
+   * This holds the single instance of the routing class.
+   *
    * @var Krai_Router
    */
   private static $_instance = null;
@@ -31,12 +41,20 @@ final class Krai_Router
   /**
    * Holds the array of defined routes sorted by complexity
    *
+   * This is an array of arrays of {@link Krai_Router_Route} instances. It is in
+   * levels of complexity to make finding a matching route (perhaps) easier.
+   *
    * @var array
    */
   private $_routemap = array();
 
   /**
    * Holds the array of defined routes in entry order
+   *
+   * This is an array of {@link Krai_Router_Route} instances sorted in the order
+   * they were parsed out of the routes configuration file. It is used for reconstructing
+   * routes from module and action data.
+   *
    * @var array
    */
   private $_reconstrmap = array();
@@ -44,16 +62,22 @@ final class Krai_Router
   /**
    * Flag for whether or not routing has already occurred.
    *
+   * This is a flag indicating whether or not {@link Krai_Router::DoRoute()} has
+   * been run yet.
+   *
    * @var boolean
    */
   private $_routed = false;
 
   /**
    * Constructor - private to implement singleton pattern
+   *
+   * This function parses the routes configuration file and stores the route objects.
+   *
    * @param string $kvfurl
    *
    */
-  private function __construct()//$kvfurl)
+  private function __construct()
   {
     /* Load the route map */
     $lines = file(Krai::$INCLUDES."/configs/routes.config");
@@ -92,26 +116,6 @@ final class Krai_Router
       $this->_reconstrmap[] = new Krai_Router_Route($patparts, $forces);
     }
 
-    /*$ruri = preg_replace("#\?.*$#", "", urldecode($_SERVER["REQUEST_URI"]));
-    Krai::WriteLog($kvfurl, Krai::LOG_DEBUG );
-    Krai::WriteLog($ruri, Krai::LOG_DEBUG );
-
-    $sp = (!empty($kvfurl)) ? strpos($ruri, $kvfurl) : false;
-    if($sp === false)
-    {
-      $t1 = $ruri;
-    }
-    else
-    {
-      $t1 = substr($ruri, 0, $sp);
-    }
-
-    $this->_baseuri = preg_replace(array("#^[/]*#","#[/]*$#"),array("",""),$t1);
-    if(!empty($this->_baseuri))
-    {
-      $this->_baseuri = "/".$this->_baseuri;
-    }*/
-
     $this->_baseuri = Krai::GetConfig("BASEURI") == "" ? "" : "/".Krai::GetConfig("BASEURI");
     Krai::WriteLog($this->_baseuri, Krai::LOG_DEBUG);
   }
@@ -119,21 +123,26 @@ final class Krai_Router
   /**
    * Singleton pattern constructor / retreiver
    *
-   * @return Krai_Router
+   * This function allows the retrieval of the singleton instance of the class.
+   *
+   * @return Krai_Router The router instance
    */
-  public static function &Instance()//$kvfurl)
+  public static function &Instance()
   {
 
     if(!(self::$_instance instanceOf Krai_Router))
     {
       $c = "Krai_Router";
-      self::$_instance = new $c();//$kvfurl);
+      self::$_instance = new $c();
     }
     return self::$_instance;
   }
 
   /**
    * Execute a route
+   *
+   * This function executes a route based on the parsing of the request parameter.
+   * It can only be called once, and after that will throw a Krai_Router_Exception.
    *
    * @param string $request The requested uri
    * @throws Krai_Router_Exception
@@ -182,9 +191,13 @@ final class Krai_Router
   /**
    * Actually execute a route
    *
-   * @param string $_module
-   * @param string $_action
-   * @param array $_params
+   * This function implements the actual execution of a route by instantiating
+   * the required module and calling the module's {@link Krai_Module::DoAction()}
+   * method.
+   *
+   * @param string $_module The name of the module to instantiate
+   * @param string $_action The name of the action to execute
+   * @param array $_params The parameters of the request
    * @throws Krai_Router_Exception
    */
   public function ExecuteRoute($_module, $_action, array $_params = array())
@@ -193,6 +206,7 @@ final class Krai_Router
     {
       Krai_Base::$PARAMS = array_merge(Krai_Base::$PARAMS, $_params);
       $t = Krai::$INFLECTOR->Underscore2Camel($_module."_module");
+      $this->Load($t);
       $inst = new $t();
       $inst->DoAction($_action, $_SERVER["REQUEST_METHOD"]);
     }
@@ -205,10 +219,14 @@ final class Krai_Router
   /**
    * Generate the URL for a certain module and action
    *
-   * @param string $_module
-   * @param string $_action
-   * @param array $_params
-   * @return string
+   * This function generates a uri representing a certain combination of module,
+   * action, and parameters which, when parsed, would execute the same.
+   *
+   * @param string $_module The name of the module
+   * @param string $_action The name of the action
+   * @param array $_params An array of parameters
+   * @param boolean $_forlink Whether or not to encode the uri returned for use in a link
+   * @return string The uri (including BASEURI).
    */
   public function UrlFor($_module, $_action, array $_params = array(), $_forlink = true)
   {
@@ -223,23 +241,79 @@ final class Krai_Router
     }
   }
 
+  /**
+   * Loads the file for a module or action name
+   *
+   * This function attempts to load the file containing the class named by the
+   * parameter. It is configured to have success with modules and actions placed
+   * in the usual places.
+   *
+   * @param string $_class The name of the class
+   * @return boolean The success of the loading
+   * @throws Krai_Router_Exception
+   *
+   */
+  public function Load($_class)
+  {
+    $_class = Krai::$INFLECTOR->Camel2Underscore($_class);
+    if(substr($_class,-6) == "module")
+    {
+      $this->LoadModuleFile(substr($class, 0, 7));
+    }
+    elseif(substr($_class, -6) == "action")
+    {
+      list($mod, $act) = explode("module", $_class, 2);
+      $this->LoadActionFile(substr($mod,0,-1), substr($act, 1,-7));
+    }
+    else
+    {
+      throw new Krai_Router_Exception("Load failed for class ".$class);
+    }
+  }
 
   /**
-   * Returns an array of string representations of all route parsings
+   * Tries to load the file for a module
    *
-   * @return array
+   * This function attempts to load the file containing a certain module.
+   *
+   * @param string $_module The name of the module
+   * @return boolean The success of the loading
+   * @throws Krai_Router_Exception
    */
-  public function ShowAllRoutes()
+  private function LoadModuleFile($_module)
   {
-    $ret = array();
-    foreach($this->_reconstrmap as $routes)
+    $f = Krai::$MODULES."/".$_module.".module/".$_module.".module.php";
+    if(Krai::Uses($f))
     {
-      foreach($routes as $route)
-      {
-        $ret[] = implode("/",$route->GetParts())." : ".Krai::AssocImplode(", "," => ", $route->GetFixedMap());
-      }
+      return true;
     }
-    return $ret;
+    else
+    {
+      throw new Krai_Router_Exception("Module Load failed for file ".$f);
+    }
+  }
+
+  /**
+   * Tries to load the file for an action
+   *
+   * This function attempts to load the file containing a certain action.
+   *
+   * @param string $_module The name of the module of the action
+   * @param string $_action The name of the action
+   * @return boolean The success of the loading
+   * @throws Krai_Router_Exception
+   */
+  private function LoadActionFile($_module, $_action)
+  {
+    $f = Krai::$MODULES."/".$_module.".module/actions/".$_action.".action.php";
+    if(Krai::Uses($f))
+    {
+      return true;
+    }
+    else
+    {
+      throw new Krai_Router_Exception("Action Load failed for file ".$f);
+    }
   }
 
 }

@@ -5,10 +5,13 @@
  * @subpackage Router
  * @author Greg McWhirter <gsmcwhirter@gmail.com>
  * @copyright Copyright (c) 2008, Greg McWhirter
+ * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
 /**
- * Framework base exception
+ * Router exception
+ *
+ * This is the exception type that should be thrown by things related to Krai_Router
  *
  * @package Krai
  * @subpackage Router

@@ -1,20 +1,20 @@
 <?php
 /**
- * Markup generator exception for the Krai.
+ * A Krai exception class
  * @package Krai
- * @subpackage Markup
+ * @subpackage Mail
  * @author Greg McWhirter <gsmcwhirter@gmail.com>
  * @copyright Copyright (c) 2008, Greg McWhirter
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
 /**
- * Markup generator exception
+ * Mail exception class
  *
- * This is the exception type thrown within Krai_Markup
+ * This class is the exception that should be thrown by anything related to Krai_Mail.
  *
  * @package Krai
- * @subpackage Markup
+ * @subpackage Mail
  */
-class Krai_Markup_Exception extends Krai_Base_Exception
-{}
+class Krai_Mail_Exception extends Krai_Base_Exception
+{ }

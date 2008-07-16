@@ -5,6 +5,7 @@
  * @subpackage Modules
  * @author Greg McWhirter <gsmcwhirter@gmail.com>
  * @copyright Copyright (c) 2008, Greg McWhirter
+ * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
 Krai::Uses(
@@ -101,12 +102,12 @@ class ApplicationModule extends Krai_Module
    */
   protected function CheckLogin()
   {
-    if(!array_key_exists(SETTINGS::COOKIENAME, self::$COOKIES))
+    if(!array_key_exists(SETTINGS::COOKIENAME, $_COOKIE))
     {
       return false;
     }
 
-    if(!self::$COOKIES[SETTINGS::COOKIENAME])
+    if(!$_COOKIE[SETTINGS::COOKIENAME])
     {
       return false;
     }
@@ -116,7 +117,7 @@ class ApplicationModule extends Krai_Module
     $q->fields = array('s.session_id','s.started','s.lastact','s.useragent','s.ipaddr','u.*');
     $q->conditions = "s.session_id = ?";
     $q->limit = "1";
-    $q->parameters = array(self::$COOKIES[SETTINGS::COOKIENAME]);
+    $q->parameters = array($_COOKIE[SETTINGS::COOKIENAME]);
 
     $res = self::$DB->Process($q);
 
@@ -129,7 +130,7 @@ class ApplicationModule extends Krai_Module
     // update the last page view time
     $q = self::$DB->UpdateQuery('sessions');
     $q->conditions = "session_id = ?";
-    $q->parameters = array(self::$COOKIES[SETTINGS::COOKIENAME]);
+    $q->parameters = array($_COOKIE[SETTINGS::COOKIENAME]);
     $q->limit = "1";
     $q->fields = array('lastact' => time());
 

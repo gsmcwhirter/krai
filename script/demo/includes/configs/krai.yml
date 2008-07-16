@@ -30,6 +30,21 @@ CONFIG_MAIL:
   SEND_MAIL: true
   FROM_ADDR: admin@example.com
   FROM_NAME: Example App Mailer
+  MAILER_CONFIG:
+    type: internal  # internal, sendmail, or smtp
+    #args: -
+    #charset: iso-8859-1
+    #sendmail_path: /usr/bin/sendmail
+    #smtp_host: localhost
+    #smtp_port: 25
+    #smtp_auth: false
+    #smtp_username:
+    #smtp_password:
+    #smtp_localhost: localhost
+    #smtp_timeout:
+    #smtp_verp: false
+    #smtp_debug: false
+    #smtp_persist: false
 
 ##### Things you might want to edit
 
@@ -38,6 +53,7 @@ CONFIG_MAIL:
 #USE_OB_GZHANDLER: false
 #DISABLE_SESSION: false
 #DEFAULT_TIMEZONE: America/New_York
+#PEAR_PATH: /path/to/pear/lib/ #include trailing slash
 USE_DB: true
 USE_LOG: true
 USE_MAIL: true

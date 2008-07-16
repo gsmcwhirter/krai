@@ -1,3 +1,13 @@
+== From 1.0b2 or earlier ==
+
+Removed Krai_Base::$SESSION, Krai_Base::$SERVER, Krai_Base::$REQUEST, Krai_Base::$ENV
+  Krai_Base::$COOKIES, Krai_Base::$FILES
+Added necessary configuration options to the mailer
+Removed __autoload
+Added Krai::Uses("pear://"...) syntax
+Added pear path configuration option
+Removed Struct magic __call and __unset
+
 == From KvFramework 2.0b6 ==
 
 Renamed most things.

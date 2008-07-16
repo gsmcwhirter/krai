@@ -5,6 +5,7 @@
  * @subpackage Actions
  * @author Greg McWhirter <gsmcwhirter@gmail.com>
  * @copyright Copyright (c) 2008, Greg McWhirter
+ * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
 /**
@@ -27,9 +28,9 @@ class UserModule_LogoutAction extends Krai_Module_Action
 
   public function Process()
   {
-    if(array_key_exists(SETTINGS::COOKIENAME, self::$COOKIES))
+    if(array_key_exists(SETTINGS::COOKIENAME, $_COOKIE))
     {
-      $this->_parent->DestroySession(self::$COOKIES[SETTINGS::COOKIENAME]);
+      $this->_parent->DestroySession($_COOKIE[SETTINGS::COOKIENAME]);
 
       setcookie(SETTINGS::COOKIENAME, "", time()-3000, Krai::GetConfig("BASEURI") == "" ? "/" : "/".Krai::GetConfig("BASEURI"));
     }

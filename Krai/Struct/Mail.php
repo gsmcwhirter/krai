@@ -5,6 +5,7 @@
  * @subpackage Struct
  * @author Greg McWhirter <gsmcwhirter@gmail.com>
  * @copyright Copyright (c) 2008, Greg McWhirter
+ * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
 /**
@@ -23,6 +24,6 @@ class Krai_Struct_Mail extends Krai_Struct
     "from" => "",
     "from_name" => "",
     "subject" => "",
-    "headers" => ""
+    "headers" => array()
   );
 }

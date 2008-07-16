@@ -9,6 +9,7 @@
  * @subpackage Struct
  * @author Greg McWhirter <gsmcwhirter@gmail.com>
  * @copyright Copyright (c) 2008, Greg McWhirter
+ * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
 Krai::Uses(
@@ -100,8 +101,11 @@ abstract class Krai_Struct
   /**
    * PHP magic function for setting a property value
    *
-   * @param mixed $m
-   * @param mixed $v
+   * Sets the value of the property if it is allowed by the struct and if the value
+   * is of the correct type. Otherwise throws a Krai_Struct_Exception.
+   *
+   * @param mixed $m The name of the property to set
+   * @param mixed $v The value of the property to set
    * @throws Krai_Struct_Exception
    */
   public function __set($m, $v)
@@ -117,32 +121,12 @@ abstract class Krai_Struct
   }
 
   /**
-   * PHP magic function for calling a method
-   *
-   * @param mixed $m
-   * @param mixed $a
-   * @throws Krai_Struct_Exception
-   */
-  public function __call($m, $a)
-  {
-    throw new Krai_Struct_Exception("You cannot call a method on a struct.");
-  }
-
-  /**
-   * PHP magic function for unsetting a property
-   *
-   * @param mixed $m
-   * @throws Krai_Struct_Exception
-   */
-  public function __unset($m)
-  {
-    throw new Krai_Struct_Exception("You cannot unset a struct variable,");
-  }
-
-  /**
    * Determine whether a property is allowed to be get / set
    *
-   * @param mixed $m
+   * This function determines, from the {@link Krai_Struct::$FIELDS} variable,
+   * whether or not a certail property is allowed.
+   *
+   * @param mixed $m The name of the property
    * @return boolean
    */
   protected function VarAllowed($m)
