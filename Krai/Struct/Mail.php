@@ -1,6 +1,9 @@
 <?php
 /**
  * Struct holding the information for an e-mail
+ *
+ * This file contains a {@link Krai_Struct} representing the data for an email
+ *
  * @package Krai
  * @subpackage Struct
  * @author Greg McWhirter <gsmcwhirter@gmail.com>
@@ -10,14 +13,14 @@
 
 /**
  * Struct holding the information for an e-mail
+ *
+ * This struct contains the data necessary to send an email via {@link Krai_Mail}
+ *
  * @package Krai
  * @subpackage Struct
  */
 class Krai_Struct_Mail extends Krai_Struct
 {
-  /**
-   * @var array The allowed data fields in the struct
-   */
   protected $FIELDS = array(
     "recipients" => array(),
     "content" => "",

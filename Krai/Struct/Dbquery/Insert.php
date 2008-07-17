@@ -1,6 +1,9 @@
 <?php
 /**
- * Database query struct for the Krai.
+ * Database query struct for the Krai Framework.
+ *
+ * This file contains the {@link Krai_Struct_Dbquery} for an INSERT query
+ *
  * @package Krai
  * @subpackage Struct
  * @author Greg McWhirter <gsmcwhirter@gmail.com>
@@ -11,26 +14,18 @@
 /**
  * Database insert query struct
  *
+ * This struct is the {@link Krai_Struct_Dbquery} representing an INSERT query
+ *
  * @package Krai
  * @subpackage Struct
  */
 class Krai_Struct_Dbquery_Insert extends Krai_Struct_Dbquery
 {
 
-  /**
-   * Allowed fields
-   *
-   * @var array
-   */
   protected $FIELDS = array(
     "fields" => array(),
     "multiple" => false
   );
 
-  /**
-   * Query action
-   *
-   * @var string
-   */
   public $action = "insert";
 }

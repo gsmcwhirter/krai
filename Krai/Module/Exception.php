@@ -47,4 +47,10 @@ class Krai_Module_Exception extends Krai_Base_Exception
    *
    */
   const UnknownRequestMethod = -5;
+
+  /**
+   * Error code for a problem concerning file paths
+   *
+   */
+  const FilePathError = -6;
 }

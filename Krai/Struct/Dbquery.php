@@ -1,6 +1,10 @@
 <?php
 /**
- * Database query struct for the Krai.
+ * Database query struct for the Krai Framework.
+ *
+ * This file contains the struct that is the root for the rest of the {@link Krai_Db}
+ * query-type structs
+ *
  * @package Krai
  * @subpackage Struct
  * @author Greg McWhirter <gsmcwhirter@gmail.com>
@@ -18,17 +22,15 @@ Krai::Uses(
 /**
  * Database base query struct
  *
+ * This struct is the base for the rest of the structs that are used by {@link Krai_Db}
+ * for automatic query construction.
+ *
  * @package Krai
  * @subpackage Struct
  */
 abstract class Krai_Struct_Dbquery extends Krai_Struct
 {
 
-  /**
-   * Allowed fields
-   *
-   * @var array
-   */
   protected $FIELDS = array(
     "conditions" => "",
     "order" => "",
@@ -41,17 +43,10 @@ abstract class Krai_Struct_Dbquery extends Krai_Struct
   );
 
   /**
-   * Variables allowed on construct
-   *
-   * @var array
-   */
-  protected $VARS = array(
-    "action",
-    "tables"
-  );
-
-  /**
    * Query action
+   *
+   * This variable represents the general action of the query. It is a key for the
+   * instance's handling by {@link Krai_Db_Handler::Process()}.
    *
    * @var string
    */
@@ -60,12 +55,18 @@ abstract class Krai_Struct_Dbquery extends Krai_Struct
   /**
    * Query tables
    *
+   * This variable contains the tables and joins involved in the query. It is
+   * parsed by {@link Krai_Db_Handler::GetJoins()}.
+   *
    * @var array
    */
   public $tables = array();
 
   /**
    * Constructor
+   *
+   * This overrides a standard {@link Krai_Struct::__construct()} call so that
+   * tables must be passed in initialization.
    *
    * @param array $tables Tables for the query
    * @param array $new_defaults New default variable values

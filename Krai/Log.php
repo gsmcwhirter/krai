@@ -1,6 +1,6 @@
 <?php
 /**
- * Logging interface for the Krai.
+ * Logging interface for the Krai Framework.
  *
  * Apologies, but I am not going to document this well since it will be replaced
  * by version 1.1.
@@ -41,6 +41,9 @@ define ("KRAI_DEFAULT_EMAIL_SUBJECT", "LOG MESSAGE: ".date("r")); // The calling
 
 /**
  * Logger interface
+ *
+ * Apologies, but I am not going to document this well since it will be replaced
+ * by version 1.1.
  *
  * @package Krai
  * @subpackage Log

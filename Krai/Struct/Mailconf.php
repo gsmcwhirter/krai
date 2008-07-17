@@ -1,6 +1,9 @@
 <?php
 /**
  * Struct holding the information for an e-mail connection
+ *
+ * This file contains a Krai_Struct used for configuring a mailer connection
+ *
  * @package Krai
  * @subpackage Struct
  * @author Greg McWhirter <gsmcwhirter@gmail.com>
@@ -10,14 +13,16 @@
 
 /**
  * Struct holding the information for an e-mail connection
+ *
+ * This struct contains the data necessary to configure a {@link Krai_Mail}
+ * mailer connection
+ *
  * @package Krai
  * @subpackage Struct
  */
 class Krai_Struct_Mailconf extends Krai_Struct
 {
-  /**
-   * @var array The allowed data fields in the struct
-   */
+
   protected $FIELDS = array(
     "type" => "",
     "charset" => "",

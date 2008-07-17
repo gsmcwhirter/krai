@@ -1,6 +1,10 @@
 <?php
 /**
- * The application configuration file.
+ * A user class for the application.
+ *
+ * This file contains a class representing a logged-in user and also providing
+ * some static functionality
+ *
  * @package Demo
  * @subpackage Lib
  * @author Greg McWhirter <gsmcwhirter@gmail.com>
@@ -10,6 +14,10 @@
 
 /**
  * Class representing a logged-in user
+ *
+ * This class represents a logged-in user. Additionally, it implements some static
+ * functionality for privilege checking.
+ *
  * @package Demo
  * @subpackage Lib
  *
@@ -19,30 +27,48 @@ class User
 
   /**
    * A copy of the database record
-   * @var Krai_DbObject
+   *
+   * This variable holds a copy of the database information for the user
+   *
+   * @var Krai_Db_Object
    */
   protected $_DBDATA;
 
   /**
    * A copy of user-initialized parameters
+   *
+   * This variable holds the values of properties that the user initialized on
+   * the object
+   *
    * @var array
    */
   protected $_MYDATA = array();
 
   /**
    * A flag for whether the user is a sysop or not
+   *
+   * This is a cache of the check for whether or not the user has sysop privileges
+   *
    * @var boolean
    */
   protected $_ISSYSOP = false;
 
   /**
    * A cache of privilige lookups
+   *
+   * This is a cache of privilege lookups, so the database doesn't have to be called
+   * for every lookup request necessarily.
+   *
    * @var array
    */
   protected static $_PrivLookups = array();
 
   /**
    * Constructor
+   *
+   * This function initializes the user object. It saves the database record to
+   * {@link User::$_DBDATA} and looks up whether or not the user is a sysop.
+   *
    * @param Krai_Db_Object $_data The database record to use
    *
    */
@@ -92,6 +118,11 @@ class User
 
   /**
    * Does a privilige lookup for an access scheme
+   *
+   * This function performs a privilege lookup based on an {@link AccessScheme}.
+   * It returns true if the user has all the required privileges, and false otherwise.
+   *
+   *
    * @param AccessScheme $as
    * @return boolean
    */
@@ -139,6 +170,10 @@ class User
 
   /**
    * A static privilige lookup
+   *
+   * This is a static privilege lookup for a user id and a privilege name. It does
+   * not require the use of an {@link AccessScheme} instance.
+   *
    * @param integer $_user_id The id of the user
    * @param string $_priv_name The name of the privilege
    * @return boolean
@@ -179,6 +214,9 @@ class User
 
 /**
  * Represents an exception in the User class
+ *
+ * This is an exception class thrown by {@link User} functions.
+ *
  * @package Demo
  * @subpackage Lib
  */

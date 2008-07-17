@@ -35,7 +35,7 @@ class UserModule_LostpassAction extends Krai_Module_Action
   {
     if($this->_RequestMethod == "POST")
     {
-      self::$DB->Query("START TRANSACTION");
+      self::$DB->Transaction("start");
       $this->_doprocess = true;
 
       //Set required fields
@@ -79,7 +79,7 @@ class UserModule_LostpassAction extends Krai_Module_Action
 
       if(!$res2)
       {
-        self::$DB->Query("ROLLBACK");
+        self::$DB->Transaction("rollback");
         throw new Krai_Module_Exception("No user with that username was found in the database.", Krai_Module_Exception::ProcessingError);
       }
 
@@ -92,36 +92,36 @@ class UserModule_LostpassAction extends Krai_Module_Action
       );
 
       $res = self::$DB->Process($q);
-      if($res)
+      if(self::$DB->Result($res))
       {
         //Send activation email
-        $mail = Mailer::NewMail();
+        $mail = Krai_Mail::NewMail();
         $mail->recipients = array($res2->email);
         $mail->subject = "Krai Demo App Lost Password";
         $mail->content =  "Greets.\n\n".
                           "A password reset was requested for your account. Below is the new password.\n\n".
                           $thecode."\n\n";
-        if(Mailer::Send($mail))
+        if(Krai_Mail::Send($mail))
         {
-          self::$DB->Query("COMMIT");
+          self::$DB->Transaction("commit");
           self::Notice("A randomly generated password was sent to the email listed for that account.");
         }
         else
         {
-          self::$DB->Query("ROLLBACK");
+          self::$DB->Transaction("rollback");
           throw new Krai_Module_Exception("Password reset failed. E-mail was not sent.", Krai_Module_Exception::ProcessingError);
         }
       }
       else
       {
-        self::$DB->Query("ROLLBACK");
+        self::$DB->Transaction("rollback");
         throw new Krai_Module_Exception("Password reset failed. Unable to update user in the database.", Krai_Module_Exception::ProcessingError);
       }
 
     }
     elseif($this->_doprocess)
     {
-      self::$DB->Query("ROLLBACK");
+      self::$DB->Transaction("rollback");
     }
   }
 

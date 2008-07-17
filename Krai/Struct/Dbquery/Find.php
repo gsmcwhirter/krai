@@ -1,6 +1,9 @@
 <?php
 /**
- * Database query struct for the Krai.
+ * Database query struct for the Krai Framework.
+ *
+ * This file contains the {@link Krai_Struct_Dbquery} for a SELECT query
+ *
  * @package Krai
  * @subpackage Struct
  * @author Greg McWhirter <gsmcwhirter@gmail.com>
@@ -11,17 +14,14 @@
 /**
  * Database select query struct
  *
+ * This struct is the {@link Krai_Struct_Dbquery} representing a SELECT query
+ *
  * @package Krai
  * @subpackage Struct
  */
 class Krai_Struct_Dbquery_Find extends Krai_Struct_Dbquery
 {
 
-  /**
-   * Allowed fields
-   *
-   * @var array
-   */
   protected $FIELDS = array(
     "conditions" => "",
     "order" => "",
@@ -30,10 +30,5 @@ class Krai_Struct_Dbquery_Find extends Krai_Struct_Dbquery
     "parameters" => array()
   );
 
-  /**
-   * Query action
-   *
-   * @var string
-   */
   public $action = "find";
 }

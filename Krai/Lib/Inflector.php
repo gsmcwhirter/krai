@@ -1,6 +1,9 @@
 <?php
 /**
  * Krai inflector class
+ *
+ * This file holds the inflector class used by the framework.
+ *
  * @package Krai
  * @subpackage Lib
  * @author Greg McWhirter <gsmcwhirter@gmail.com>
@@ -10,6 +13,10 @@
 
 /**
  * Inflector class - changes case conventions and plurality
+ *
+ * This class provides functionality to convert words from singluar to plural and
+ * vice versa. Additionally, it can change things from CamelCase to lowercase_with_underscores.
+ *
  * @package Krai
  * @subpackage Lib
  */
@@ -18,6 +25,8 @@ final class Krai_Lib_Inflector
 
   /**
    * Holds pluralizations
+   *
+   * This is an array of pluralization regular expression patterns and replacements
    *
    * @var array
    */
@@ -44,6 +53,8 @@ final class Krai_Lib_Inflector
 
   /**
    * Holds singular-izations
+   *
+   * This is an array of singularization regular expression patterns and replacements
    *
    * @var array
    */
@@ -77,12 +88,16 @@ final class Krai_Lib_Inflector
   /**
    * List of nouns which are not pluralizable
    *
+   * This is an array of some nouns which do not change from singular to plural
+   *
    * @var array
    */
   private $_uncountable = array('equipment', 'information', 'rice', 'money', 'species', 'series', 'fish', 'sheep');
 
   /**
    * Holds irregular pluralizations
+   *
+   * This is an array of irregular pluralizations
    *
    * @var array
    */
@@ -92,10 +107,12 @@ final class Krai_Lib_Inflector
     'child' => 'children',
     'sex' => 'sexes',
     'move' => 'moves'
-	);
+  );
 
   /**
-   * Constructor - doesn't do anything yet
+   * Constructor - doesn't do anything
+   *
+   * This doesn't do anything except create a new instance.
    *
    */
   public function __construct()
@@ -103,6 +120,10 @@ final class Krai_Lib_Inflector
 
   /**
    * Changes a string from CamelCase to underscore_case
+   *
+   * This function takes a string and replaces capital letters by lowercase letters
+   * preceded by underscores (except the first letter of the new string will never)
+   * be an underscore unless the first letter of the original was).
    *
    * @param string $str
    * @return string
@@ -116,6 +137,10 @@ final class Krai_Lib_Inflector
   /**
    * Changes a string from underscore_case to CamelCase
    *
+   * This function takes a string and capitalizes the first letter and any letter
+   * preceded by an underscore character. It also capitalizes the first letter of
+   * the string.
+   *
    * @param string $str
    * @return string
    */
@@ -127,6 +152,9 @@ final class Krai_Lib_Inflector
 
   /**
    * Changes a noun from singular to plural
+   *
+   * This function takes a word and attempts to make it plural. It returns false
+   * if it cannot figure out how.
    *
    * @param string $word
    * @return string
@@ -162,6 +190,9 @@ final class Krai_Lib_Inflector
 
   /**
    * Changes a word from plural to singular
+   *
+   * This function takes a word and attempts to singularize it. It returns false
+   * if it cannot figure out how.
    *
    * @param string $word
    * @return string

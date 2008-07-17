@@ -1,6 +1,6 @@
 <?php
 /**
- * Logging session for the Krai.
+ * Logging session for the Krai Framework.
  * @package Krai
  * @subpackage Log
  * @author Greg McWhirter <gsmcwhirter@gmail.com>

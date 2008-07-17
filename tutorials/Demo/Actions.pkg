@@ -3,7 +3,7 @@
 <refentry id="{@id actions}">
 	<refnamediv>
 		<refname>Actions</refname>
-		<refpurpose>This manual provides examples and explanations for functionality of actions in the Krai PHP demo application.</refpurpose>
+		<refpurpose>This manual provides examples and explanations for functionality of actions in the Krai Framework PHP demo application.</refpurpose>
 	</refnamediv>
 	<refsynopsisdiv>
 		<author>Greg McWhirter

@@ -1,6 +1,10 @@
 <?php
 /**
- * Database data object for the Krai.
+ * Database data object for the Krai Framework.
+ *
+ * This file contains the class that is returned by fetching an object from the
+ * database.
+ *
  * @package Krai
  * @subpackage Db
  * @author Greg McWhirter <gsmcwhirter@gmail.com>
@@ -11,6 +15,9 @@
 /**
  * Database data object
  *
+ * This is the class that the objets fetched as results from a select query should
+ * be.
+ *
  * @package Krai
  * @subpackage Db
  */
@@ -19,6 +26,8 @@ class Krai_Db_Object
 
   /**
    * Holds the actual data
+   *
+   * This variable holds the values of the columns.
    *
    * @var array
    */
@@ -51,6 +60,8 @@ class Krai_Db_Object
 
   /**
    * Convert the database object to an array
+   *
+   * This function allows for conversion of the object into an associative array
    *
    * @return array
    */

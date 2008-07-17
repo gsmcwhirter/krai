@@ -1,6 +1,6 @@
 <?php
 /**
- * Logging base type for the Krai.
+ * Logging base type for the Krai Framework.
  * @package Krai
  * @subpackage Log
  * @author Greg McWhirter <gsmcwhirter@gmail.com>

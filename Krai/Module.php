@@ -86,6 +86,10 @@ abstract class Krai_Module extends Krai_Base
     }
     catch(Krai_Module_Exception_Adone $e)
     {
+      if($e->getCode() == Krai_Module_Exception_Adone::Rendered)
+      {
+        $actioninst->AfterRender();
+      }
       $actioninst->AfterFilters();
       $this->AfterFilters();
 
@@ -136,7 +140,7 @@ abstract class Krai_Module extends Krai_Base
       header("Location: ".self::$ROUTER->UrlFor($module, $action, $params, array(), false));
     }
 
-    throw new Krai_Module_Exception_Adone();
+    throw new Krai_Module_Exception_Adone(Krai_Module_Exception_Adone::Redirected);
   }
 
   /**
@@ -150,11 +154,11 @@ abstract class Krai_Module extends Krai_Base
    * @param array $params The parameters for the request
    * @throws Krai_Module_Exception_Adone
    */
-  public function RedirectSilent($module, $action = null, array $params = array())
+  public function RedirectSilent($module, $action, array $params = array())
   {
     self::$ROUTER->ExecuteRoute($module, $action, $params);
 
-    throw new Krai_Module_Exception_Adone();
+    throw new Krai_Module_Exception_Adone(Krai_Module_Exception_Adone::Redirected);
   }
 
 }

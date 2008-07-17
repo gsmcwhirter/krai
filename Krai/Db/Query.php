@@ -1,6 +1,9 @@
 <?php
 /**
- * Database query object for the Krai.
+ * Database query object for the Krai Framework.
+ *
+ * This file contains the class that wraps around database query handles.
+ *
  * @package Krai
  * @subpackage Db
  * @author Greg McWhirter <gsmcwhirter@gmail.com>
@@ -11,6 +14,8 @@
 /**
  * Database query object
  *
+ * This class is a wrapper around database query handles.
+ *
  * @package Krai
  * @subpackage Db
  */
@@ -19,11 +24,15 @@ class Krai_Db_Query
   /**
    * Is the query closed or not?
    *
+   * This variable represents whether or not the query is closed.
+   *
    * @var boolean
    */
   protected $_Closed = false;
   /**
    * The query object
+   *
+   * This variable holds the actual query handle.
    *
    * @var mixed
    */
@@ -42,6 +51,8 @@ class Krai_Db_Query
   /**
    * Is the query closed?
    *
+   * This function reports whether or not the query is closed.
+   *
    * @return boolean
    */
   public function IsClosed()
@@ -51,6 +62,8 @@ class Krai_Db_Query
 
   /**
    * Close the query
+   *
+   * This function closes the query.
    *
    */
   public function Close()
@@ -64,6 +77,9 @@ class Krai_Db_Query
 
   /**
    * PHP Magic Function
+   *
+   * This function passes method calls on an instance of this class onto the
+   * query handle wrapped in the instance.
    *
    * @param mixed $m
    * @param mixed $p
@@ -94,12 +110,25 @@ class Krai_Db_Query
   /**
    * PHP Magic Function
    *
+   * This function passes property requests on an instance of this class onto the
+   * query handle wrapped in the instance.
+   *
    * @param mixed $v
    * @return mixed
    */
   public function __get($v)
   {
     return $this->_Query->$v;
+  }
+
+  /**
+   * Get a reference to the query object
+   *
+   * This function returns a reference to the query object wrapped in the instance
+   */
+  public function &GetQuery()
+  {
+    return $this->_Query;
   }
 
 }

@@ -19,7 +19,26 @@
  */
 class Krai_Module_Exception_Adone extends Krai_Base_Exception
 {
-  public function __construct($message = "", $code = 0)
+
+  /**
+   * Code constant representing that neither a rendering nor a redirect occurred.
+   *
+   */
+  const Default = 0;
+
+  /**
+   * Code constant representing that a rendering occurred.
+   *
+   */
+  const Rendered = 1;
+
+  /**
+   * Code constant representing that a redirection occurred.
+   *
+   */
+  const Redirected = 2;
+
+  public function __construct($code = 0, $message = "")
   {
     parent::__construct($message, $code);
   }

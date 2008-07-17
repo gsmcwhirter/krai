@@ -17,6 +17,9 @@ Krai::Uses(
 
 /**
  * Caching class
+ *
+ * Note: THIS IS NOT IMPLEMENTED CORRECTLY YET. DO NOT USE.
+ *
  * @package Krai
  * @subpackage Cache
  */

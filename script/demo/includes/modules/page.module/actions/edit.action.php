@@ -150,7 +150,7 @@ class PageModule_EditAction extends Krai_Module_Action
       {
         if($this->_postaction != "preview")
         {
-          self::$DB->Query("START TRANSACTION");
+          self::$DB->Transaction("start");
 
           if($this->_postaction == "publish")
           {
@@ -166,7 +166,7 @@ class PageModule_EditAction extends Krai_Module_Action
 
             $res = self::$DB->Process($q);
 
-            if($res)
+            if(self::$DB->Result($res))
             {
               $q = self::$DB->UpdateQuery(array("pages"));
               $q->fields = array(
@@ -179,26 +179,26 @@ class PageModule_EditAction extends Krai_Module_Action
 
               $res2 = self::$DB->Process($q);
 
-              if($res2)
+              if(self::$DB->Result($res2))
               {
-                self::$DB->Query("COMMIT");
+                self::$DB->Transaction("commit");
                 self::Notice("Revision saved successfully.");
               }
               else
               {
-                self::$DB->Query("ROLLBACK");
+                self::$DB->Transaction("rollback");
                 throw new Krai_Module_Exception("Unable to save the revision.", Krai_Module_Exception::ProcessingError);
               }
             }
             else
             {
-              self::$DB->Query("ROLLBACK");
+              self::$DB->Transaction("rollback");
               throw new Krai_Module_Exception("Unable to save the revision.", Krai_Module_Exception::ProcessingError);
             }
           }
           else
           {
-            self::$DB->Query("ROLLBACK");
+            self::$DB->Transaction("rollback");
             throw new Krai_Module_Exception("You cannot save a published post as a draft.", Krai_Module_Exception::ProcessingError);
           }
         }

@@ -1,6 +1,11 @@
 <?php
 /**
  * Krai application skeleton root script
+ *
+ * This file is the entry point for the application. It loads the framework file,
+ * runs {@link Krai::Setup()}, includes the application configuration file, and
+ * runs {@link Krai::Run()}.
+ *
  * @package Demo
  * @author Greg McWhirter <gsmcwhirter@gmail.com>
  * @copyright Copyright (c) 2008, Greg McWhirter

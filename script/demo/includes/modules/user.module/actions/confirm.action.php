@@ -38,7 +38,7 @@ class UserModule_ConfirmAction extends Krai_Module_Action
   {
     if(!self::IsErrors())
     {
-      self::$DB->Query("START TRANSACTION");
+      self::$DB->Transaction("start");
 
       switch(self::$GET["type"])
       {
@@ -53,7 +53,7 @@ class UserModule_ConfirmAction extends Krai_Module_Action
 
           if($res && User::HasPrivilege($res->user_id, "user:active"))
           {
-            self::$DB->Query("ROLLBACK");
+            self::$DB->Transaction("rollback");
             self::Notice("That account was already activated.");
           }
           else
@@ -65,7 +65,7 @@ class UserModule_ConfirmAction extends Krai_Module_Action
             );
 
             $res = self::$DB->Process($q);
-
+            $res = self::$DB->Result($res);
             if($res || $res === 0)
             {
               $q = self::$DB->UpdateQuery(array("users"));
@@ -76,12 +76,12 @@ class UserModule_ConfirmAction extends Krai_Module_Action
 
               self::$DB->Process($q);
 
-              self::$DB->Query("COMMIT");
+              self::$DB->Transaction("commit");
               self::Notice("Account activation was successful.");
             }
             else
             {
-              self::$DB->Query("ROLLBACK");
+              self::$DB->Transaction("rollback");
               throw new Krai_Module_Exception("Account activation failed.", Krai_Module_Exception::ProcessingError);
             }
           }
@@ -105,20 +105,20 @@ class UserModule_ConfirmAction extends Krai_Module_Action
 
             $res = self::$DB->Process($q);
 
-            if($res)
+            if(self::$DB->Result($res))
             {
-              self::$DB->Query("COMMIT");
+              self::$DB->Transaction("commit");
               self::Notice("E-mail confirmation was successful.");
             }
             else
             {
-              self::$DB->Query("ROLLBACK");
+              self::$DB->Transaction("rollback");
               self::Error("Unable to update the users table.");
             }
           }
           else
           {
-            self::$DB->Query("ROLLBACK");
+            self::$DB->Transaction("rollback");
             throw new Krai_Module_Exception("E-mail confirmation failed.", Krai_Module_Exception::ProcessingError);
           }
           break;

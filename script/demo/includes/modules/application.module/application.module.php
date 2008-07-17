@@ -1,6 +1,9 @@
 <?php
 /**
- * Krai application skeleton application module
+ * Krai Framework demo application base module
+ *
+ * This file contains the application module for the Demo application.
+ *
  * @package Demo
  * @subpackage Modules
  * @author Greg McWhirter <gsmcwhirter@gmail.com>
@@ -14,7 +17,12 @@ Krai::Uses(
 );
 
 /**
- * The initial application module. Other modules should inherit from this one.
+ * The initial application module.
+ *
+ * This class is a descendent of {@link Krai_Module}. It is the base module of
+ * the application, in that all other modules in the application should inherit
+ * from this one. It has functionality to check logins.
+ *
  * @package Demo
  * @subpackage Modules
  *
@@ -23,32 +31,43 @@ class ApplicationModule extends Krai_Module
 {
   /**
    * Holds the logged-in user instance
+   *
+   * This variable holds an instance of a logged-in user.
+   *
    * @var User
    */
   protected static $_USER = null;
 
   /**
    * An array of privileges to require for access
+   *
+   * This variable holds an array to be used in initializing an {@link AccessScheme}
+   * for use in privilege checks.
+   *
    * @var array
    */
   protected $_RequiresLogin = array();
 
   /**
    * A dump of valid session key characters
+   *
+   * This is a dump of characters used for all sorts of things. It is included here
+   * so that it does not have to be duplicated everywhere.
+   *
    * @var string
    */
   public static $CHARDUMP = 'abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
   /**
    * A regular expression to detect a valid email address
+   *
+   * This is a regular expression that detects malformed email addresses (at least
+   * theoretically).
+   *
    * @var string
    */
   const EMAIL_REGEXP = '^[a-zA-Z0-9_\-\.+]+[@+]{1}[a-zA-Z0-9\-]+\.[a-zA-Z0-9\-\.]+$';
 
-  /**
-   * Filters for before the action execution
-   *
-   */
   protected function BeforeFilters()
   {
     parent::BeforeFilters();
@@ -58,17 +77,16 @@ class ApplicationModule extends Krai_Module
     $this->ValidateAccess($as);
   }
 
-  /**
-   * Filters for after the action execution
-   *
-   */
   protected function AfterFilters()
   {
     parent::AfterFilters();
   }
 
   /**
-   * PHP magic overloading. Makes $this->_parent->USER = self::$_USER data accessible in actions
+   * PHP magic overloading.
+   *
+   * Makes $this->_parent->USER = self::$_USER data accessible in actions
+   *
    * @param mixed $n
    * @return mixed
    */
@@ -85,7 +103,10 @@ class ApplicationModule extends Krai_Module
   }
 
   /**
-   * PHP magic overloading. Prevents the setting of variables.
+   * PHP magic overloading.
+   *
+   * Prevents the setting of variables.
+   *
    * @param mixed $n
    * @param mixed $v
    * @return null
@@ -97,6 +118,10 @@ class ApplicationModule extends Krai_Module
 
   /**
    * Checks whether a user is logged in or not
+   *
+   * This function determines whether or not a user is currently logged in by
+   * looking at cookies and checking them against the database.
+   *
    * @return boolean
    *
    */
@@ -143,6 +168,9 @@ class ApplicationModule extends Krai_Module
 
   /**
    * Destroys a user login session
+   *
+   * This function destroys a session in the database.
+   *
    * @param string $id The ID of the session to destroy
    * @return boolean
    */
@@ -153,12 +181,18 @@ class ApplicationModule extends Krai_Module
     $q->parameters = array($id);
     $q->limit = "1";
 
-    return self::$DB->Process($q);
+    $res = self::$DB->Process($q);
+    return ($res instanceOf Krai_Db_Query) ? self::$DB->Result($res) : $res;
   }
 
   /**
    * Validates access according to an AccessScheme
-   * @param AccessScheme $as
+   *
+   * This function determines whether or not a user has sufficient privileges to
+   * view a page. If not, it usually redirects to the login page, or else returns
+   * false if the $justtf parameter is true.
+   *
+   * @param AccessScheme $as The access scheme to verify against
    * @param boolean $justtf Prevents redirecting to a login page if necessary and returns boolean instead
    * @return boolean
    */
@@ -201,6 +235,10 @@ class ApplicationModule extends Krai_Module
 
   /**
    * Hash a password so it can be checked against the database
+   *
+   * This function hashes a password for database storage and for checking inputted
+   * passwords against those in the database.
+   *
    * @param string $pass
    * @return string
    */

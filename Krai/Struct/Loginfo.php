@@ -1,6 +1,9 @@
 <?php
 /**
- * Logging information struct for the Krai.
+ * Logging information struct for the Krai Framework.
+ *
+ * This file contains the information needed to configure the {@link Krai_Log}
+ *
  * @package Krai
  * @subpackage Struct
  * @author Greg McWhirter <gsmcwhirter@gmail.com>
@@ -11,17 +14,13 @@
 /**
  * Log Info Struct
  *
+ * This struct contains the information for configuring the {@link Krai_Log}
+ *
  * @package Krai
  * @subpackage Struct
  */
 class Krai_Struct_Loginfo extends Krai_Struct
 {
-
-  /**
-   * Allowed fields
-   *
-   * @var array
-   */
   protected $FIELDS = array(
     "types" => array(),
     "configs" => array(),

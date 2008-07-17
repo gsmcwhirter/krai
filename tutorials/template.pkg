@@ -3,7 +3,7 @@
 <refentry id="{@id}">
 	<refnamediv>
 		<refname>Krai Manual</refname>
-		<refpurpose>This manual provides examples and explanations for functionality in the Krai PHP application framework.</refpurpose>
+		<refpurpose>This manual provides examples and explanations for functionality in the Krai Framework PHP application framework.</refpurpose>
 	</refnamediv>
 	<refsynopsisdiv>
 		<author>Greg McWhirter

@@ -1,6 +1,7 @@
 <?php
 /**
- * Markup generator exception for the Krai.
+ * Markup generator exception for the Krai Framework.
+ *
  * @package Krai
  * @subpackage Markup
  * @author Greg McWhirter <gsmcwhirter@gmail.com>

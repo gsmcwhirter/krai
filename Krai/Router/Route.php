@@ -1,6 +1,10 @@
 <?php
 /**
  * Krai route instance
+ *
+ * This file contains the class that represents a route instance relied upon by
+ * {@link Krai_Router}.
+ *
  * @package Krai
  * @subpackage Router
  * @author Greg McWhirter <gsmcwhirter@gmail.com>
@@ -11,6 +15,11 @@
 /**
  * A route instance
  *
+ * This class represents an instance of a route parsed from the routes configuration
+ * file. It provides functionality to determine whether or not it matches a given
+ * request, whether or not it should be applied in the generating of a url in
+ * {@link Krai_Router::UrlFor()}, and can generate that url given the data necessary.
+ *
  * @package Krai
  * @subpackage Router
  */
@@ -20,6 +29,8 @@ class Krai_Router_Route
   /**
    * Holds the parts of the pattern for this route
    *
+   * This array holds the parts of the pattern defining this route.
+   *
    * @var array
    */
   private $_parts = array();
@@ -27,12 +38,18 @@ class Krai_Router_Route
   /**
    * Holds the variable overrides for this route
    *
+   * This array holds the parts of the pattern that were statically set in the
+   * routes configuration file (after the "-->").
+   *
    * @var array
    */
   private $_forcemap = array();
 
   /**
    * Holds the variables that are required for reconstruct
+   *
+   * This array holds the names of parameters necessary to fill in the pattern
+   * for the route.
    *
    * @var array
    *
@@ -42,8 +59,11 @@ class Krai_Router_Route
   /**
    * Constructor
    *
-   * @param array $parts
-   * @param array $forcemap
+   * This function creates the route instance and records the appropriate patterns
+   * in the appropriate variables. It is called in {@link Krai_Router::__construct()}.
+   *
+   * @param array $parts The parts of the route
+   * @param array $forcemap The parts of the route after the "-->"
    */
   public function __construct(array $parts, array $forcemap)
   {
@@ -77,8 +97,12 @@ class Krai_Router_Route
   /**
    * Determine whether or not a split request fits the pattern
    *
-   * @param array $str_parts
-   * @return mixed Array of parameters or false
+   * This function decides whether or not the requested url matches this pattern
+   * represented by the instance. The parameter is essentially the {@link PHP_MANUAL#explode}
+   * of the REQUEST_URI. This function is called by {@link Krai_Router::DoRoute()}.
+   *
+   * @param array $str_parts The parts of the uri explosion
+   * @return mixed Array of parameter values if matched or false if not matched
    */
   public function Matches(array $str_parts)
   {
@@ -125,6 +149,20 @@ class Krai_Router_Route
     return $retvars;
   }
 
+
+  /**
+   * Determines matching when trying to generate a uri from route data.
+   *
+   * This function determines whether or not the pattern represented by this instance
+   * could be used to construct a url which would lead back to that data upon
+   * reparsing. It is called in {@link Krai_Router::UrlFor()}.
+   *
+   * @param string $_module The name of the module
+   * @param string $_action The name of the action
+   * @param array $_params Additional parameters that need to be considered
+   * @return boolean Success of matching attempt
+   *
+   */
   public function MatchUrlFor($_module, $_action, array $_params)
   {
     Krai::WriteLog("Testing Route.".serialize($this), Krai::LOG_DEBUG);
@@ -185,6 +223,9 @@ class Krai_Router_Route
 
   /**
    * Reconstruct the uri for this route
+   *
+   * This function actually generates a uri by filling in the blanks in the pattern
+   * represented by the instance with the appropriate data presented by the parameters.
    *
    * @param string $_module The module of the route
    * @param string $_action The action of the route

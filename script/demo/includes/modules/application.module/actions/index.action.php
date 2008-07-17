@@ -1,6 +1,9 @@
 <?php
 /**
- * Krai application skeleton application module index action
+ * Krai Framework demo application - application module index action
+ *
+ * This file contains the index action of the application module of the demo application
+ *
  * @package Demo
  * @subpackage Actions
  * @author Greg McWhirter <gsmcwhirter@gmail.com>
@@ -10,6 +13,9 @@
 
 /**
  * The index action for the application module
+ *
+ * This is the index action for the {@link ApplicationModule}.
+ *
  * @package Demo
  * @subpackage Actions
  *

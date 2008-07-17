@@ -42,7 +42,7 @@ abstract class Krai_Mail
    * This holds an instance of the PEAR Mail class, which is created and configured
    * in {@link Krai_Mail::Configure()}.
    *
-   * @var Mailer
+   * @var Mail
    */
   protected static $_MAILER;
 

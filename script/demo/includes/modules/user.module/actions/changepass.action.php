@@ -38,7 +38,7 @@ class UserModule_ChangepassAction extends Krai_Module_Action
   {
     if($this->_RequestMethod == "POST")
     {
-      self::$DB->Query("START TRANSACTION");
+      self::$DB->Transaction("start");
       $this->_doprocess = true;
 
       //Set required fields
@@ -92,21 +92,21 @@ class UserModule_ChangepassAction extends Krai_Module_Action
       );
 
       $res = self::$DB->Process($q);
-      if($res)
+      if(self::$DB->Result($res))
       {
-        self::$DB->Query("COMMIT");
+        self::$DB->Transaction("commit");
         self::Notice("Password Changed.");
       }
       else
       {
-        self::$DB->Query("ROLLBACK");
+        self::$DB->Transaction("rollback");
         throw new Krai_Module_Exception("Changing password failed. Unable to update user in the database.", Krai_Module_Exception::ProcessingError);
       }
 
     }
     elseif($this->_doprocess)
     {
-      self::$DB->Query("ROLLBACK");
+      self::$DB->Transaction("rollback");
     }
   }
 

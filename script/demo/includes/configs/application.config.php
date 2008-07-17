@@ -1,6 +1,9 @@
 <?php
 /**
  * The application configuration file.
+ *
+ * This file contains application configuration information.
+ *
  * @package Demo
  * @subpackage Config
  * @author Greg McWhirter <gsmcwhirter@gmail.com>
@@ -14,6 +17,9 @@ Krai::Uses(
 
 /**
  * Contains the application settings
+ *
+ * This class contains settins used by the application.
+ *
  * @package Demo
  * @subpackage Config
  */
@@ -40,13 +46,11 @@ abstract class SETTINGS
   const DATE_STRING = "D, M. jS g:i A";
 
   /**
-   * Holds the location of a mimetex.cgi to use
-   * @var string
-   */
-  public static $MimetexUrl = "http://www.hallofkvasir.org/cgi-bin/mimetex.cgi";
-
-  /**
    * Holds the rules for the Text_Wiki parser to use.
+   *
+   * This is an array of the rules that the Text_Wiki parser should use when it
+   * attempts to parse text passed to it.
+   *
    * @var array
    *
    */
@@ -60,13 +64,11 @@ abstract class SETTINGS
         'Heading',
         'Toc',
         'Horiz',
-        'Nbsp',
         'Break',
         'Blockquote',
         'List',
         'Deflist',
         'Table',
-        'Tex',
         'Image',
         'Phplookup',
         'Center',

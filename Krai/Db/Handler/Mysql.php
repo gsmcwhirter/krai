@@ -1,6 +1,9 @@
 <?php
 /**
- * MySQL Database handler abstract class for the Krai
+ * MySQL Database handler abstract class for the Krai Framework
+ *
+ * This file holds the database handler for mysql databases used by the framework.
+ *
  * @package Krai
  * @subpackage Db
  * @author Greg McWhirter <gsmcwhirter@gmail.com>
@@ -11,6 +14,9 @@
 /**
  * MySQL database handler
  *
+ * This class is a wrapper around the {@link PHP_MANUAL#mysqli} database connection
+ * functionality, implementing the Krai_Db_Handler pattern.
+ *
  * @package Krai
  * @subpackage Db
  */
@@ -19,12 +25,17 @@ class Krai_Db_Handler_Mysql extends Krai_Db_Handler
   /**
    * Holds the database connection proper
    *
+   * This variable holds the actual database connection using {@link PHP_MANUAL#mysqli}
+   *
    * @var mysqli
    */
   private $_dbc;
 
   /**
    * Constructor
+   *
+   * This function initializes the database with the provided info. Expected array
+   * keys are '_host', '_user', '_pass', and '_name'.
    *
    * @param array $dbinfo Database connection information
    * @return void
@@ -35,12 +46,6 @@ class Krai_Db_Handler_Mysql extends Krai_Db_Handler
     parent::__construct();
   }
 
-  /**
-   * Process a query struct
-   *
-   * @param Krai_Struct_Dbquery $query The query struct
-   * @return mixed
-   */
   public function Process(Krai_Struct_Dbquery $query)
   {
     switch($query->action)
@@ -65,7 +70,15 @@ class Krai_Db_Handler_Mysql extends Krai_Db_Handler
         break;
       case "delete":
         $sql = "DELETE FROM ".$this->GetJoins($query->tables).(($query->conditions != "") ? " WHERE ".$query->conditions : "").(($query->limit != "") ? " LIMIT ".$query->limit : "");
-        return $this->Query($sql, $query->parameters);
+        $res = $this->Query($sql, $query->parameters);
+        if($res instanceOf Krai_Db_Query)
+        {
+          return $this->Affected($res);
+        }
+        else
+        {
+          return $res;
+        }
         break;
       case "insert":
         $ks = array();
@@ -113,9 +126,9 @@ class Krai_Db_Handler_Mysql extends Krai_Db_Handler
 
         $sql = "INSERT INTO ".$this->GetJoins($query->tables)." (".$ks.") VALUES ".$vss;
         $q = $this->Query($sql, $vals);
-        if($this->Affected() > 0)
+        if($this->Affected($q) > 0)
         {
-          return $this->Inserted();
+          return $this->Inserted($q);
         }
         else
         {
@@ -140,26 +153,18 @@ class Krai_Db_Handler_Mysql extends Krai_Db_Handler
         $flds = implode(", ", $flds);
         $sql = "UPDATE ".$this->GetJoins($query->tables)." SET ".$flds." WHERE ".$query->conditions.(($query->limit != "") ? " LIMIT ".$query->limit : "");
         $q = $this->Query($sql, array_merge($vals, $query->parameters));
-        if($q)
+        if($q instanceOf Krai_Db_Query)
         {
-          return true;
+          return $this->Affected($q);
         }
         else
         {
-          return false;
+          return $q;
         }
         break;
     }
   }
 
-  /**
-   * Execute a query
-   *
-   * @param string $sql The SQL
-   * @param array $params Query parameters
-   * @return mixed A Krai_Db_Query object or the result of the mysqli::query call
-   * @throws Krai_Db_Exception
-   */
   public function Query($sql, array $params = array())
   {
     $tstart = microtime(true);
@@ -182,16 +187,10 @@ class Krai_Db_Handler_Mysql extends Krai_Db_Handler
     {
       throw new Krai_Db_Exception($this->error("text"), $this->error("number"));
     }
-    return ($query instanceOf mysqli_result) ? new Krai_Db_Query($query) : $query;
+    return new Krai_Db_Query(($query instanceOf mysqli_result) ? $query : array($query, $this->_dbc->affected_rows, $this->_dbc->insert_id));
 
   }
 
-  /**
-   * Works on aspects of a transaction (starting, committing, rolling back)
-   * @param string $_action One of "start", "commit", or "rollback"
-   * @throws Krai_Db_Exception
-   *
-   */
   public function Transaction($_action)
   {
     switch(strtolower($_action))
@@ -221,6 +220,13 @@ class Krai_Db_Handler_Mysql extends Krai_Db_Handler
 
   /**
    * Parse the query parameters, escaping and whatnot
+   *
+   * This function is a replacement for prepared statements with mysqli since
+   * the parameter passing to that and data retrieval is terribly un-elegant.
+   *
+   * This function generates regular expressions to pick out the '?' terms in the
+   * sql query and an array of replacement syntax, having used {@link Krai_Db_Handler_Mysql::Escape()}
+   * to clean the values.
    *
    * @param array $params The raw parameters
    * @return array Regexes for replacement and the clean parameters
@@ -268,12 +274,6 @@ class Krai_Db_Handler_Mysql extends Krai_Db_Handler
 
   }
 
-  /**
-   * Fetch an object for a query
-   *
-   * @param Krai_Db_Query $qid The query
-   * @return Krai_Db_Object The resulting object
-   */
   public function Fetch(Krai_Db_Query &$qid)
   {
     $row = (!$qid->IsClosed() && $this->Rows($qid) > 0) ? $qid->fetch_object("Krai_Db_Object") : null;
@@ -284,12 +284,6 @@ class Krai_Db_Handler_Mysql extends Krai_Db_Handler
     return $row;
   }
 
-  /**
-   * Fetch an array for a query
-   *
-   * @param Krai_Db_Query $qid The query
-   * @return array The resulting row
-   */
   public function FetchArray(Krai_Db_Query &$qid)
   {
     $row = (!$qid->IsClosed()) ? $qid->fetch_assoc() : null;
@@ -300,12 +294,6 @@ class Krai_Db_Handler_Mysql extends Krai_Db_Handler
     return $row;
   }
 
-  /**
-   * Fetch just one row from the query
-   *
-   * @param Krai_Db_Query $qid The query
-   * @return array
-   */
   public function FetchOne(Krai_Db_Query &$qid)
   {
     $row = (!$qid->IsClosed()) ? $qid->fetch_row() : null;
@@ -316,25 +304,12 @@ class Krai_Db_Handler_Mysql extends Krai_Db_Handler
     return $row[0];
   }
 
-  /**
-   * Get the number of rows from a query
-   *
-   * @param Krai_Db_Query $qid The query
-   * @return integer
-   */
   public function Rows(Krai_Db_Query $qid)
   {
     return $qid->num_rows;
   }
 
-  /**
-   * Get the error from a query
-   *
-   * @param string $ret One of "text", "number", or "array" for the desired format
-   * @return mixed
-   * @throws Krai_Db_Exception
-   */
-  public function Error($ret)
+  public function Error(Krai_Db_Query $qid, $ret)
   {
     if($ret == "text")
     {
@@ -354,73 +329,44 @@ class Krai_Db_Handler_Mysql extends Krai_Db_Handler
     }
   }
 
-  /**
-   * Return the number of affected rows from the last query
-   *
-   * @return integer
-   */
-  public function Affected()
+  public function Affected(Krai_Db_Query $qid)
   {
-    return $this->_dbc->affected_rows;
+    $d = $qid->GetQuery();
+    if(is_array($d))
+    {
+      return $d[1];
+    }
+  }
+
+  public function Inserted(Krai_Db_Query $qid)
+  {
+    $d = $qid->GetQuery();
+    if(is_array($d))
+    {
+      return $d[2];
+    }
+  }
+
+  public function Result(Krai_Db_Query $qid)
+  {
+    $d = $qid->GetQuery();
+    if(is_array($d))
+    {
+      return $d[0];
+    }
   }
 
   /**
-   * Return the last insert id
+   * Escape the parameter so it is safe to insert into a query
    *
-   * @return integer
-   */
-  public function Inserted()
-  {
-    return $this->_dbc->insert_id;
-  }
-
-  /**
-   * Escape the value for sql
+   * This function escapes a value so it is safe to use in an sql query
    *
    * @param mixed $val
    * @return mixed
    */
-  public function Escape($val)
+  protected function Escape($val)
   {
     return $this->_dbc->escape_string(preg_replace("#\?#","/?", $val));
-  }
-
-  /**
-   * Generate the joins from a table array
-   *
-   * @param array $tables Array of tables to join
-   * @return string The join syntax
-   */
-  protected function GetJoins(array $tables)
-  {
-    if(count($tables) == 1)
-    {
-      return $tables[0];
-    }
-    else
-    {
-      $main = array_shift($tables);
-      $ljoins = array();
-      $ijoins = array();
-      foreach($tables as $k => $v)
-      {
-        if(is_string($k))
-        {
-          $ljoins[] = "LEFT JOIN ".$k." ON ".$v;
-        }
-        else
-        {
-          $ijoins[] = $v;
-        }
-      }
-
-      array_unshift($ijoins, $main);
-
-      $ljoins = implode(" ", $ljoins);
-      $ijoins = implode(", ", $ijoins);
-
-      return $ijoins." ".$ljoins;
-    }
   }
 
 }

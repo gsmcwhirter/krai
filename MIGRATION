@@ -8,6 +8,11 @@ Added Krai::Uses("pear://"...) syntax
 Added pear path configuration option
 Removed Struct magic __call and __unset
 
+Database handlers now require query objects for Affected, Inserted
+Return types of Database hander Process have changed
+Added support for AfterRender in Krai_Module_Action instances
+Removed Text_Wiki built-in library. Dependent on PEAR now.
+
 == From KvFramework 2.0b6 ==
 
 Renamed most things.

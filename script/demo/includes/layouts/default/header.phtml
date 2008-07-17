@@ -7,7 +7,7 @@
   <meta name="date" content="2008-07-05T15:02:59-0400" />
   <meta name="copyright" content="Copyright (c) 2008 Greg McWhirter" />
   <meta name="keywords" content="Krai Demo" />
-  <meta name="description" content="A demonstration application for the Krai" />
+  <meta name="description" content="A demonstration application for the Krai Framework" />
   <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
   <meta http-equiv="content-type"
     content="application/xhtml+xml; charset=UTF-8" />
@@ -19,14 +19,12 @@
   <?php echo Krai_Markup::StylesheetTag(array("default.css"), "screen") ?>
 
   <?php echo Krai_Markup::JavascriptTag(array("jquery/jquery-1.2.6.min.js", "jquery/jquery.domec-0.3.1.min.js",
-                                            "jquery/jquery.chili-2.1.1.min.js", "jquery/jquery.textarearesizer.compressed.js")) ?>
+                                             "jquery/jquery.textarearesizer.compressed.js")) ?>
   <script type="text/javascript">
     function OnPageLoad(cback)
     {
       $(document).ready(cback);
     }
-
-    ChiliBook.recipeFolder = "<?php echo ((Krai::GetConfig("BASEURI") == "") ? "" : "/".Krai::GetConfig("BASEURI"))."/javascripts/jquery/chili-2.1/" ?>";
   </script>
   <?php echo Krai_Markup::JavascriptTag(array("application.js")) ?>
   <script type="text/javascript">

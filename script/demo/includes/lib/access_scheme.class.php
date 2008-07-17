@@ -1,6 +1,9 @@
 <?php
 /**
- * The application configuration file.
+ * An access scheme struct
+ *
+ * This file holds a struct representing an access requirement scheme
+ *
  * @package Demo
  * @subpackage Lib
  * @author Greg McWhirter <gsmcwhirter@gmail.com>
@@ -10,16 +13,15 @@
 
 /**
  * Structure of an Access Scheme for use with authenticating permissions.
+ *
+ * This struct is used to represent an access requirement scheme.
+ *
  * @package Demo
  * @subpackage Lib
  *
  */
 class AccessScheme extends Krai_Struct
 {
-  /**
-   * Holds the required attributes
-   * @var array
-   */
   protected $FIELDS = array(
 	  'requires' => array()
   );

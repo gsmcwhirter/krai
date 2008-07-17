@@ -1,6 +1,9 @@
 <?php
 /**
- * PDO Database handler abstract class for the Krai
+ * PDO Database handler abstract class for the Krai Framework
+ *
+ * This file includes a database handler using the {@link PHP_MANUAL#PDO} library.
+ *
  * @package Krai
  * @subpackage Db
  * @author Greg McWhirter <gsmcwhirter@gmail.com>
@@ -15,6 +18,9 @@ Krai::Uses(
 /**
  * PDO database handler
  *
+ * This is a database handler implementing a wrapper around the {@link PHP_MANUAL#PDO}
+ * functionality. THIS IS STILL ALPHA QUALITY. USE AT YOUR OWN RISK.
+ *
  * @package Krai
  * @subpackage Db
  */
@@ -23,26 +29,18 @@ class Krai_Db_Handler_Pdo extends Krai_Db_Handler
   /**
    * Holds the database connection proper
    *
+   * This variable holds the actual connection to the database.
+   *
    * @var PDO
    */
   private $_dbc;
 
   /**
    * Holds copies of prepared statements
+   *
    * @var array
    */
   private $_prepared_statements = array();
-
-  /**
-   * Holds the affected rows of the last query
-   * @var integer
-   */
-  private $_last_query_affected = null;
-
-  /**
-   * Holds the error info of the last statement.
-   */
-  private $_last_statement_einfo;
 
   /**
    * Constructor
@@ -56,12 +54,6 @@ class Krai_Db_Handler_Pdo extends Krai_Db_Handler
     parent::__construct();
   }
 
-  /**
-   * Process a query struct
-   *
-   * @param Krai_Struct_Dbquery $query The query struct
-   * @return mixed
-   */
   public function Process(Krai_Struct_Dbquery $query)
   {
     switch($query->action)
@@ -86,7 +78,16 @@ class Krai_Db_Handler_Pdo extends Krai_Db_Handler
         break;
       case "delete":
         $sql = "DELETE FROM ".$this->GetJoins($query->tables).(($query->conditions != "") ? " WHERE ".$query->conditions : "").(($query->limit != "") ? " LIMIT ".$query->limit : "");
-        return $this->Query($sql, $query->parameters);
+        $res = $this->Query($sql, $query->parameters);
+        if($res instanceOf Krai_Db_Query)
+        {
+          return $this->Affected($res);
+        }
+        else
+        {
+          return $res;
+        }
+        //return $this->Query($sql, $query->parameters);
         break;
       case "insert":
         $ks = array();
@@ -134,9 +135,9 @@ class Krai_Db_Handler_Pdo extends Krai_Db_Handler
 
         $sql = "INSERT INTO ".$this->GetJoins($query->tables)." (".$ks.") VALUES ".$vss;
         $q = $this->Query($sql, $vals);
-        if($this->Affected() > 0)
+        if($this->Affected($q) > 0)
         {
-          return $this->Inserted();
+          return $this->Inserted($q);
         }
         else
         {
@@ -161,26 +162,18 @@ class Krai_Db_Handler_Pdo extends Krai_Db_Handler
         $flds = implode(", ", $flds);
         $sql = "UPDATE ".$this->GetJoins($query->tables)." SET ".$flds." WHERE ".$query->conditions.(($query->limit != "") ? " LIMIT ".$query->limit : "");
         $q = $this->Query($sql, array_merge($vals, $query->parameters));
-        if($q)
+        if($q instanceOf Krai_Db_Query)
         {
-          return true;
+          return $this->Affected($q);
         }
         else
         {
-          return false;
+          return $q;
         }
         break;
     }
   }
 
-  /**
-   * Execute a query
-   *
-   * @param string $sql The SQL
-   * @param array $params Query parameters
-   * @return mixed A Krai_Db_Query object or the result of the mysqli::query call
-   * @throws Krai_Db_Exception
-   */
   public function Query($sql, array $params = array())
   {
     $tstart = microtime(true);
@@ -202,7 +195,6 @@ class Krai_Db_Handler_Pdo extends Krai_Db_Handler
     }
 
     $query = $stmt->execute($params);
-    $this->_last_statement_einfo = $stmt->errorInfo();
 
     Krai::WriteLog($sql." ".serialize($params), Krai::LOG_DEBUG, array("sql"));
 
@@ -242,26 +234,18 @@ class Krai_Db_Handler_Pdo extends Krai_Db_Handler
     }
     else
     {
-      $count = $stmt->rowCount();
       $sel = false;
-      $this->_last_query_affected = $count;
     }
 
     $tstop = microtime(true);
 
 
-    $ret = ($query && $sel) ? new Krai_Db_Querypdo($stmt, $count) : (($query) ? $count : $query);
+    $ret = ($query) ? new Krai_Db_Querypdo($stmt, ($sel) ? $count : $query) : $query;
     Krai::WriteLog(serialize(gettype($ret))." ".serialize($count), Krai::LOG_DEBUG, array("sql"));
     return $ret;
 
   }
 
-  /**
-   * Works on aspects of a transaction (starting, committing, rolling back)
-   * @param string $_action One of "start", "commit", or "rollback"
-   * @throws Krai_Db_Exception
-   *
-   */
   public function Transaction($_action)
   {
     switch(strtolower($_action))
@@ -289,24 +273,6 @@ class Krai_Db_Handler_Pdo extends Krai_Db_Handler
     }
   }
 
-  /**
-   * Parse the query parameters, escaping and whatnot
-   *
-   * @param array $params The raw parameters
-   * @throws Krai_Db_Exception
-   * @return array Regexes for replacement and the clean parameters
-   */
-  protected function ParseQueryParams(array $params = array())
-  {
-    throw new Krai_Db_Exception("ParseQueryParams not implemented.");
-  }
-
-  /**
-   * Fetch an object for a query
-   *
-   * @param Krai_Db_Query $qid The query
-   * @return Krai_Db_Object The resulting object
-   */
   public function Fetch(Krai_Db_Query &$qid)
   {
     $row = (!$qid->IsClosed() && $this->Rows($qid) > 0) ? $qid->fetchObject("Krai_Db_Object") : null;
@@ -318,12 +284,6 @@ class Krai_Db_Handler_Pdo extends Krai_Db_Handler
     return $row;
   }
 
-  /**
-   * Fetch an array for a query
-   *
-   * @param Krai_DbQuery $qid The query
-   * @return array The resulting row
-   */
   public function FetchArray(Krai_Db_Query &$qid)
   {
     $row = (!$qid->IsClosed()) ? $qid->fetch(PDO::FETCH_ASSOC) : null;
@@ -334,12 +294,6 @@ class Krai_Db_Handler_Pdo extends Krai_Db_Handler
     return $row;
   }
 
-  /**
-   * Fetch a non-associative array for the query
-   *
-   * @param Krai_Db_Query $qid The query
-   * @return array
-   */
   public function FetchOne(Krai_Db_Query &$qid)
   {
     $row = (!$qid->IsClosed()) ? $qid->fetch(PDO::FETCH_NUM) : null;
@@ -350,27 +304,15 @@ class Krai_Db_Handler_Pdo extends Krai_Db_Handler
     return $row[0];
   }
 
-  /**
-   * Get the number of rows from a query
-   *
-   * @param Krai_DbQuery $qid The query
-   * @return integer
-   */
   public function Rows(Krai_Db_Query $qid)
   {
     return $qid->NumRows();
   }
 
-  /**
-   * Get the error from a query
-   *
-   * @param string $ret One of "text", "number", or "array" for the desired format
-   * @return mixed
-   * @throws Krai_Db_Exception
-   */
-  public function Error($ret)
+  public function Error(Krai_Db_Query $qid, $ret)
   {
-    $einfo = $this->_last_statement_einfo;
+    $stmt = $qid->GetQuery();
+    $einfo = $stmt->errorInfo();
     $einfo = (count($einfo) > 0) ? $einfo : $this->_dbc->errorInfo();
 
     if($ret == "text")
@@ -391,78 +333,23 @@ class Krai_Db_Handler_Pdo extends Krai_Db_Handler
     }
   }
 
-  /**
-   * Return the number of affected rows from the last query
-   *
-   * @return integer
-   */
-  public function Affected()
+  public function Affected(Krai_Db_Query $qid)
   {
-    return $this->_last_query_affected;
+    $stmt = $qid->GetQuery();
+    return $stmt->rowCount();
   }
 
-  /**
-   * Return the last insert id
-   *
-   * @return integer
-   */
-  public function Inserted()
+  public function Inserted(Krai_Db_Query $qid)
   {
     return $this->_dbc->lastInsertId();
   }
 
   /**
-   * Escape the value for sql
-   *
-   * @param mixed $val
-   * @return mixed
-   * @throws Krai_Db_Exception
-   */
-  public function Escape($val)
-  {
-    throw new Krai_Db_Exception("Escape is not implemented.");
-  }
-
-  /**
-   * Generate the joins from a table array
-   *
-   * @param array $tables Array of tables to join
-   * @return string The join syntax
-   */
-  protected function GetJoins(array $tables)
-  {
-    if(count($tables) == 1)
-    {
-      return $tables[0];
-    }
-    else
-    {
-      $main = array_shift($tables);
-      $ljoins = array();
-      $ijoins = array();
-      foreach($tables as $k => $v)
-      {
-        if(is_string($k))
-        {
-          $ljoins[] = "LEFT JOIN ".$k." ON ".$v;
-        }
-        else
-        {
-          $ijoins[] = $v;
-        }
-      }
-
-      array_unshift($ijoins, $main);
-
-      $ljoins = implode(" ", $ljoins);
-      $ijoins = implode(", ", $ijoins);
-
-      return $ijoins." ".$ljoins;
-    }
-  }
-
-  /**
    * Generates DSN strings for a variety of databases from the $dbinfo
+   *
+   * This function processes database info into the DSN strings that PDO needs in
+   * order to connect to the database.
+   *
    * @param array $dbinfo Database connection information
    * @return string
    * @throws Krai_Db_Exception

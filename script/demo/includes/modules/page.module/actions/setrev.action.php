@@ -73,7 +73,7 @@ class PageModule_SetrevAction extends Krai_Module_Action
 
     if($this->_doprocess && !self::IsErrors())
     {
-      self::$DB->Query("START TRANSACTION");
+      self::$DB->Transaction("start");
 
       $q = self::$DB->UpdateQuery(array("pages"));
       $q->fields = array("page_revision" => self::$POST["revision_select"], "page_updated" => time());
@@ -83,14 +83,14 @@ class PageModule_SetrevAction extends Krai_Module_Action
 
       $res2 = self::$DB->Process($q);
 
-      if($res2)
+      if(self::$DB->Result($res2))
       {
-        self::$DB->Query("COMMIT");
+        self::$DB->Transaction("commit");
         self::Notice("Revision saved successfully.");
       }
       else
       {
-        self::$DB->Query("ROLLBACK");
+        self::$DB->Transaction("rollback");
         throw new Krai_Module_Exception("Unable to save the revision.", Krai_Module_Exception::ProcessingError);
       }
     }

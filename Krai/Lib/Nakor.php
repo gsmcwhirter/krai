@@ -1,6 +1,9 @@
 <?php
 /**
- * Nakor's Input Scrubberr
+ * Nakor's Input Scrubber
+ *
+ * This file contains an input scrubber
+ *
  * @package Krai
  * @subpackage Lib
  * @author Nakor <nakor@clantemplates.com>
@@ -26,6 +29,8 @@
 /**
  * Nakor's Input scrubber
  *
+ * This class provides some servicable input scrubbing.
+ *
  * @package Krai
  * @subpackage Lib
  */
@@ -35,6 +40,9 @@ class Nakor
     /**
      * Determines whether magic quotes are on or not
      *
+     * This variable holds the value of the determination of whether magic_quotes_gpc
+     * is enabled for the server.
+     *
      * @var boolean
      */
     private $get_magic_quotes;
@@ -42,17 +50,16 @@ class Nakor
     /**
     * Clean Input
     *
-    * Removes harmful tags from $HTTP_REQUEST_VARS
+    * This function sanitizes input in either the $_GET or $_POST arrays based on
+    * the $type parameter. It basically just passes off to {@link Nakor::CleanArrayRec()}.
     *
-    * @return    array
+    * @param string $type One of "GET" or "POST" representing which array to clean.
+    * @return array A sanitized copy of the array
     */
-
     public function CleanInput($type)
     {
         $this->get_magic_quotes = get_magic_quotes_gpc();
-
         $return = array();
-
 
       if($type == "GET"){
         # ************************************************************************** #
@@ -61,24 +68,6 @@ class Nakor
         #
         # ************************************************************************** #
 
-
-        /*if( is_array($_GET) )
-        {
-            while( list($k, $v) = each($_GET) )
-            {
-                if ( is_array($_GET[$k]) )
-                {
-                    while( list($k2, $v2) = each($_GET[$k]) )
-                    {
-                        $return[ $this->CleanKey($k) ][ $this->CleanKey($k2) ] = $this->CleanValue($v2);
-                    }
-                }
-                else
-                {
-                    $return[ $this->CleanKey($k) ] = $this->CleanValue($v);
-                }
-            }
-        }*/
         $return = $this->CleanArrayRec($_GET);
 
 
@@ -91,27 +80,8 @@ class Nakor
         #
         # ************************************************************************** #
 
-        /*if( is_array($_POST) )
-        {
-            while( list($k, $v) = each($_POST) )
-            {
-                if ( is_array($_POST[$k]) )
-                {
-                    while( list($k2, $v2) = each($_POST[$k]) )
-                    {
-                        $return[ $this->CleanKey($k) ][ $this->CleanKey($k2) ] = $this->CleanValue($v2);
-                    }
-                }
-                else
-                {
-                    $return[ $this->CleanKey($k) ] = $this->CleanValue($v);
-                }
-            }
-        }*/
         $return = $this->CleanArrayRec($_POST);
       }
-
-      //$return['request_method'] = strtolower($_SERVER['REQUEST_METHOD']);
 
       return $return;
     }
@@ -119,8 +89,10 @@ class Nakor
     /**
      * Recursively clean an array
      *
-     * @param array $array
-     * @return array
+     * This function recursively cleans the keys and values of an array.
+     *
+     * @param array $array The array to clean
+     * @return array The cleaned array
      */
     private function CleanArrayRec(array $array)
     {
@@ -138,9 +110,8 @@ class Nakor
      *
      * Removes harmful tags from a variable key
      *
-     * @param    string $key
-     *
-     * @return    string
+     * @param    string $key The key to clean
+     * @return    string The cleaned key
      */
     private function CleanKey($key)
     {
@@ -164,9 +135,8 @@ class Nakor
      *
      * Removes harmful tags from a variable value
      *
-     * @param    string $val
-     *
-     * @return    string
+     * @param    string $val The value to clean
+     * @return    string The cleaned value
      */
     public function CleanValue($val)
     {
@@ -183,10 +153,8 @@ class Nakor
         $val = str_replace( ">"            , "&gt;"          , $val );
         $val = str_replace( "<"            , "&lt;"          , $val );
         $val = str_replace( "\""           , "&quot;"        , $val );
-        //$val = preg_replace( "/\n/"        , "<br />"        , $val );
         $val = preg_replace( "/\\\$/"      , "&#036;"        , $val );
         $val = preg_replace( "/\r/"        , ""              , $val );
-        //$val = str_replace( "!"            , "&#33;"         , $val );
         $val = str_replace( "'"            , "&#39;"         , $val );
         $val = preg_replace("/&amp;#([0-9]+);/s", "&#\\1;", $val );
 
@@ -205,8 +173,10 @@ class Nakor
     /**
      * Reverse variable cleaning
      *
-     * @param string $val
-     * @return string
+     * This function can un-scrub a variable value
+     *
+     * @param string $val The value to un-sanitize
+     * @return string The unsanitized value
      */
     public function UncleanValue($val){
       if ($val == "")
@@ -221,9 +191,7 @@ class Nakor
         $val = str_replace( "&gt;"             , ">"         , $val );
         $val = str_replace( "&lt;"            , "<"          , $val );
         $val = str_replace( "&quot;"           , "\""        , $val );
-        $val = str_replace( "<br />"        , "\n"        , $val );
         $val = str_replace( "&#036;"      , "\$"        , $val );
-        $val = str_replace( "&#33;"            , "!"         , $val );
         $val = str_replace( "&#39;"            , "'"         , $val );
 
         // Strip slashes if not already done so.

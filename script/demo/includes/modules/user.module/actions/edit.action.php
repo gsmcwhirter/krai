@@ -43,7 +43,7 @@ class UserModule_EditAction extends Krai_Module_Action
   {
     if($this->_RequestMethod == "POST")
     {
-      self::$DB->Query("START TRANSACTION");
+      self::$DB->Transaction("start");
       $this->_doprocess = true;
 
       //Set required fields
@@ -126,11 +126,11 @@ class UserModule_EditAction extends Krai_Module_Action
 
       $res = self::$DB->Process($q);
 
-      if($res)
+      if(self::$DB->Result($res))
       {
         if($this->_parent->USER->email != self::$POST["email"])
         {
-          $mail = Mailer::NewMail();
+          $mail = Krai_Mail::NewMail();
           $mail->recipients = array(self::$POST["email"]);
           $mail->subject = Krai::GetConfig("SYSTEM_NAME")." E-Mail Change";
           $mail->content =  "Greets.\n\n".
@@ -138,7 +138,7 @@ class UserModule_EditAction extends Krai_Module_Action
                             "To activate the new e-mail, please go to the following URL.\n".
                             "If you did NOT request this e-mail change, please do not visit the link.\n\n".
                             "http://".Krai::GetConfig("DOMAIN").self::$ROUTER->UrlFor("user","confirm",array("id" => $this->_parent->USER->user_id,"code" => $thecode,"type"=>"email"), false)."\n\n";
-          if(Mailer::Send($mail))
+          if(Krai_Mail::Send($mail))
           {
             self::Notice("An e-mail confirmation was sent to the new address for your requested e-mail change.");
           }
@@ -148,19 +148,19 @@ class UserModule_EditAction extends Krai_Module_Action
           }
         }
 
-        self::$DB->Query("COMMIT");
+        self::$DB->Transaction("commit");
         self::Notice("Preferences saved.");
       }
       else
       {
-        self::$DB->Query("ROLLBACK");
+        self::$DB->Transaction("rollback");
         throw new Krai_Module_Exception("Saving preferences failed. Unable to update user in the database.", Krai_Module_Exception::ProcessingError);
       }
 
     }
     elseif($this->_doprocess)
     {
-      self::$DB->Query("ROLLBACK");
+      self::$DB->Transaction("rollback");
     }
   }
 
