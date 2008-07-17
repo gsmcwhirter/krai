@@ -206,7 +206,6 @@ final class Krai_Router
     {
       Krai_Base::$PARAMS = array_merge(Krai_Base::$PARAMS, $_params);
       $t = Krai::$INFLECTOR->Underscore2Camel($_module."_module");
-      $this->Load($t);
       $inst = new $t();
       $inst->DoAction($_action, $_SERVER["REQUEST_METHOD"]);
     }
@@ -238,81 +237,6 @@ final class Krai_Router
         Krai::WriteLog("Matched Route.".serialize($route), Krai::LOG_DEBUG);
         return $this->_baseuri.$route->Reconstruct($_module, $_action, $_params, $_forlink);
       }
-    }
-  }
-
-  /**
-   * Loads the file for a module or action name
-   *
-   * This function attempts to load the file containing the class named by the
-   * parameter. It is configured to have success with modules and actions placed
-   * in the usual places.
-   *
-   * @param string $_class The name of the class
-   * @return boolean The success of the loading
-   * @throws Krai_Router_Exception
-   *
-   */
-  public function Load($_class)
-  {
-    $_class = Krai::$INFLECTOR->Camel2Underscore($_class);
-    if(substr($_class,-6) == "module")
-    {
-      $this->LoadModuleFile(substr($class, 0, 7));
-    }
-    elseif(substr($_class, -6) == "action")
-    {
-      list($mod, $act) = explode("module", $_class, 2);
-      $this->LoadActionFile(substr($mod,0,-1), substr($act, 1,-7));
-    }
-    else
-    {
-      throw new Krai_Router_Exception("Load failed for class ".$class);
-    }
-  }
-
-  /**
-   * Tries to load the file for a module
-   *
-   * This function attempts to load the file containing a certain module.
-   *
-   * @param string $_module The name of the module
-   * @return boolean The success of the loading
-   * @throws Krai_Router_Exception
-   */
-  private function LoadModuleFile($_module)
-  {
-    $f = Krai::$MODULES."/".$_module.".module/".$_module.".module.php";
-    if(Krai::Uses($f))
-    {
-      return true;
-    }
-    else
-    {
-      throw new Krai_Router_Exception("Module Load failed for file ".$f);
-    }
-  }
-
-  /**
-   * Tries to load the file for an action
-   *
-   * This function attempts to load the file containing a certain action.
-   *
-   * @param string $_module The name of the module of the action
-   * @param string $_action The name of the action
-   * @return boolean The success of the loading
-   * @throws Krai_Router_Exception
-   */
-  private function LoadActionFile($_module, $_action)
-  {
-    $f = Krai::$MODULES."/".$_module.".module/actions/".$_action.".action.php";
-    if(Krai::Uses($f))
-    {
-      return true;
-    }
-    else
-    {
-      throw new Krai_Router_Exception("Action Load failed for file ".$f);
     }
   }
 

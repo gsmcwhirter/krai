@@ -343,6 +343,12 @@ final class Krai
       self::$MODULES = self::$INCLUDES."/modules";
       self::$LAYOUTS = self::$INCLUDES."/layouts";
 
+      spl_autoload_register(array("Krai","AutoLoad"));
+      if(function_exists("__autoload"))
+      {
+        spl_autoload_register("__autoload");
+      }
+
       self::$_SETUP = true;
     }
   }
@@ -570,7 +576,7 @@ final class Krai
 
     foreach($args as $filename)
     {
-      if(preg_match("#^pear://#"), $filename))
+      if(preg_match("#^pear://#", $filename))
       {
         try
         {
@@ -673,5 +679,80 @@ final class Krai
       throw new Exception("Error: Called WriteBackLogs while logging was still off.");
     }
 
+  }
+
+  /**
+   * Loads the file for a module or action name
+   *
+   * This function attempts to load the file containing the class named by the
+   * parameter. It is configured to have success with modules and actions placed
+   * in the usual places.
+   *
+   * @param string $_class The name of the class
+   * @return boolean The success of the loading
+   * @throws Exception
+   *
+   */
+  public static function AutoLoad($_class)
+  {
+    $_class = self::$INFLECTOR->Camel2Underscore($_class);
+    if(substr($_class,-6) == "module")
+    {
+      self::LoadModuleFile(substr($_class, 0, -7));
+    }
+    elseif(substr($_class, -6) == "action")
+    {
+      list($mod, $act) = explode("module", $_class, 2);
+      self::LoadActionFile(substr($mod,0,-1), substr($act, 1,-7));
+    }
+    else
+    {
+      //throw new Exception("Load failed for class ".$class);
+    }
+  }
+
+  /**
+   * Tries to load the file for a module
+   *
+   * This function attempts to load the file containing a certain module.
+   *
+   * @param string $_module The name of the module
+   * @return boolean The success of the loading
+   * @throws Krai_Router_Exception
+   */
+  private static function LoadModuleFile($_module)
+  {
+    $f = self::$MODULES."/".$_module.".module/".$_module.".module.php";
+    if(self::Uses($f))
+    {
+      return true;
+    }
+    else
+    {
+      //throw new Exception("Module Load failed for file ".$f);
+    }
+  }
+
+  /**
+   * Tries to load the file for an action
+   *
+   * This function attempts to load the file containing a certain action.
+   *
+   * @param string $_module The name of the module of the action
+   * @param string $_action The name of the action
+   * @return boolean The success of the loading
+   * @throws Exception
+   */
+  private static function LoadActionFile($_module, $_action)
+  {
+    $f = self::$MODULES."/".$_module.".module/actions/".$_action.".action.php";
+    if(self::Uses($f))
+    {
+      return true;
+    }
+    else
+    {
+      //throw new Exception("Action Load failed for file ".$f);
+    }
   }
 }

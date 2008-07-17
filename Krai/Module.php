@@ -60,10 +60,6 @@ abstract class Krai_Module extends Krai_Base
     {
       throw new Krai_Module_Exception("Unable to find requested action ".$action." (".$act." : ".$f.").", Krai_Module_Exception::ActionNotFound);
     }
-    else
-    {
-      Krai_Base::$ROUTER->Load($fsc);
-    }
 
 
     try

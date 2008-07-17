@@ -4,4 +4,9 @@ generating an application skeleton with the "-p" flag (see ./script/newapp.sh -h
 
 Otherwise, you can use the framework in the same directory as your application.
 
+
+Dependency:
+  - The Krai_Mail component of the framework depends on the PEAR Mail library
+  - The Demo Application depends on the PEAR Text_Wiki library
+
 Please see the README file for complete details.
