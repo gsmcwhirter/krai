@@ -38,7 +38,7 @@ abstract class Krai_Markup
    * So, for example:
    * <code>
    * # This is the BASEURI line in the config file
-   * BASEURI = mypath/test
+   * BASEURI: mypath/test
    *
    * # Get the tags
    * Krai_Markup::JavascriptTag(array("file1.js","other/file2.js"));
@@ -69,7 +69,7 @@ abstract class Krai_Markup
    * So, for example:
    * <code>
    * # This is the BASEURI line in the config file
-   * BASEURI = mypath/test
+   * BASEURI: mypath/test
    *
    * # Get the tags
    * Krai_Markup::StylesheetTag(array("file1.css","other/file2.css"));
