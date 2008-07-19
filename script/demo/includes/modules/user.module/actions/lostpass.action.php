@@ -69,7 +69,7 @@ class UserModule_LostpassAction extends Krai_Module_Action
         $thecode .= $dump{mt_rand(0,strlen($dump)-1)};
       }
 
-      $q = self::$DB->FindQuery(array("users"));
+      $q = self::$DB->SelectQuery(array("users"));
       $q->conditions = "username = ?";
       $q->parameters = array(self::$POST["username"]);
       $q->fields = array("user_id","email");
@@ -92,7 +92,7 @@ class UserModule_LostpassAction extends Krai_Module_Action
       );
 
       $res = self::$DB->Process($q);
-      if(self::$DB->Result($res))
+      if($res->IsSuccessful())
       {
         //Send activation email
         $mail = Krai_Mail::NewMail();

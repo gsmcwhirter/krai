@@ -166,11 +166,11 @@ class PageModule_EditAction extends Krai_Module_Action
 
             $res = self::$DB->Process($q);
 
-            if(self::$DB->Result($res))
+            if($res->IsSuccessful())
             {
               $q = self::$DB->UpdateQuery(array("pages"));
               $q->fields = array(
-                                 "page_revision" => $res,
+                                 "page_revision" => $res->InsertID(),
                                  "page_updated" => time()
                                  );
               $q->conditions = "page_id = ?";
@@ -179,7 +179,7 @@ class PageModule_EditAction extends Krai_Module_Action
 
               $res2 = self::$DB->Process($q);
 
-              if(self::$DB->Result($res2))
+              if($res2->IsSuccessful())
               {
                 self::$DB->Transaction("commit");
                 self::Notice("Revision saved successfully.");

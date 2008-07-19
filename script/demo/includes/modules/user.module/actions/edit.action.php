@@ -79,7 +79,7 @@ class UserModule_EditAction extends Krai_Module_Action
       //Check for e-mail uniqueness
       if(!array_key_exists("email", $this->_errorfields))
       {
-        $q = self::$DB->FindQuery(array("users"));
+        $q = self::$DB->SelectQuery(array("users"));
         $q->conditions = "(email = ? OR new_email = ?) AND user_id != ?";
         $q->parameters = array(self::$POST["email"], self::$POST["email"], $this->_parent->USER->user_id);
         $q->limit = "1";
@@ -126,7 +126,7 @@ class UserModule_EditAction extends Krai_Module_Action
 
       $res = self::$DB->Process($q);
 
-      if(self::$DB->Result($res))
+      if($res->IsSuccessful())
       {
         if($this->_parent->USER->email != self::$POST["email"])
         {

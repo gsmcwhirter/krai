@@ -23,7 +23,7 @@ class PageModule_ListAction extends Krai_Module_Action
 
   public function Process()
   {
-    $q = self::$DB->FindQuery(array("pages as p", "page_revisions as r"));
+    $q = self::$DB->SelectQuery(array("pages as p", "page_revisions as r"));
     $q->conditions = "p.page_indexed = ? AND r.page_id = p.page_id AND r.rev_id = p.page_revision";
     $q->parameters = array("yes");
     $q->order = "r.rev_page_name AND p.page_id";

@@ -92,7 +92,7 @@ class UserModule_ChangepassAction extends Krai_Module_Action
       );
 
       $res = self::$DB->Process($q);
-      if(self::$DB->Result($res))
+      if($res->IsSuccessful())
       {
         self::$DB->Transaction("commit");
         self::Notice("Password Changed.");

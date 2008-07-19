@@ -89,7 +89,7 @@ class UserModule_LoginAction extends Krai_Module_Action
     {
       $password = "0x".bin2hex(sha1(self::$POST['password']));
 
-      $q = self::$DB->FindQuery(array('users as u'));
+      $q = self::$DB->SelectQuery(array('users as u'));
       $q->fields = array('u.user_id');
       $q->conditions = "username = ? AND password = ?";
       $q->parameters = array(self::$POST["username"], $password);
@@ -152,7 +152,7 @@ class UserModule_LoginAction extends Krai_Module_Action
           $sessionID .= $charDump{mt_rand(0,strlen($charDump)-1)};
         }
         // check to see if 32-character string already exists
-	$q = self::$DB->FindQuery('sessions');
+	$q = self::$DB->SelectQuery('sessions');
 	$q->conditions = "session_id = ?";
 	$q->limit = "1";
 	$q->parameters = array($sessionID);

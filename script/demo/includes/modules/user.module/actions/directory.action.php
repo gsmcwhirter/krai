@@ -24,7 +24,7 @@ class UserModule_DirectoryAction extends Krai_Module_Action
 
   public function Process()
   {
-    $q = self::$DB->FindQuery(array("users as u"));
+    $q = self::$DB->SelectQuery(array("users as u"));
     $q->fields = array("u.*");
     $q->conditions = "u.directory_list = 'yes'";
     $q->order = "displayname, username";

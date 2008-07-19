@@ -15,6 +15,9 @@ Removed Text_Wiki built-in library. Dependent on PEAR now.
 
 Merged Krai_Base with Krai. Removed Krai_Base.
 
+Changed how Db handlers return data. Moved query stats into Query objects. Re-named
+  FindQuery to SelectQuery
+
 == From KvFramework 2.0b6 ==
 
 Renamed most things.

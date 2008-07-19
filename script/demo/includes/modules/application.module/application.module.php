@@ -138,7 +138,7 @@ class ApplicationModule extends Krai_Module
     }
 
     // check to see if user has an active session using the session string found in cookie
-    $q  = self::$DB->FindQuery(array('sessions as s', 'users as u' => "s.user_id = u.user_id"));
+    $q  = self::$DB->SelectQuery(array('sessions as s', 'users as u' => "s.user_id = u.user_id"));
     $q->fields = array('s.session_id','s.started','s.lastact','s.useragent','s.ipaddr','u.*');
     $q->conditions = "s.session_id = ?";
     $q->limit = "1";
@@ -182,7 +182,7 @@ class ApplicationModule extends Krai_Module
     $q->limit = "1";
 
     $res = self::$DB->Process($q);
-    return ($res instanceOf Krai_Db_Query) ? self::$DB->Result($res) : $res;
+    return $res->IsSuccessful();
   }
 
   /**

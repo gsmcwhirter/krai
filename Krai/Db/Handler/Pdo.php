@@ -11,9 +11,9 @@
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
-Krai::Uses(
+/*Krai::Uses(
   Krai::$FRAMEWORK."/Db/Querypdo.php"
-);
+);*/
 
 /**
  * PDO database handler
@@ -58,9 +58,9 @@ class Krai_Db_Handler_Pdo extends Krai_Db_Handler
   {
     switch($query->action)
     {
-      case "find":
+      case "select":
         $sql = "SELECT ".((count($query->fields) > 0) ? implode(", ", $query->fields) : "*")." FROM ".$this->GetJoins($query->tables).(($query->conditions != "") ? " WHERE ".$query->conditions : "").(($query->order != "") ? " ORDER BY ". $query->order : "").(($query->limit != "") ? " LIMIT ".$query->limit : "");
-        $q = $this->Query($sql, $query->parameters);
+        $q = $this->Query("select", $sql, $query->parameters);
 
         if($query->limit != "1")
         {
@@ -78,16 +78,7 @@ class Krai_Db_Handler_Pdo extends Krai_Db_Handler
         break;
       case "delete":
         $sql = "DELETE FROM ".$this->GetJoins($query->tables).(($query->conditions != "") ? " WHERE ".$query->conditions : "").(($query->limit != "") ? " LIMIT ".$query->limit : "");
-        $res = $this->Query($sql, $query->parameters);
-        if($res instanceOf Krai_Db_Query)
-        {
-          return $this->Affected($res);
-        }
-        else
-        {
-          return $res;
-        }
-        //return $this->Query($sql, $query->parameters);
+        return $this->Query("delete", $sql, $query->parameters);
         break;
       case "insert":
         $ks = array();
@@ -134,15 +125,7 @@ class Krai_Db_Handler_Pdo extends Krai_Db_Handler
         $ks = implode(", ", $ks);
 
         $sql = "INSERT INTO ".$this->GetJoins($query->tables)." (".$ks.") VALUES ".$vss;
-        $q = $this->Query($sql, $vals);
-        if($this->Affected($q) > 0)
-        {
-          return $this->Inserted($q);
-        }
-        else
-        {
-          return false;
-        }
+        return $this->Query("insert", $sql, $vals);
         break;
       case "update":
         $flds = array();
@@ -161,25 +144,21 @@ class Krai_Db_Handler_Pdo extends Krai_Db_Handler
         }
         $flds = implode(", ", $flds);
         $sql = "UPDATE ".$this->GetJoins($query->tables)." SET ".$flds." WHERE ".$query->conditions.(($query->limit != "") ? " LIMIT ".$query->limit : "");
-        $q = $this->Query($sql, array_merge($vals, $query->parameters));
-        if($q instanceOf Krai_Db_Query)
-        {
-          return $this->Affected($q);
-        }
-        else
-        {
-          return $q;
-        }
+        return $this->Query("update",$sql, array_merge($vals, $query->parameters));
         break;
     }
   }
 
-  public function Query($sql, array $params = array())
+  public function Query($querytype, $sql, array $params = array())
   {
+    if(!in_array($querytype, array("select","update","insert","delete","transaction")))
+    {
+      throw new Krai_Db_Exception("Unrecognized query type provided.");
+    }
     $tstart = microtime(true);
 
     $stmtkey = md5($sql);
-    if(!array_key_exists($stmtkey,$this->_prepared_statements))
+    if(!array_key_exists($stmtkey, $this->_prepared_statements))
     {
       $stmt = $this->_dbc->prepare($sql);
       $this->_prepared_statements[$stmtkey] = $stmt;
@@ -191,19 +170,12 @@ class Krai_Db_Handler_Pdo extends Krai_Db_Handler
 
     if($this->CONFIG["DEBUG"])
     {
-      Krai::Notice($sql." ".serialize($params));
+      print $sql." ".serialize($params);
     }
 
     $query = $stmt->execute($params);
 
-    Krai::WriteLog($sql." ".serialize($params), Krai::LOG_DEBUG, array("sql"));
-
-    if(!$query)
-    {
-      throw new Krai_Db_Exception($this->Error("text"), is_integer($this->Error("number")) ? $this->Error("number") : 0);
-    }
-
-    if(preg_match("#^SELECT\s#i",$sql))
+    if($querytype == "select")
     {
       if(preg_match("#^SELECT\s.*?COUNT.*?\sFROM\s#i", $sql))
       {
@@ -211,8 +183,7 @@ class Krai_Db_Handler_Pdo extends Krai_Db_Handler
       }
       else
       {
-
-        $sql2 = preg_replace("#^SELECT\s.*?\sFROM(\s)#i","SELECT COUNT(*) FROM$1",$sql);
+        $sql2 = preg_replace("#^SELECT\s.*?\sFROM(\s)#i","SELECT COUNT(*) FROM$1",$sql,1);
         $stmtkey2 = md5($sql2);
 
         if(!array_key_exists($stmtkey2, $this->_prepared_statements))
@@ -225,24 +196,33 @@ class Krai_Db_Handler_Pdo extends Krai_Db_Handler
           $stmt2 = $this->_prepared_statements[$stmtkey2];
         }
 
-        Krai::WriteLog($sql2." ".serialize($params), Krai::LOG_DEBUG, array("sql"));
-
         $countq = $stmt2->execute($params);
         $count = $stmt2->fetchColumn();
       }
-      $sel = true;
-    }
-    else
-    {
-      $sel = false;
     }
 
     $tstop = microtime(true);
 
+    Krai::WriteLog($sql2." ".serialize($params), Krai::LOG_DEBUG, array("sql"));
+    Krai::WriteLog($sql." ".serialize($params)." :: ".($tstop - $tstart)."s", Krai::LOG_DEBUG, array("sql"));
 
-    $ret = ($query) ? new Krai_Db_Querypdo($stmt, ($sel) ? $count : $query) : $query;
-    Krai::WriteLog(serialize(gettype($ret))." ".serialize($count), Krai::LOG_DEBUG, array("sql"));
-    return $ret;
+    $error = $stmt->errorInfo();
+    if(is_array($error))
+    {
+      $error = array($error[2], $error[1]);
+    }
+    else
+    {
+      $error = array(null, null);
+    }
+
+    return new Krai_Db_Query($stmt, array(
+      "affected" => ($querytype != "select" && $querytype != "transaction") ? $stmt->rowCount() : null,
+      "insertid" => ($querytype == "insert") ? $this->_dbc->lastInsertId() : null,
+      "numrows" => ($querytype == "select") ? $count : null,
+      "successful" => $query,
+      "error" => $error
+    ));
 
   }
 
@@ -275,9 +255,8 @@ class Krai_Db_Handler_Pdo extends Krai_Db_Handler
 
   public function Fetch(Krai_Db_Query &$qid)
   {
-    $row = (!$qid->IsClosed() && $this->Rows($qid) > 0) ? $qid->fetchObject("Krai_Db_Object") : null;
-    Krai::WriteLog(serialize($qid->IsClosed())." ".serialize($this->Rows($qid))." ".serialize($row), Krai::LOG_DEBUG, array("sql"));
-    if(!$qid->IsClosed() && (!$row || $this->Rows($qid) == 1))
+    $row = (!$qid->IsClosed() && $qid->NumRows() > 0) ? $qid->fetchObject("Krai_Db_Object") : null;
+    if(!$qid->IsClosed() && (!$row || $qid->NumRows() == 1))
     {
       $qid->Close();
     }
@@ -286,8 +265,8 @@ class Krai_Db_Handler_Pdo extends Krai_Db_Handler
 
   public function FetchArray(Krai_Db_Query &$qid)
   {
-    $row = (!$qid->IsClosed()) ? $qid->fetch(PDO::FETCH_ASSOC) : null;
-    if(!$qid->IsClosed() && (!$row || $this->Rows($qid) == 1))
+    $row = (!$qid->IsClosed() && $qid->NumRows() > 0) ? $qid->fetch(PDO::FETCH_ASSOC) : null;
+    if(!$qid->IsClosed() && (!$row || $qid->NumRows() == 1))
     {
       $qid->Close();
     }
@@ -296,20 +275,20 @@ class Krai_Db_Handler_Pdo extends Krai_Db_Handler
 
   public function FetchOne(Krai_Db_Query &$qid)
   {
-    $row = (!$qid->IsClosed()) ? $qid->fetch(PDO::FETCH_NUM) : null;
-    if(!$qid->IsClosed() && (!$row || $this->Rows($qid) == 1))
+    $row = (!$qid->IsClosed() && $qid->NumRows() > 0) ? $qid->fetch(PDO::FETCH_NUM) : null;
+    if(!$qid->IsClosed() && (!$row || $qid->NumRows() == 1))
     {
       $qid->Close();
     }
     return $row[0];
   }
 
-  public function Rows(Krai_Db_Query $qid)
+  /*public function Rows(Krai_Db_Query $qid)
   {
     return $qid->NumRows();
-  }
+  }*/
 
-  public function Error(Krai_Db_Query $qid, $ret)
+  /*public function Error(Krai_Db_Query $qid, $ret)
   {
     $stmt = $qid->GetQuery();
     $einfo = $stmt->errorInfo();
@@ -331,18 +310,18 @@ class Krai_Db_Handler_Pdo extends Krai_Db_Handler
     {
       throw new Krai_Db_Exception("Un-recognized return type option passed to Krai_Db_Handler_Pdo::Error.");
     }
-  }
+  }*/
 
-  public function Affected(Krai_Db_Query $qid)
+  /*public function Affected(Krai_Db_Query $qid)
   {
     $stmt = $qid->GetQuery();
     return $stmt->rowCount();
-  }
+  }*/
 
-  public function Inserted(Krai_Db_Query $qid)
+  /*public function Inserted(Krai_Db_Query $qid)
   {
     return $this->_dbc->lastInsertId();
-  }
+  }*/
 
   /**
    * Generates DSN strings for a variety of databases from the $dbinfo

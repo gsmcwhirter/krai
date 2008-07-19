@@ -19,7 +19,7 @@
  * @package Krai
  * @subpackage Struct
  */
-class Krai_Struct_Dbquery_Find extends Krai_Struct_Dbquery
+class Krai_Struct_Dbquery_Select extends Krai_Struct_Dbquery
 {
 
   protected $FIELDS = array(
@@ -30,5 +30,5 @@ class Krai_Struct_Dbquery_Find extends Krai_Struct_Dbquery
     "parameters" => array()
   );
 
-  public $action = "find";
+  public $action = "select";
 }

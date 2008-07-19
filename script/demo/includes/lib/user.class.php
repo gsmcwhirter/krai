@@ -75,7 +75,7 @@ class User
   public function __construct(Krai_Db_Object $_data)
   {
     $this->_DBDATA = $_data;
-    $q = Krai::$DB->FindQuery(array("user_roles as ur","roles as r"));
+    $q = Krai::$DB->SelectQuery(array("user_roles as ur","roles as r"));
     $q->conditions = "ur.user_id = ? AND ur.role_id = ? AND r.role_id = ur.role_id";
     $q->parameters = array($this->_DBDATA->user_id, 'sysop');
     $q->fields = array("ur.role_id");
@@ -140,7 +140,7 @@ class User
       $p .= "?, ";
     }
 
-    $q = Krai::$DB->FindQuery(array("user_roles as ur","roles as r"));
+    $q = Krai::$DB->SelectQuery(array("user_roles as ur","roles as r"));
     $q->conditions = "ur.user_id = ? AND ur.role_id IN (".substr($p,0,-2).") AND r.role_id = ur.role_id";
     $q->parameters = array_merge(array($this->_DBDATA->user_id),$as->requires);
     $q->fields = array("ur.role_id");
@@ -190,7 +190,7 @@ class User
       self::$_PrivLookups[intval($_user_id)] = array();
     }
 
-    $q = Krai::$DB->FindQuery(array("user_roles as ur","users as u","roles as r"));
+    $q = Krai::$DB->SelectQuery(array("user_roles as ur","users as u","roles as r"));
     $q->conditions = "ur.role_id = ? AND ur.user_id = ? AND u.user_id = ur.user_id AND r.role_id = ur.role_id";
     $q->parameters = array($_priv_name, $_user_id);
     $q->fields = array("ur.role_id","ur.user_id");

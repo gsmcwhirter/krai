@@ -83,7 +83,7 @@ class PageModule_SetrevAction extends Krai_Module_Action
 
       $res2 = self::$DB->Process($q);
 
-      if(self::$DB->Result($res2))
+      if($res2->IsSuccessful())
       {
         self::$DB->Transaction("commit");
         self::Notice("Revision saved successfully.");

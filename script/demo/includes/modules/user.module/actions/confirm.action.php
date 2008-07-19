@@ -43,7 +43,7 @@ class UserModule_ConfirmAction extends Krai_Module_Action
       switch(self::$GET["type"])
       {
         case "register":
-          $q = self::$DB->FindQuery(array("users"));
+          $q = self::$DB->SelectQuery(array("users"));
           $q->conditions = "user_id = ? AND activation_code = ?";
           $q->parameters = array(self::$GET["id"], self::$GET["code"]);
           $q->fields = array("user_id");
@@ -65,8 +65,8 @@ class UserModule_ConfirmAction extends Krai_Module_Action
             );
 
             $res = self::$DB->Process($q);
-            $res = self::$DB->Result($res);
-            if($res || $res === 0)
+            $res = $res->IsSuccessful();
+            if($res)
             {
               $q = self::$DB->UpdateQuery(array("users"));
               $q->conditions = "user_id = ?";
@@ -87,7 +87,7 @@ class UserModule_ConfirmAction extends Krai_Module_Action
           }
           break;
         case "email":
-          $q = self::$DB->FindQuery(array("users"));
+          $q = self::$DB->SelectQuery(array("users"));
           $q->conditions = "user_id = ? AND confirmation_code = ?";
           $q->parameters = array(self::$GET["id"], self::$GET["code"]);
           $q->fields = array("user_id","new_email");
@@ -105,7 +105,7 @@ class UserModule_ConfirmAction extends Krai_Module_Action
 
             $res = self::$DB->Process($q);
 
-            if(self::$DB->Result($res))
+            if($res->IsSuccessful())
             {
               self::$DB->Transaction("commit");
               self::Notice("E-mail confirmation was successful.");

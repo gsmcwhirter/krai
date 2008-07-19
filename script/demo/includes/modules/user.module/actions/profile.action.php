@@ -31,7 +31,7 @@ class UserModule_ProfileAction extends Krai_Module_Action
 
   public function Process()
   {
-    $q = self::$DB->FindQuery(array("users as u"));
+    $q = self::$DB->SelectQuery(array("users as u"));
     $q->conditions = "u.username = ?";
     $q->parameters = array(self::$PARAMS["id"]);
     $q->limit = "1";

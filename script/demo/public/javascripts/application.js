@@ -45,7 +45,7 @@ function page_edit_cancel()
 
 function LoadRevChooser(page_id)
 {
-  $.getJSON(_BASEURI_+'page/revisions/'+page_id, {}, function(response){
+  $.getJSON(CONFIG.BASEURI+'page/revisions/'+page_id, {}, function(response){
     if(response.result == 0)
     {
       if(response.message != "ok")
@@ -63,7 +63,7 @@ function LoadRevChooser(page_id)
         var sb = $.create('select',{'class': 'selectbox single', 'size': '1', 'style': 'width: auto;', 'id': 'revision_select', 'name': 'revision_select'}, options);
         sb.change(function(){ShowRevision(page_id);});
         $('#rev_chooser').append(
-          $.create('form', {'method':'post', 'action': _BASEURI_+'page/setrev/'+page_id}, [
+          $.create('form', {'method':'post', 'action': CONFIG.BASEURI+'page/setrev/'+page_id}, [
             sb,
             ' ',
             $.create('input',{'type': 'submit','class': 'button', 'value': 'set revision'},[])
@@ -90,7 +90,7 @@ function ShowRevision(page_id)
 {
   $('#revision_select').attr("disabled","disabled");
   var rev_id = $('#revision_select option:selected').val();
-  $.getJSON(_BASEURI_+'page/revisions/'+page_id, {'rid': rev_id}, function(response){
+  $.getJSON(CONFIG.BASEURI+'page/revisions/'+page_id, {'rid': rev_id}, function(response){
     if(response.result == 0)
     {
       if(response.message != "ok")

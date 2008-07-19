@@ -52,11 +52,12 @@ abstract class Krai_Db_Handler
    *
    * This function executes a specified SQL query using the passed parameters.
    *
+   * @param string $querytype The type of query that is to be executed (one of "select","insert","update","delete","transaction" -- use "select" for things like DESCRIBE)
    * @param string $sql The query to execute
    * @param array $params Parameters for the query
    * @return mixed
    */
-  abstract public function Query($sql, array $params = array());
+  abstract public function Query($querytype, $sql, array $params = array());
 
   /**
    * Fetch a database record from a query as an object
@@ -97,7 +98,7 @@ abstract class Krai_Db_Handler
    * @param Krai_Db_Query $qid The query
    * @return integer The number of rows (-1 for an error)
    */
-  abstract public function Rows(Krai_Db_Query $qid);
+  //abstract public function Rows(Krai_Db_Query $qid);
 
   /**
    * Get the error from a query
@@ -107,7 +108,7 @@ abstract class Krai_Db_Handler
    * @param Krai_Db_Query $qid The query
    * @param string $ret The error format
    */
-  abstract public function Error(Krai_Db_Query $qid, $ret);
+  //abstract public function Error(Krai_Db_Query $qid, $ret);
 
   /**
    * Return the number of rows affected by the last query
@@ -116,7 +117,7 @@ abstract class Krai_Db_Handler
    *
    * @param Krai_Db_Query $qid The query
    */
-  abstract public function Affected(Krai_Db_Query $qid);
+  //abstract public function Affected(Krai_Db_Query $qid);
 
   /**
    * Return the last inserted id
@@ -125,7 +126,7 @@ abstract class Krai_Db_Handler
    *
    * @param Krai_Db_Query $qid The query
    */
-  abstract public function Inserted(Krai_Db_Query $qid);
+  //abstract public function Inserted(Krai_Db_Query $qid);
 
   /**
    * Process a query struct according to its type.
@@ -204,13 +205,13 @@ abstract class Krai_Db_Handler
    * @param mixed $tables
    * @return Krai_Struct_Dbquery_Find
    */
-  final public function FindQuery($tables)
+  final public function SelectQuery($tables)
   {
     if(!is_array($tables))
     {
       $tables = array($tables);
     }
-    return new Krai_Struct_Dbquery_Find($tables);
+    return new Krai_Struct_Dbquery_Select($tables);
   }
 
   /**

@@ -50,9 +50,9 @@ class Krai_Db_Handler_Mysql extends Krai_Db_Handler
   {
     switch($query->action)
     {
-      case "find":
+      case "select":
         $sql = "SELECT ".((count($query->fields) > 0) ? implode(", ", $query->fields) : "*")." FROM ".$this->GetJoins($query->tables).(($query->conditions != "") ? " WHERE ".$query->conditions : "").(($query->order != "") ? " ORDER BY ". $query->order : "").(($query->limit != "") ? " LIMIT ".$query->limit : "");
-        $q = $this->Query($sql, $query->parameters);
+        $q = $this->Query("select", $sql, $query->parameters);
 
         if($query->limit != "1")
         {
@@ -70,15 +70,7 @@ class Krai_Db_Handler_Mysql extends Krai_Db_Handler
         break;
       case "delete":
         $sql = "DELETE FROM ".$this->GetJoins($query->tables).(($query->conditions != "") ? " WHERE ".$query->conditions : "").(($query->limit != "") ? " LIMIT ".$query->limit : "");
-        $res = $this->Query($sql, $query->parameters);
-        if($res instanceOf Krai_Db_Query)
-        {
-          return $this->Affected($res);
-        }
-        else
-        {
-          return $res;
-        }
+        return $this->Query("delete", $sql, $query->parameters);
         break;
       case "insert":
         $ks = array();
@@ -125,15 +117,7 @@ class Krai_Db_Handler_Mysql extends Krai_Db_Handler
         $ks = implode(", ", $ks);
 
         $sql = "INSERT INTO ".$this->GetJoins($query->tables)." (".$ks.") VALUES ".$vss;
-        $q = $this->Query($sql, $vals);
-        if($this->Affected($q) > 0)
-        {
-          return $this->Inserted($q);
-        }
-        else
-        {
-          return false;
-        }
+        return $this->Query("insert", $sql, $vals);
         break;
       case "update":
         $flds = array();
@@ -152,42 +136,46 @@ class Krai_Db_Handler_Mysql extends Krai_Db_Handler
         }
         $flds = implode(", ", $flds);
         $sql = "UPDATE ".$this->GetJoins($query->tables)." SET ".$flds." WHERE ".$query->conditions.(($query->limit != "") ? " LIMIT ".$query->limit : "");
-        $q = $this->Query($sql, array_merge($vals, $query->parameters));
-        if($q instanceOf Krai_Db_Query)
-        {
-          return $this->Affected($q);
-        }
-        else
-        {
-          return $q;
-        }
+        return $this->Query("update", $sql, array_merge($vals, $query->parameters));
         break;
     }
   }
 
-  public function Query($sql, array $params = array())
+  public function Query($querytype, $sql, array $params = array())
   {
+    if(!in_array($querytype, array("select","update","insert","delete","transaction")))
+    {
+      throw new Krai_Db_Exception("Unrecognized query type provided.");
+    }
+
     $tstart = microtime(true);
     list($spats, $bpars) = $this->ParseQueryParams($params);
     $sql_real = preg_replace("#/\?#","?",preg_replace($spats, $bpars, $sql, 1));
 
     if($this->CONFIG["DEBUG"])
     {
-      Krai::Notice($sql);
-      Krai::Notice($sql_real);
+      print $sql;
+      print $sql_real;
     }
 
     $query = $this->_dbc->query($sql_real);
 
     $tstop = microtime(true);
 
-    Krai::WriteLog($sql_real, Krai::LOG_DEBUG, array("sql"));
+    Krai::WriteLog($sql_real. ":: ".($tstop - $tstart)."s", Krai::LOG_DEBUG, array("sql"));
 
-    if(!$query)
+    /*if(!$query)
     {
-      throw new Krai_Db_Exception($this->error("text"), $this->error("number"));
-    }
-    return new Krai_Db_Query(($query instanceOf mysqli_result) ? $query : array($query, $this->_dbc->affected_rows, $this->_dbc->insert_id));
+      throw new Krai_Db_Exception($this->error("text").$this->error("number"));
+    }*/
+
+    return new Krai_Db_Query($query, array(
+      "affected" => ($querytype != "select" && $querytype != "transaction") ? $this->_dbc->affected_rows : null,
+      "insertid" => ($querytype == "insert") ? $this->_dbc->insert_id : null,
+      "numrows" => ($querytype == "select") ? $query->num_rows : null,
+      "successful" => ($querytype != "select" && $querytype != "transaction") ? $query : (($query) ? true : false ),
+      "error" => array($this->_dbc->error, $this->_dbc->errno)
+      ));
 
   }
 
@@ -196,19 +184,19 @@ class Krai_Db_Handler_Mysql extends Krai_Db_Handler
     switch(strtolower($_action))
     {
       case "start":
-        if(!$this->Query("START TRANSACTION"))
+        if(!$this->Query("transaction","START TRANSACTION"))
         {
           throw new Krai_Db_Exception("Unable to start transaction.");
         }
         break;
       case "commit":
-        if(!$this->Query("COMMIT"))
+        if(!$this->Query("transaction","COMMIT"))
         {
           throw new Krai_Db_Exception("Unable to commit transaction.");
         }
         break;
       case "rollback":
-        if(!$this->Query("ROLLBACK"))
+        if(!$this->Query("transaction","ROLLBACK"))
         {
           throw new Krai_Db_Exception("Unable to rollback transaction.");
         }
@@ -276,8 +264,8 @@ class Krai_Db_Handler_Mysql extends Krai_Db_Handler
 
   public function Fetch(Krai_Db_Query &$qid)
   {
-    $row = (!$qid->IsClosed() && $this->Rows($qid) > 0) ? $qid->fetch_object("Krai_Db_Object") : null;
-    if(!$qid->IsClosed() && (!$row || $this->Rows($qid) == 1))
+    $row = (!$qid->IsClosed() && $qid->NumRows() > 0) ? $qid->fetch_object("Krai_Db_Object") : null;
+    if(!$qid->IsClosed() && (!$row || $qid->NumRows() == 1))
     {
       $qid->Close();
     }
@@ -287,7 +275,7 @@ class Krai_Db_Handler_Mysql extends Krai_Db_Handler
   public function FetchArray(Krai_Db_Query &$qid)
   {
     $row = (!$qid->IsClosed()) ? $qid->fetch_assoc() : null;
-    if(!$qid->IsClosed() && (!$row || $this->Rows($qid) == 1))
+    if(!$qid->IsClosed() && (!$row || $qid->NumRows() == 1))
     {
       $qid->Close();
     }
@@ -297,19 +285,14 @@ class Krai_Db_Handler_Mysql extends Krai_Db_Handler
   public function FetchOne(Krai_Db_Query &$qid)
   {
     $row = (!$qid->IsClosed()) ? $qid->fetch_row() : null;
-    if(!$qid->IsClosed() && (!$row || $this->Rows($qid) == 1))
+    if(!$qid->IsClosed() && (!$row || $qid->NumRows() == 1))
     {
       $qid->Close();
     }
     return $row[0];
   }
 
-  public function Rows(Krai_Db_Query $qid)
-  {
-    return $qid->num_rows;
-  }
-
-  public function Error(Krai_Db_Query $qid, $ret)
+  /*public function Error(Krai_Db_Query $qid, $ret)
   {
     if($ret == "text")
     {
@@ -327,34 +310,39 @@ class Krai_Db_Handler_Mysql extends Krai_Db_Handler
     {
       throw new Krai_Db_Exception("Un-recognized return type option passed to Krai_DbMysql::Error.");
     }
-  }
+  }*/
 
-  public function Affected(Krai_Db_Query $qid)
+  /*public function Affected(Krai_Db_Query $qid)
   {
     $d = $qid->GetQuery();
     if(is_array($d))
     {
       return $d[1];
     }
-  }
+  }*/
 
-  public function Inserted(Krai_Db_Query $qid)
+  /*public function Inserted(Krai_Db_Query $qid)
   {
     $d = $qid->GetQuery();
     if(is_array($d))
     {
       return $d[2];
     }
-  }
+  }*/
 
-  public function Result(Krai_Db_Query $qid)
+  /*public function Result(Krai_Db_Query $qid)
   {
     $d = $qid->GetQuery();
     if(is_array($d))
     {
       return $d[0];
     }
-  }
+  }*/
+
+  /*public function Rows(Krai_Db_Query $qid)
+  {
+    return $qid->num_rows;
+  }*/
 
   /**
    * Escape the parameter so it is safe to insert into a query

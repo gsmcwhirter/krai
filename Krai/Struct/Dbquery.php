@@ -14,7 +14,7 @@
 
 Krai::Uses(
   Krai::$FRAMEWORK."/Struct/Dbquery/Delete.php",
-  Krai::$FRAMEWORK."/Struct/Dbquery/Find.php",
+  Krai::$FRAMEWORK."/Struct/Dbquery/Select.php",
   Krai::$FRAMEWORK."/Struct/Dbquery/Insert.php",
   Krai::$FRAMEWORK."/Struct/Dbquery/Update.php"
 );

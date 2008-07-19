@@ -42,14 +42,14 @@ class PageModule extends ApplicationModule
   {
     if(is_null($_rev_id))
     {
-      $q = self::$DB->FindQuery(array("pages as p","page_revisions as pr" => "pr.rev_id = p.page_revision","users as u" => "u.user_id = pr.rev_user"));
+      $q = self::$DB->SelectQuery(array("pages as p","page_revisions as pr" => "pr.rev_id = p.page_revision","users as u" => "u.user_id = pr.rev_user"));
       $q->fields = array("u.*","pr.*","p.*");
       $q->conditions = "p.page_id = ?";
       $q->parameters = array($_page_id);
     }
     else
     {
-      $q = self::$DB->FindQuery(array("pages as p","page_revisions as pr" => "pr.page_id = p.page_id","users as u" => "u.user_id = pr.rev_user"));
+      $q = self::$DB->SelectQuery(array("pages as p","page_revisions as pr" => "pr.page_id = p.page_id","users as u" => "u.user_id = pr.rev_user"));
       $q->fields = array("u.*","pr.*","p.*");
       $q->conditions = "p.page_id = ? AND pr.rev_id = ?";
       $q->parameters = array($_page_id, $_rev_id);
@@ -69,7 +69,7 @@ class PageModule extends ApplicationModule
    */
   public function GetAllRevisions($_page_id, $_orderby = null)
   {
-    $q = self::$DB->FindQuery(array("pages as p", "page_revisions as pr", "users as u" => "u.user_id = pr.rev_user"));
+    $q = self::$DB->SelectQuery(array("pages as p", "page_revisions as pr", "users as u" => "u.user_id = pr.rev_user"));
     $q->fields = array("u.*","pr.rev_page_name","pr.rev_date","pr.rev_id","p.*");
     $q->conditions = "pr.page_id = p.page_id AND p.page_id = ?";
     $q->parameters = array($_page_id);
@@ -100,7 +100,7 @@ class PageModule extends ApplicationModule
       return true;
     }
 
-    $q = self::$DB->FindQuery(array("page_owners as po"));
+    $q = self::$DB->SelectQuery(array("page_owners as po"));
     $q->conditions = "po.user_id = ? AND po.page_id = ?";
     $q->parameters = array(self::$_USER->user_id, $_page_id);
     $q->limit = "1";
