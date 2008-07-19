@@ -32,8 +32,8 @@ CONFIG_MAIL:
   FROM_NAME: Example App Mailer
   MAILER_CONFIG:
     type: internal  # internal, sendmail, or smtp
+    charset: iso-8859-1
     #args: -
-    #charset: iso-8859-1
     #sendmail_path: /usr/bin/sendmail
     #smtp_host: localhost
     #smtp_port: 25
