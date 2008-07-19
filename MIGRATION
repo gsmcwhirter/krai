@@ -13,6 +13,8 @@ Return types of Database hander Process have changed
 Added support for AfterRender in Krai_Module_Action instances
 Removed Text_Wiki built-in library. Dependent on PEAR now.
 
+Merged Krai_Base with Krai. Removed Krai_Base.
+
 == From KvFramework 2.0b6 ==
 
 Renamed most things.

@@ -23,7 +23,7 @@ define_syslog_variables();
  *
  *  @package Krai
  */
-final class Krai
+class Krai
 {
   /**#@+
    * Logger level constant. These are used with {@link Krai_Log}.
@@ -426,6 +426,8 @@ final class Krai
       self::$MODULES = self::$INCLUDES."/modules";
       self::$LAYOUTS = self::$INCLUDES."/layouts";
 
+      self::Uses(self::$FRAMEWORK."/Exception.php");
+
       spl_autoload_register(array("Krai","AutoLoad"));
       if(function_exists("__autoload"))
       {
@@ -471,7 +473,6 @@ final class Krai
       self::$REQUEST = urldecode($_uri);
 
       self::Uses(
-        self::$FRAMEWORK."/Base.php",
         self::$FRAMEWORK."/Struct.php"
       );
 

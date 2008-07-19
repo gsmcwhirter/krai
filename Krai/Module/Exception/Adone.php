@@ -24,7 +24,7 @@ class Krai_Module_Exception_Adone extends Krai_Exception
    * Code constant representing that neither a rendering nor a redirect occurred.
    *
    */
-  const Default = 0;
+  const KMEADefault = 0;
 
   /**
    * Code constant representing that a rendering occurred.
