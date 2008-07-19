@@ -130,11 +130,6 @@ class UserModule_LoginAction extends Krai_Module_Action
     }
   }
 
-  public function HandleError($_ErrorCode, $_ErrorMsg)
-  {
-    self::Error($_ErrorMsg);
-  }
-
   /**
    * Creates a session for the user
    * @param integer $_user_id

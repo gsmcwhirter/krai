@@ -67,9 +67,4 @@ class PageModule_ViewAction extends Krai_Module_Action
       $this->_parent->RedirectSilent("page","list");
     }
   }
-
-  public function HandleError($_ErrorCode, $_ErrorMsg)
-  {
-    self::Error($_ErrorMsg);
-  }
 }

@@ -119,9 +119,4 @@ class UserModule_ChangepassAction extends Krai_Module_Action
     $this->Render("user.module/views/changepass.phtml");
   }
 
-  public function HandleError($_ErrorCode, $_ErrorMsg)
-  {
-    self::Error($_ErrorMsg);
-  }
-
 }

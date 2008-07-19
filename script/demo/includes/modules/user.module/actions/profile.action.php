@@ -59,9 +59,4 @@ class UserModule_ProfileAction extends Krai_Module_Action
       $this->Render("user.module/views/profile.phtml");
     }
   }
-
-  public function HandleError($_ErrorCode, $_ErrorMsg)
-  {
-    self::Error($_ErrorMsg);
-  }
 }

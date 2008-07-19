@@ -133,9 +133,4 @@ class UserModule_LostpassAction extends Krai_Module_Action
     }
   }
 
-  public function HandleError($_ErrorCode, $_ErrorMsg)
-  {
-    self::Error($_ErrorMsg);
-  }
-
 }

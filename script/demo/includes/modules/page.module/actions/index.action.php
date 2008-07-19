@@ -41,9 +41,4 @@ class PageModule_IndexAction extends Krai_Module_Action
   {
     $this->Render("page.module/views/index.phtml");
   }
-
-  public function HandleError($_ErrorCode, $_ErrorMsg)
-  {
-    self::Error($_ErrorMsg);
-  }
 }

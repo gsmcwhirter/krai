@@ -107,9 +107,4 @@ class PageModule_SetrevAction extends Krai_Module_Action
         $this->RedirectTo("page","index");
     }
   }
-
-  public function HandleError($_ErrorCode, $_ErrorMsg)
-  {
-    self::Error($_ErrorMsg);
-  }
 }

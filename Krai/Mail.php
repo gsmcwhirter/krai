@@ -78,6 +78,17 @@ abstract class Krai_Mail
   protected static $_FROMNAME = "";
 
   /**
+   * Default character set
+   *
+   * This holds the default charset in which to send mail. It can be configured
+   * in a {@link Krai_Mail::Configure()} call inside the {@link Krai_Struct_Mailconf}
+   * struct passed.
+   *
+   * @var string
+   */
+  protected static $_CHARSET = "iso-8859-1";
+
+  /**
    * Factory to create a new mail struct
    *
    * This function generates and returns a new {@link Krai_Struct_Mail} instance,
@@ -145,6 +156,7 @@ abstract class Krai_Mail
     self::$_SEND_MAIL = ($_send) ? true : false;
     self::$_FROM = $_from;
     self::$_FROMNAME = $_fromname;
+    self::$_CHARSET = $_backend->charset;
 
     switch($_backend->type)
     {

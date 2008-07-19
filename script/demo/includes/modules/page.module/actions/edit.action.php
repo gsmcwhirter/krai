@@ -228,9 +228,4 @@ class PageModule_EditAction extends Krai_Module_Action
       }
     }
   }
-
-  public function HandleError($_ErrorCode, $_ErrorMsg)
-  {
-    self::Error($_ErrorMsg);
-  }
 }

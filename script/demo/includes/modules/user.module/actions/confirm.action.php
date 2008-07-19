@@ -18,7 +18,7 @@ class UserModule_ConfirmAction extends Krai_Module_Action
 {
   public function Validate()
   {
-    if(!array_key_exists("id", self::$GET) || empty(self::$GET["id"]))
+    if(!array_key_exists("id", self::$PARAMS) || empty(self::$PARAMS["id"]))
     {
       throw new Krai_Module_Exception("The ID parameter was missing for confirmation.", Krai_Module_Exception::ValidationError);
     }
@@ -45,7 +45,7 @@ class UserModule_ConfirmAction extends Krai_Module_Action
         case "register":
           $q = self::$DB->SelectQuery(array("users"));
           $q->conditions = "user_id = ? AND activation_code = ?";
-          $q->parameters = array(self::$GET["id"], self::$GET["code"]);
+          $q->parameters = array(self::$PARAMS["id"], self::$GET["code"]);
           $q->fields = array("user_id");
           $q->limit = "1";
 
@@ -60,7 +60,7 @@ class UserModule_ConfirmAction extends Krai_Module_Action
           {
             $q = self::$DB->InsertQuery(array("user_roles"));
             $q->fields = array(
-              "user_id" => self::$GET["id"],
+              "user_id" => self::$PARAMS["id"],
               "role_id" => "user:active"
             );
 
@@ -70,7 +70,7 @@ class UserModule_ConfirmAction extends Krai_Module_Action
             {
               $q = self::$DB->UpdateQuery(array("users"));
               $q->conditions = "user_id = ?";
-              $q->parameters = array(self::$GET["id"]);
+              $q->parameters = array(self::$PARAMS["id"]);
               $q->fields = array("activation_code" =>  null);
               $q->limit = "1";
 
@@ -89,7 +89,7 @@ class UserModule_ConfirmAction extends Krai_Module_Action
         case "email":
           $q = self::$DB->SelectQuery(array("users"));
           $q->conditions = "user_id = ? AND confirmation_code = ?";
-          $q->parameters = array(self::$GET["id"], self::$GET["code"]);
+          $q->parameters = array(self::$PARAMS["id"], self::$GET["code"]);
           $q->fields = array("user_id","new_email");
           $q->limit = "1";
 
@@ -99,7 +99,7 @@ class UserModule_ConfirmAction extends Krai_Module_Action
           {
             $q = self::$DB->UpdateQuery(array("users"));
             $q->conditions = "user_id = ?";
-            $q->parameters = array(self::$GET["id"]);
+            $q->parameters = array(self::$PARAMS["id"]);
             $q->fields = array("confirmation_code" =>  null, "email" => $res->new_email, "new_email" => null);
             $q->limit = "1";
 
@@ -131,11 +131,6 @@ class UserModule_ConfirmAction extends Krai_Module_Action
   public function Display()
   {
     $this->RedirectTo("page","index");
-  }
-
-  public function HandleError($_ErrorCode, $_ErrorMsg)
-  {
-    self::Error($_ErrorMsg);
   }
 
 }

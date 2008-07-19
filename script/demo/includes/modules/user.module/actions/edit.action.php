@@ -165,9 +165,4 @@ class UserModule_EditAction extends Krai_Module_Action
     $this->Render("user.module/views/edit.phtml");
   }
 
-  public function HandleError($_ErrorCode, $_ErrorMsg)
-  {
-    self::Error($_ErrorMsg);
-  }
-
 }
