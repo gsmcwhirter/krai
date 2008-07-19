@@ -8,10 +8,6 @@
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
-Krai::Uses(
-  Krai::$INCLUDES."/lib/mailer.class.php"
-);
-
 /**
  * Action to recover lost password
  * @package Demo
