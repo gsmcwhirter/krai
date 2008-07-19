@@ -17,7 +17,7 @@
  * @package Krai
  * @subpackage Module
  */
-class Krai_Module_Exception_Mdone extends Krai_Base_Exception
+class Krai_Module_Exception_Mdone extends Krai_Exception
 {
   public function __construct($message = "", $code = 0)
   {

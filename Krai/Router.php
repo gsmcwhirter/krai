@@ -204,7 +204,7 @@ final class Krai_Router
   {
     if(!is_null($_module) && !empty($_action))
     {
-      Krai_Base::$PARAMS = array_merge(Krai_Base::$PARAMS, $_params);
+      Krai::$PARAMS = array_merge(Krai::$PARAMS, $_params);
       $t = Krai::$INFLECTOR->Underscore2Camel($_module."_module");
       $inst = new $t();
       $inst->DoAction($_action, $_SERVER["REQUEST_METHOD"]);

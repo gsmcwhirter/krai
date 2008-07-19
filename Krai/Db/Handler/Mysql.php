@@ -173,8 +173,8 @@ class Krai_Db_Handler_Mysql extends Krai_Db_Handler
 
     if($this->CONFIG["DEBUG"])
     {
-      Krai_Base::Notice($sql);
-      Krai_Base::Notice($sql_real);
+      Krai::Notice($sql);
+      Krai::Notice($sql_real);
     }
 
     $query = $this->_dbc->query($sql_real);

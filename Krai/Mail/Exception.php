@@ -16,5 +16,5 @@
  * @package Krai
  * @subpackage Mail
  */
-class Krai_Mail_Exception extends Krai_Base_Exception
+class Krai_Mail_Exception extends Krai_Exception
 { }

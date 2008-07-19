@@ -56,7 +56,7 @@ include Krai::$MODULES."/page.module/views/entry.phtml";
         </tr>
         <?php } ?>
         <tr>
-          <td class="label"><label for="page_content">Page Content</label><br /><a href="<?php echo Krai_Base::$ROUTER->UrlFor("page","view",array("pid" => "wiki_markup")) ?>" rel="external" class="subfooter">markup help</a></td>
+          <td class="label"><label for="page_content">Page Content</label><br /><a href="<?php echo Krai::$ROUTER->UrlFor("page","view",array("pid" => "wiki_markup")) ?>" rel="external" class="subfooter">markup help</a></td>
           <td class="field"><textarea cols="40" rows="6" name="page_content" id="page_content" class="txtarea"><?php echo (array_key_exists("page_content", self::$POST)) ? self::$POST["page_content"] : $this->_thepage->rev_page_content ?></textarea></td>
         </tr>
         <tr>

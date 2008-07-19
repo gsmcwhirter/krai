@@ -16,7 +16,7 @@
  * @package Krai
  * @subpackage Module
  */
-class Krai_Module_Exception extends Krai_Base_Exception
+class Krai_Module_Exception extends Krai_Exception
 {
   /**
    * Error code for a processing error

@@ -24,7 +24,7 @@ Krai::Uses(
  * @package Krai
  * @subpackage Module
  */
-abstract class Krai_Module extends Krai_Base
+abstract class Krai_Module extends Krai
 {
 
   /**

@@ -16,5 +16,5 @@
  * @package Krai
  * @subpackage Cache
  */
-class Krai_Cache_Exception extends Krai_Base_Exception
+class Krai_Cache_Exception extends Krai_Exception
 {}

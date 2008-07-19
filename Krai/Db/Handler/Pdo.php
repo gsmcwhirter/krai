@@ -191,7 +191,7 @@ class Krai_Db_Handler_Pdo extends Krai_Db_Handler
 
     if($this->CONFIG["DEBUG"])
     {
-      Krai_Base::Notice($sql." ".serialize($params));
+      Krai::Notice($sql." ".serialize($params));
     }
 
     $query = $stmt->execute($params);

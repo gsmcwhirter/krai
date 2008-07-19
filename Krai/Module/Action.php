@@ -20,7 +20,7 @@
  * @package Krai
  * @subpackage Module
  */
-abstract class Krai_Module_Action extends Krai_Base
+abstract class Krai_Module_Action extends Krai
 {
   /**
    * Holds a reference to the parent module
@@ -123,7 +123,7 @@ abstract class Krai_Module_Action extends Krai_Base
    *
    * This function handles the {@link Krai_Module_Exception}s thrown by the
    * {@link Krai_Module_Action::Validate()} and {@link Krai_Module_Action::Process()}
-   * methods. By default it is implemented to call {@link Krai_Base::Error()} with
+   * methods. By default it is implemented to call {@link Krai::Error()} with
    * the $_ErrorMsg parameter.
    *
    * @param integer $_ErrorCode

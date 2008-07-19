@@ -16,5 +16,5 @@
  * @package Krai
  * @subpackage Db
  */
-class Krai_Db_Exception extends Krai_Base_Exception
+class Krai_Db_Exception extends Krai_Exception
 { }

@@ -17,5 +17,5 @@
  * @package Krai
  * @subpackage Markup
  */
-class Krai_Markup_Exception extends Krai_Base_Exception
+class Krai_Markup_Exception extends Krai_Exception
 {}

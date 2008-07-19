@@ -17,7 +17,7 @@
  * @package Krai
  * @subpackage Module
  */
-class Krai_Module_Exception_Adone extends Krai_Base_Exception
+class Krai_Module_Exception_Adone extends Krai_Exception
 {
 
   /**

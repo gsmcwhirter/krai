@@ -16,7 +16,7 @@
  * @package Krai
  * @subpackage Router
  */
-class Krai_Router_Exception extends Krai_Base_Exception
+class Krai_Router_Exception extends Krai_Exception
 {
   /**
    * Error code for a route not found.

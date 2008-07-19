@@ -9,7 +9,7 @@
 <span style="font-weight: bold;">An uncaught <?php echo get_class($e) ?> occurred.</span><br />
 <br />
 <span style="font-weight: bold;">Messages</span>:
-<?php echo ($e instanceOf Krai_Base_Exception && count($e->Errors) > 1) ? "<pre>".implode("\n\t", $e->Errors)."</pre>" : $e->getMessage() ?><br />
+<?php echo ($e instanceOf Krai_Exception && count($e->Errors) > 1) ? "<pre>".implode("\n\t", $e->Errors)."</pre>" : $e->getMessage() ?><br />
 <span style="font-weight: bold;">File</span>: <?php echo $e->getFile() ?><br />
 <span style="font-weight: bold;">Code</span>: <?php echo $e->getCode() ?><br />
 <span style="font-weight: bold;">Request</span>: <?php echo Krai::$REQUEST ?><br />

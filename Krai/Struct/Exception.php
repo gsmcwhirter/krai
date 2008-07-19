@@ -16,5 +16,5 @@
  * @package Krai
  * @subpackage Struct
  */
-class Krai_Struct_Exception extends Krai_Base_Exception
+class Krai_Struct_Exception extends Krai_Exception
 {}

@@ -11,13 +11,13 @@
 /**
  * Framework base exception
  *
- * This is an exception for Krai_Base, and the exception from which any other in
+ * This is an exception for Krai, and the exception from which any other in
  * the framework is derived.
  *
  * @package Krai
  * @subpackage Base
  */
-class Krai_Base_Exception extends Exception
+class Krai_Exception extends Exception
 {
   /**
    * Holds an array of errors
