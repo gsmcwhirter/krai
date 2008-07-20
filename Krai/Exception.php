@@ -2,7 +2,6 @@
 /**
  * A Krai exception class
  * @package Krai
- * @subpackage Base
  * @author Greg McWhirter <gsmcwhirter@gmail.com>
  * @copyright Copyright (c) 2008, Greg McWhirter
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
@@ -15,7 +14,6 @@
  * the framework is derived.
  *
  * @package Krai
- * @subpackage Base
  */
 class Krai_Exception extends Exception
 {

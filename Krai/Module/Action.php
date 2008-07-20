@@ -193,7 +193,7 @@ abstract class Krai_Module_Action extends Krai
     }
     else
     {
-      include Krai::$MODULES."/".$_file;
+      include $_file;
     }
 
     throw new Krai_Module_Exception_Adone(Krai_Module_Exception_Adone::Rendered);

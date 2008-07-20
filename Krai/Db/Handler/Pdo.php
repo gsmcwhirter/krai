@@ -198,16 +198,16 @@ class Krai_Db_Handler_Pdo extends Krai_Db_Handler
 
         $countq = $stmt2->execute($params);
         $count = $stmt2->fetchColumn();
+        Krai::WriteLog($sql2." ".serialize($params), Krai::LOG_DEBUG, array("sql"));
       }
     }
 
     $tstop = microtime(true);
 
-    Krai::WriteLog($sql2." ".serialize($params), Krai::LOG_DEBUG, array("sql"));
     Krai::WriteLog($sql." ".serialize($params)." :: ".($tstop - $tstart)."s", Krai::LOG_DEBUG, array("sql"));
 
     $error = $stmt->errorInfo();
-    if(is_array($error))
+    if(is_array($error) && count($error) == 3)
     {
       $error = array($error[2], $error[1]);
     }
