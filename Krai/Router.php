@@ -52,8 +52,8 @@ final class Krai_Router
    * Holds the array of defined routes in entry order
    *
    * This is an array of {@link Krai_Router_Route} instances sorted in the order
-   * they were parsed out of the routes configuration file. It is used for reconstructing
-   * routes from module and action data.
+   * they were parsed out of the routes configuration file. It is used for
+   * reconstructing routes from module and action data.
    *
    * @var array
    */
@@ -72,7 +72,8 @@ final class Krai_Router
   /**
    * Constructor - private to implement singleton pattern
    *
-   * This function parses the routes configuration file and stores the route objects.
+   * This function parses the routes configuration file and stores the route
+   * objects.
    *
    * @param string $kvfurl
    *
@@ -92,7 +93,9 @@ final class Krai_Router
       $t = explode("-->", trim($line), 2);
       $pattern = trim($t[0]);
       $actmap = trim((array_key_exists(1, $t)) ? $t[1] : "");
-      $pattern = trim(preg_replace(array("#^[/]*#","#[/]*$#"),array("",""),$pattern));
+      $pattern = trim(preg_replace(array("#^[/]*#","#[/]*$#"),
+                                   array("",""),
+                                   $pattern));
       $patparts = (empty($pattern)) ? array() : explode("/", $pattern);
       $actparts = (empty($actmap)) ? array() : explode(",", $actmap);
       $forces = array();
@@ -112,11 +115,13 @@ final class Krai_Router
         $this->_routemap[count($patparts)] = array();
       }
 
-      $this->_routemap[count($patparts)][] = new Krai_Router_Route($patparts,$forces);
+      $this->_routemap[count($patparts)][] = new Krai_Router_Route($patparts,
+                                                                   $forces);
       $this->_reconstrmap[] = new Krai_Router_Route($patparts, $forces);
     }
 
-    $this->_baseuri = Krai::GetConfig("BASEURI") == "" ? "" : "/".Krai::GetConfig("BASEURI");
+    $this->_baseuri = Krai::GetConfig("BASEURI") == "" ? "" : "/".
+                                                     Krai::GetConfig("BASEURI");
     Krai::WriteLog($this->_baseuri, Krai::LOG_DEBUG);
   }
 
@@ -141,8 +146,9 @@ final class Krai_Router
   /**
    * Execute a route
    *
-   * This function executes a route based on the parsing of the request parameter.
-   * It can only be called once, and after that will throw a Krai_Router_Exception.
+   * This function executes a route based on the parsing of the request
+   * parameter. It can only be called once, and after that will throw a
+   * Krai_Router_Exception.
    *
    * @param string $request The requested uri
    * @throws Krai_Router_Exception
@@ -151,7 +157,9 @@ final class Krai_Router
   {
     if(!$this->_routed)
     {
-      $request = preg_replace(array("#^[/]*#","#[/]*$#"),array("",""), $request);
+      $request = preg_replace(array("#^[/]*#","#[/]*$#"),
+                              array("",""),
+                              $request);
       //$request = preg_replace("#\.html$#","", $request);
       $rparts = (empty($request)) ? array() : explode("/", $request);
       if(array_key_exists(count($rparts), $this->_routemap))
@@ -169,22 +177,30 @@ final class Krai_Router
 
         if(is_null($found))
         {
-          throw new Krai_Router_Exception("Unable to find a route matching the request.", Krai_Router_Exception::NoRouteFound);
+          throw new Krai_Router_Exception(
+                                "Unable to find a route matching the request.",
+                                Krai_Router_Exception::NoRouteFound);
         }
         else
         {
           $this->_routed = true;
-          $this->ExecuteRoute($found["module"], $found["action"], $found["params"]);
+          $this->ExecuteRoute($found["module"],
+                              $found["action"],
+                              $found["params"]);
         }
       }
       else
       {
-        throw new Krai_Router_Exception("Unable to find a route with the proper number of arguments.", Krai_Router_Exception::NoRouteFound);
+        throw new Krai_Router_Exception(
+                  "Unable to find a route with the proper number of arguments.",
+                  Krai_Router_Exception::NoRouteFound);
       }
     }
     else
     {
-      throw new Krai_Router_Exception("Routing has already been performed for this request.", Krai_Router_Exception::RoutingPerformed);
+      throw new Krai_Router_Exception(
+                        "Routing has already been performed for this request.",
+                        Krai_Router_Exception::RoutingPerformed);
     }
   }
 
@@ -192,8 +208,8 @@ final class Krai_Router
    * Actually execute a route
    *
    * This function implements the actual execution of a route by instantiating
-   * the required module and calling the module's {@link Krai_Module::DoAction()}
-   * method.
+   * the required module and calling the module's
+   * {@link Krai_Module::DoAction()} method.
    *
    * @param string $_module The name of the module to instantiate
    * @param string $_action The name of the action to execute
@@ -211,7 +227,9 @@ final class Krai_Router
     }
     else
     {
-      throw new Krai_Router_Exception("Matching route did not yield a module to which to route.", Krai_Router_Exception::NoRouteAction);
+      throw new Krai_Router_Exception(
+                    "Matching route did not yield a module to which to route.",
+                    Krai_Router_Exception::NoRouteAction);
     }
   }
 
@@ -224,10 +242,14 @@ final class Krai_Router
    * @param string $_module The name of the module
    * @param string $_action The name of the action
    * @param array $_params An array of parameters
-   * @param boolean $_forlink Whether or not to encode the uri returned for use in a link
+   * @param boolean $_forlink Whether or not to encode the uri returned for use
+   * in a link
    * @return string The uri (including BASEURI).
    */
-  public function UrlFor($_module, $_action, array $_params = array(), $_forlink = true)
+  public function UrlFor($_module,
+                         $_action,
+                         array $_params = array(),
+                         $_forlink = true)
   {
     foreach($this->_reconstrmap as $route)
     {
@@ -235,7 +257,10 @@ final class Krai_Router
       {
         //The route is a match now
         Krai::WriteLog("Matched Route.".serialize($route), Krai::LOG_DEBUG);
-        return $this->_baseuri.$route->Reconstruct($_module, $_action, $_params, $_forlink);
+        return $this->_baseuri.$route->Reconstruct($_module,
+                                                   $_action,
+                                                   $_params,
+                                                   $_forlink);
       }
     }
   }

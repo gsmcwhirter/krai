@@ -104,8 +104,8 @@ abstract class Krai_Mail
   /**
    * Send (or just process and not send) an email
    *
-   * This function processes a {@link Krai_Struct_Mail} and attempts to send it if
-   * emailing is turned on.
+   * This function processes a {@link Krai_Struct_Mail} and attempts to send it
+   * if emailing is turned on.
    *
    * @param Krai_Struct_Mail $mail The email to send
    * @return boolean The success of the mailing attempt
@@ -114,7 +114,8 @@ abstract class Krai_Mail
   {
     $headers = $mail->headers;
     $headers["Content-type"] = "text/plain; charset=".self::$_CHARSET;
-    $headers["From"] = (($mail->from_name) ? $mail->from_name : self::$_FROMNAME)." <".(($mail->from) ? $mail->from : self::$_FROM).">";
+    $headers["From"] = ($mail->from_name ? $mail->from_name : self::$_FROMNAME).
+                        " <".(($mail->from) ? $mail->from : self::$_FROM).">";
     $headers["Reply-to"] = (($mail->from) ? $mail->from : self::$_FROM);
     $headers["Subject"] = $mail->subject;
     $headers["Date"] = date("r");
@@ -140,10 +141,10 @@ abstract class Krai_Mail
   /**
    * Configure the mailer
    *
-   * This function lets you configure the mailer options. It should probably only
-   * be called once, but that is not enforced in the code. This function sets
-   * {@link Krai_Mail::$_SEND_MAIL}, {@link Krai_Mail::$_FROM}, {@link Krai_Mail::$_FROMNAME},
-   * and {@link Krai_Mail::$_MAILER}
+   * This function lets you configure the mailer options. It should probably
+   * only be called once, but that is not enforced in the code. This function
+   * sets {@link Krai_Mail::$_SEND_MAIL}, {@link Krai_Mail::$_FROM},
+   * {@link Krai_Mail::$_FROMNAME}, and {@link Krai_Mail::$_MAILER}
    *
    * @param boolean $_send Whether or not to send mail
    * @param string $_from From address
@@ -151,7 +152,11 @@ abstract class Krai_Mail
    * @param Krai_Struct_Mailconf $_backend The mailer backend configuration
    * @throws Krai_Mail_Exception
    */
-  public static function Configure($_send, $_from, $_fromname, Krai_Struct_Mailconf $_backend)
+  public static function Configure($_send,
+                                   $_from,
+                                   $_fromname,
+                                   Krai_Struct_Mailconf $_backend
+                                  )
   {
     self::$_SEND_MAIL = ($_send) ? true : false;
     self::$_FROM = $_from;
@@ -164,7 +169,11 @@ abstract class Krai_Mail
         self::$_MAILER = Mail::factory("mail", $_backend->args);
         break;
       case "sendmail":
-        self::$_MAILER = Mail::factory("sendmail", array("sendmail_path" => $_backend->sendmail_path, "sendmail_args" => $_backend->args));
+        self::$_MAILER = Mail::factory("sendmail",
+                                       array("sendmail_path" => $_backend->sendmail_path,
+                                             "sendmail_args" => $_backend->args
+                                            )
+                                      );
         break;
       case "smtp":
         self::$_MAILER = Mail::factory("smtp", array(

@@ -31,7 +31,8 @@ class Krai_Exception extends Exception
    *
    * This initializes the exception and records the error messages and code
    *
-   * @param mixed $message A string error message or an array of string error messages
+   * @param mixed $message A string error message or an array of string error
+   * messages
    * @param integer $code The error code
    */
   public function __construct($message, $code = 0)

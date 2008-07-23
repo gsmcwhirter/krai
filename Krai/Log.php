@@ -34,10 +34,11 @@ define ("KRAI_DEFAULT_LOCAL_LOGFILE_PATH", Krai::$APPDIR."/log/");
 define("KRAI_ADMIN_EMAIL", Krai::GetConfig("ADMIN_EMAIL"));
 
 /**
- * Email log subject template
+ * Email log subject template.
+ * The calling application is appended to the end of this
  *
  */
-define ("KRAI_DEFAULT_EMAIL_SUBJECT", "LOG MESSAGE: ".date("r")); // The calling application is appended to the end of this.
+define ("KRAI_DEFAULT_EMAIL_SUBJECT", "LOG MESSAGE: ".date("r"));
 
 /**
  * Logger interface
@@ -218,7 +219,11 @@ abstract class Krai_Log
    * @param string $cat
    * @param array $forces
    */
-  final public static function Write($message, $level = Krai::LOG_INFO, array $logs = array(), $cat = null, array $forces = array())
+  final public static function Write($message,
+                                     $level = Krai::LOG_INFO,
+                                     array $logs = array(),
+                                     $cat = null,
+                                     array $forces = array())
   {
     $pars = array();
     if(count($logs) == 0)

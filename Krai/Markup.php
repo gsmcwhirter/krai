@@ -2,8 +2,8 @@
 /**
  * Krai markup generator functions
  *
- * This file holds a class that provides some markup generation functionality. It
- * is currently not well developed.
+ * This file holds a class that provides some markup generation functionality.
+ * It is currently not well developed.
  *
  * @package Krai
  * @subpackage Markup
@@ -31,9 +31,9 @@ abstract class Krai_Markup
   /**
    * Generates javascript tags for some file names
    *
-   * This function generates <script> tags for some collection of javascript file
-   * names. The files are prefixed with the BASEURI configuration option value and
-   * the javascripts directory.
+   * This function generates <script> tags for some collection of javascript
+   * file names. The files are prefixed with the BASEURI configuration option
+   * value and the javascripts directory.
    *
    * So, for example:
    * <code>
@@ -42,7 +42,8 @@ abstract class Krai_Markup
    *
    * # Get the tags
    * Krai_Markup::JavascriptTag(array("file1.js","other/file2.js"));
-   * # => the <script> tags for /mypath/test/javascripts/file1.js and /mypath/test/javascripts/other/file2.js
+   * # => the <script> tags for /mypath/test/javascripts/file1.js and
+   *                            /mypath/test/javascripts/other/file2.js
    * </code>
    *
    * @param array $files An array of file names to generate a tag for
@@ -53,7 +54,9 @@ abstract class Krai_Markup
     $ret = "";
     foreach($files as $file)
     {
-      $ret .= "<script src=\"".(Krai::GetConfig("BASEURI") == "" ? "" : "/".Krai::GetConfig("BASEURI"))."/javascripts/".$file."\" type=\"text/javascript\"></script>\n";
+      $ret .= "<script src=\"".(Krai::GetConfig("BASEURI") == "" ? "" : "/".
+                                Krai::GetConfig("BASEURI")).
+                "/javascripts/".$file."\" type=\"text/javascript\"></script>\n";
     }
 
     return $ret;
@@ -63,8 +66,8 @@ abstract class Krai_Markup
    * Generates link tags for some stylesheet files
    *
    * This function generates <link> tags for some collection of stylesheet file
-   * names. The files are prefixed with the BASEURI configuration option value and
-   * the css directory.
+   * names. The files are prefixed with the BASEURI configuration option value
+   * and the css directory.
    *
    * So, for example:
    * <code>
@@ -73,7 +76,8 @@ abstract class Krai_Markup
    *
    * # Get the tags
    * Krai_Markup::StylesheetTag(array("file1.css","other/file2.css"));
-   * # => the <link> tags for /mypath/test/css/file1.css and /mypath/test/css/other/file2.css
+   * # => the <link> tags for /mypath/test/css/file1.css and
+   *                          /mypath/test/css/other/file2.css
    * </code>
    *
    * @param array $files An array of file names for which to generate tags
@@ -85,7 +89,10 @@ abstract class Krai_Markup
     $ret = "";
     foreach($files as $file)
     {
-      $ret .= "<link href=\"".(Krai::GetConfig("BASEURI") == "" ? "" : "/".Krai::GetConfig("BASEURI"))."/css/".$file."\" rel=\"stylesheet\" type=\"text/css\" media=\"".$media."\" />\n";
+      $ret .= "<link href=\"".(Krai::GetConfig("BASEURI") == "" ? "" : "/".
+                               Krai::GetConfig("BASEURI")).
+                  "/css/".$file."\" rel=\"stylesheet\" type=\"text/css\"".
+                  " media=\"".$media."\" />\n";
     }
 
     return $ret;

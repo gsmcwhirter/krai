@@ -21,8 +21,8 @@ Krai::Uses(
   *
   * This class provides a sort of approximation of a struct type from some other
   * languages. The {@link Krai_Struct::$FIELDS} variable holds the names and
-  * default values of the allowed properties. The default values are also used to
-  * determine what type the values of those properties must have.
+  * default values of the allowed properties. The default values are also used
+  * to determine what type the values of those properties must have.
   *
   * The class uses the PHP overloading functions to control the public behavior.
   *
@@ -36,8 +36,8 @@ abstract class Krai_Struct
    * Array of allowed properties of the struct
    *
    * This variable holds the names and
-   * default values of the allowed properties. The default values are also used to
-   * determine what type the values of those properties must have.
+   * default values of the allowed properties. The default values are also used
+   * to determine what type the values of those properties must have.
    *
    * @var array
    */
@@ -60,7 +60,8 @@ abstract class Krai_Struct
    * default values, in lieu of setting those values after initialization, for
    * convenience.
    *
-   * @param array $new_defaults Override the default values of the allowed fields
+   * @param array $new_defaults Override the default values of the allowed
+   * fields
    */
   public function __construct(array $new_defaults = array())
   {
@@ -68,7 +69,11 @@ abstract class Krai_Struct
     {
       $this->FIELDS = array();
     }
-    $this->FIELDS = array_merge($this->FIELDS, array_intersect_key($new_defaults, $this->FIELDS));
+    $this->FIELDS = array_merge($this->FIELDS,
+                                array_intersect_key($new_defaults,
+                                                    $this->FIELDS
+                                                    )
+                                );
     foreach($this->FIELDS as $f => $d)
     {
       $this->DATA[$f] = $d;
@@ -94,7 +99,9 @@ abstract class Krai_Struct
     }
     else
     {
-      throw new Krai_Struct_Exception("Variable $m does not exist in the struct.");
+      throw new Krai_Struct_Exception(
+                                    "Variable $m does not exist in the struct."
+                                    );
     }
   }
 
@@ -116,7 +123,8 @@ abstract class Krai_Struct
     }
     else
     {
-      throw new Krai_Struct_Exception("Setting variable $m to $v failed. Variable name or type not allowed.");
+      throw new Krai_Struct_Exception("Setting variable $m to $v failed. ".
+                                      "Variable name or type not allowed.");
     }
   }
 

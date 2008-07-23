@@ -2,7 +2,8 @@
 /**
  * Database handler abstract class for the Krai Framework
  *
- * This file contains the database connection loading class used by the framework.
+ * This file contains the database connection loading class used by the
+ * framework.
  *
  * @package Krai
  * @subpackage Db
@@ -23,9 +24,9 @@ Krai::Uses(
  *
  * Database connection configuration and loading class
  *
- * This class provides functionality to determine the correct type of {@link Krai_Db_Handler}
- * to use for a certain database type. It also loads the necessary files to
- * instantiate a connection of that type.
+ * This class provides functionality to determine the correct type of
+ * {@link Krai_Db_Handler} to use for a certain database type. It also loads the
+ * necessary files to instantiate a connection of that type.
  *
  * @package Krai
  * @subpackage Db
@@ -33,13 +34,14 @@ Krai::Uses(
 class Krai_Db
 {
   /**
-   * Looks up the name and includes the file for the class handling a certain type
-   * of database.
+   * Looks up the name and includes the file for the class handling a certain
+   * type of database.
    *
    * This function is basically a switch on the types of databases supported by
    * the framework at any given time. Currently there is alpha support for a PDO
-   * connection which should theoretically support many formats, and beta-to-stable
-   * support for mysql through the {@link PHP_MANUAL#mysqli} interface.
+   * connection which should theoretically support many formats, and
+   * beta-to-stable support for mysql through the {@link PHP_MANUAL#mysqli}
+   * interface.
    *
    * @param string $_type The database type
    * @return string The name of the class
@@ -65,7 +67,9 @@ class Krai_Db
           );
           return "Krai_Db_Handler_Mysql";
         default:
-          throw new Krai_Db_Exception("Tried to load handler for unsupported database ".$_type);
+          throw new Krai_Db_Exception(
+                        "Tried to load handler for unsupported database ".$_type
+                        );
       }
     }
   }

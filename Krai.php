@@ -66,8 +66,9 @@ class Krai
   /**
    * Application includes directory variable
    *
-   * This variable holds the value of the path to the application includes directory.
-   * It gets set to {@link Krai::$APPDIR}/includes. The value has no trailing slash.
+   * This variable holds the value of the path to the application includes
+   * directory. It gets set to {@link Krai::$APPDIR}/includes. The value has no
+   * trailing slash.
    *
    * @var string
    */
@@ -76,8 +77,9 @@ class Krai
   /**
    * Application modules directory variable
    *
-   * This variable holds the value of the path to the application modules directory.
-   * It gets set to {@link Krai::$INCLUDES}/modules. The value has no trailing slash.
+   * This variable holds the value of the path to the application modules
+   * directory. It gets set to {@link Krai::$INCLUDES}/modules. The value has no
+   * trailing slash.
    *
    * @var string
    */
@@ -86,8 +88,9 @@ class Krai
   /**
    * Application layouts directory variable
    *
-   * This variable holds the value of the path to the application layouts directory.
-   * It gets set to {@link Krai::$INCLUDES}/layouts. The value has no trailing slash.
+   * This variable holds the value of the path to the application layouts
+   * directory. It gets set to {@link Krai::$INCLUDES}/layouts. The value has no
+   * trailing slash.
    *
    * @var string
    */
@@ -106,9 +109,9 @@ class Krai
   /**
    * Inflector instance
    *
-   * This variable holds an instance of {@link Krai_Lib_Inflector}, which can be used
-   * to convert from WordsWithUnderscores |-> words_with_underscores and back,
-   * among other functionality.
+   * This variable holds an instance of {@link Krai_Lib_Inflector}, which can be
+   * used to convert from WordsWithUnderscores |-> words_with_underscores and
+   * back, among other functionality.
    *
    * @var Krai_Lib_Inflector
    */
@@ -117,9 +120,10 @@ class Krai
   /**
    * The page requested
    *
-   * This variable holds the string of the page that was requested. It is determined
-   * either by passing a string to {@link Krai::Run()}, or else automatically
-   * set by the call to {@link Krai::DetermineRequest()} from within {@link Krai::Run()}.
+   * This variable holds the string of the page that was requested. It is
+   * determined either by passing a string to {@link Krai::Run()}, or else
+   * automatically set by the call to {@link Krai::DetermineRequest()} from
+   * within {@link Krai::Run()}.
    *
    * @var string
    */
@@ -138,10 +142,10 @@ class Krai
   /**
    * Framework logging flag
    *
-   * This is a flag representing whether or not application-level logging has been
-   * enabled and initialized in the framework. It is used by {@link Krai::WriteLog()}
-   * to determine whether to try writing the log message or whether to store it for
-   * writing when the logger is initialized.
+   * This is a flag representing whether or not application-level logging has
+   * been enabled and initialized in the framework. It is used by
+   * {@link Krai::WriteLog()} to determine whether to try writing the log
+   * message or whether to store it for writing when the logger is initialized.
    *
    * @var boolean
    */
@@ -150,8 +154,8 @@ class Krai
   /**
    * Framework log message cache
    *
-   * This is an array in which to hold log messages that are attempted to be sent
-   * to the logger for writing when the logger is not ready.
+   * This is an array in which to hold log messages that are attempted to be
+   * sent to the logger for writing when the logger is not ready.
    *
    * @var array
    */
@@ -170,8 +174,8 @@ class Krai
   /**
    * Whether or not the application was set up
    *
-   * This is a flag representing whether or not {@link Krai::Setup()} has yet been
-   * called. This prevents things from being set up twice.
+   * This is a flag representing whether or not {@link Krai::Setup()} has yet
+   * been called. This prevents things from being set up twice.
    *
    * @var boolean
    *
@@ -202,7 +206,8 @@ class Krai
   /**
    * Cleaned $_POST copy
    *
-   * This is a copy of the $_POST data having been run through the input scrubber.
+   * This is a copy of the $_POST data having been run through the input
+   * scrubber.
    *
    * @var array
    */
@@ -211,7 +216,8 @@ class Krai
   /**
    * Cleaned $_GET copy
    *
-   * This is a copy of the $_GET data having been run through the input scrubber.
+   * This is a copy of the $_GET data having been run through the input
+   * scrubber.
    *
    * @var array
    */
@@ -231,9 +237,9 @@ class Krai
   /**
    * Holds the database connections
    *
-   * This is either an associative array of database connections as defined in the
-   * config file and initialized in {@link Krai::Run()}, or a single database if
-   * only one was defined.
+   * This is either an associative array of database connections as defined in
+   * the config file and initialized in {@link Krai::Run()}, or a single
+   * database if only one was defined.
    *
    * @var mixed
    */
@@ -252,8 +258,8 @@ class Krai
   /**
    * Holds the errors and notices
    *
-   * This array holds the error and notice messages reported by the framework and
-   * application.
+   * This array holds the error and notice messages reported by the framework
+   * and application.
    *
    * @var array
    */
@@ -323,8 +329,8 @@ class Krai
    * This function sets up the framework in preparation of being run.
    * It expects a parameter of a string of the location and name of the YAML
    * configuration file. If the application skeleton is being used, this should
-   * be "../includes/configs/krai.yml" from the usual {@link Demo#default.php default.php}
-   * location.
+   * be "../includes/configs/krai.yml" from the usual
+   * {@link Demo#default.php default.php} location.
    *
    * The function sets up the {@link Krai::$APPDIR}, {@link Krai::$FRAMEWORK},
    * {@link Krai::$INCLUDES}, {@link Krai::$MODULES}, and {@link Krai::$LAYOUTS}
@@ -443,10 +449,11 @@ class Krai
    *
    * This function starts everything in motion. According to the configuration,
    * it loads and initializes all necessary and sufficient framework components.
-   * It initializes database connections, and finally initializes scrubbed versions
-   * of input variables.
+   * It initializes database connections, and finally initializes scrubbed
+   * versions of input variables.
    *
-   * @param string $_uri An override for the usually determined request to process
+   * @param string $_uri An override for the usually determined request to
+   * process
    * @throws Exception
    */
   public static function Run($_uri = null)
@@ -592,13 +599,14 @@ class Krai
    * Sets the mime-type header for the response
    *
    * This function is used to set the Content-type header for a response. It is
-   * most often used when the script is outputting an image or JSON. If it is not
-   * called by the application on a given request, the Content-type defaults to
-   * "text/html" for compatibility. However, some users may want to use
+   * most often used when the script is outputting an image or JSON. If it is
+   * not called by the application on a given request, the Content-type defaults
+   * to "text/html" for compatibility. However, some users may want to use
    * "application/xhtml+xml" for strict XHTML compliance.
    *
    * @param string $type The mime-type to set
-   * @param boolean $force Flag to force a reset if the type had previously been set
+   * @param boolean $force Flag to force a reset if the type had previously been
+   * set
    *
    */
   public static function SetMime($type, $force = false)
@@ -646,8 +654,8 @@ class Krai
    *
    * This function parses the {@link PHP_MANUAL#$_SERVER} REQUEST_URI variable
    * in order to determine what request was actually made (taking into account
-   * the BASEURI set in the configuration file). It is called in {@link Krai::Run()}
-   * unless an overriding request is passed to that function.
+   * the BASEURI set in the configuration file). It is called in
+   * {@link Krai::Run()} unless an overriding request is passed to that function
    *
    * @return string The actual request to parse.
    */
@@ -656,18 +664,27 @@ class Krai
     //get rid of the query string for these purposes
     $the_request = preg_replace("#\?.*$#", "", $_SERVER['REQUEST_URI']);
 
-    $the_request_actual = preg_replace(array("#^/*#","#^".self::GetConfig("BASEURI")."#"),array("",""),$the_request);
+    $the_request_actual = preg_replace(array(
+                                             "#^/*#",
+                                             "#^".self::GetConfig("BASEURI")."#"
+                                            ),
+                                       array(
+                                             "",
+                                             ""
+                                            ),
+                                       $the_request
+                                      );
     return ($the_request_actual == "") ? "/" : $the_request_actual;
   }
 
   /**
-   * A wrapper for including files and logging such. Uses {@link PHP_MANUAL#func_get_args()}
-   * for variable argument number.
+   * A wrapper for including files and logging such. Uses
+   * {@link PHP_MANUAL#func_get_args()} for variable argument number.
    *
-   * This function accepts an unlimited number of arguments, each of which should
-   * be a string of a file that needs to be included into the application execution.
-   * The function uses {@link PHP_MANUAL#include_once}, so it is not suitable for
-   * files that need to be included multiple times.
+   * This function accepts an unlimited number of arguments, each of which
+   * should be a string of a file that needs to be included into the application
+   * execution. The function uses {@link PHP_MANUAL#include_once}, so it is not
+   * suitable for files that need to be included multiple times.
    *
    * Additionally, the function provides logging for all the includes processed
    * through it, at the {@link Krai::LOG_DEBUG} level.
@@ -712,8 +729,8 @@ class Krai
   /**
    * A function to implode an associative array preserving keys
    *
-   * This function is an extension of {@link PHP_MANUAL#implode} for use when you
-   * want to preserve the keys of the array as well.
+   * This function is an extension of {@link PHP_MANUAL#implode} for use when
+   * you want to preserve the keys of the array as well.
    *
    * @param string $majorglue The glue for between the array entries
    * @param string $minorglue The glue for between key => value pairs
@@ -733,19 +750,25 @@ class Krai
   /**
    * Provides an interface to the loghandler, whatever that might be.
    *
-   * This function is a wrapper for the logger currently in use (namely, {@link Krai_Log}).
-   * If the logger has been started, it writes to the log right away. Otherwise,
-   * it writes to the {@link Krai::$_BACKLOGS} array, so the log entries can be
-   * written if/when the logger gets initialized.
+   * This function is a wrapper for the logger currently in use (namely,
+   * {@link Krai_Log}). If the logger has been started, it writes to the log
+   * right away. Otherwise, it writes to the {@link Krai::$_BACKLOGS} array, so
+   * the log entries can be written if/when the logger gets initialized.
    *
    * @param string $message The message to write
    * @param integer $level The level of the message
-   * @param array $logs The identifiers of the logs to which to write (default is the default log)
+   * @param array $logs The identifiers of the logs to which to write (default
+   * is the default log)
    * @param string $cat The category of the log message
-   * @param array $forces I forget... the logger is being rewritten anyhow, so this will probably change...
+   * @param array $forces I forget... the logger is being rewritten anyhow, so
+   * this will probably change...
    *
    */
-  public static function WriteLog($message, $level = Krai::LOG_INFO, array $logs = array(), $cat = null, array $forces = array())
+  public static function WriteLog($message,
+                                  $level = Krai::LOG_INFO,
+                                  array $logs = array(),
+                                  $cat = null,
+                                  array $forces = array())
   {
     if (self::$_LOGGING)
     {
@@ -760,9 +783,9 @@ class Krai
   /**
    * Writes the back logs to the logger
    *
-   * This function writes the messages stored up in {@link Krai::$_BACKLOGS} to the
-   * logger. If this is called and the logger is still not initialized, an Exception
-   * is thrown.
+   * This function writes the messages stored up in {@link Krai::$_BACKLOGS} to
+   * the logger. If this is called and the logger is still not initialized, an
+   * Exception is thrown.
    *
    * @throws Exception
    */
@@ -781,7 +804,9 @@ class Krai
     }
     else
     {
-      throw new Exception("Error: Called WriteBackLogs while logging was still off.");
+      throw new Exception(
+                      "Error: Called WriteBackLogs while logging was still off."
+                      );
     }
 
   }
@@ -948,8 +973,8 @@ class Krai
   /**
    * Returns the logged errors
    *
-   * This function returns the error messages currently in the queue and clears the
-   * queue.
+   * This function returns the error messages currently in the queue and clears
+   * the queue.
    *
    * @return array The error messages
    */
