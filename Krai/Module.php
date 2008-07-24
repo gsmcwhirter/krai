@@ -93,10 +93,6 @@ abstract class Krai_Module extends Krai
     }
     catch(Krai_Module_Exception_Adone $e)
     {
-      if($e->getCode() == Krai_Module_Exception_Adone::Rendered)
-      {
-        $actioninst->AfterRender();
-      }
       $actioninst->AfterFilters();
       $this->AfterFilters();
 

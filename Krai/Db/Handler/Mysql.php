@@ -164,11 +164,6 @@ class Krai_Db_Handler_Mysql extends Krai_Db_Handler
 
     Krai::WriteLog($sql_real. ":: ".($tstop - $tstart)."s", Krai::LOG_DEBUG, array("sql"));
 
-    /*if(!$query)
-    {
-      throw new Krai_Db_Exception($this->error("text").$this->error("number"));
-    }*/
-
     return new Krai_Db_Query($query, array(
       "affected" => ($querytype != "select" && $querytype != "transaction") ? $this->_dbc->affected_rows : null,
       "insertid" => ($querytype == "insert") ? $this->_dbc->insert_id : null,
@@ -291,58 +286,6 @@ class Krai_Db_Handler_Mysql extends Krai_Db_Handler
     }
     return $row[0];
   }
-
-  /*public function Error(Krai_Db_Query $qid, $ret)
-  {
-    if($ret == "text")
-    {
-      return $this->_dbc->error;
-    }
-    elseif($ret == "number")
-    {
-      return $this->_dbc->errno;
-    }
-    elseif($ret == "array")
-    {
-      return array($this->_dbc->error, $this->_dbc->errno);
-    }
-    else
-    {
-      throw new Krai_Db_Exception("Un-recognized return type option passed to Krai_DbMysql::Error.");
-    }
-  }*/
-
-  /*public function Affected(Krai_Db_Query $qid)
-  {
-    $d = $qid->GetQuery();
-    if(is_array($d))
-    {
-      return $d[1];
-    }
-  }*/
-
-  /*public function Inserted(Krai_Db_Query $qid)
-  {
-    $d = $qid->GetQuery();
-    if(is_array($d))
-    {
-      return $d[2];
-    }
-  }*/
-
-  /*public function Result(Krai_Db_Query $qid)
-  {
-    $d = $qid->GetQuery();
-    if(is_array($d))
-    {
-      return $d[0];
-    }
-  }*/
-
-  /*public function Rows(Krai_Db_Query $qid)
-  {
-    return $qid->num_rows;
-  }*/
 
   /**
    * Escape the parameter so it is safe to insert into a query

@@ -91,44 +91,6 @@ abstract class Krai_Db_Handler
   abstract public function FetchOne(Krai_Db_Query &$qid);
 
   /**
-   * Get the number of rows returned for a query
-   *
-   * This function returns the number of rows in the resultset of a query
-   *
-   * @param Krai_Db_Query $qid The query
-   * @return integer The number of rows (-1 for an error)
-   */
-  //abstract public function Rows(Krai_Db_Query $qid);
-
-  /**
-   * Get the error from a query
-   *
-   * This function returns the error information associated with a query.
-   *
-   * @param Krai_Db_Query $qid The query
-   * @param string $ret The error format
-   */
-  //abstract public function Error(Krai_Db_Query $qid, $ret);
-
-  /**
-   * Return the number of rows affected by the last query
-   *
-   * This function returns the number of rows affected by a query
-   *
-   * @param Krai_Db_Query $qid The query
-   */
-  //abstract public function Affected(Krai_Db_Query $qid);
-
-  /**
-   * Return the last inserted id
-   *
-   * This function returns the last insert id of the query
-   *
-   * @param Krai_Db_Query $qid The query
-   */
-  //abstract public function Inserted(Krai_Db_Query $qid);
-
-  /**
    * Process a query struct according to its type.
    *
    * This function processes a query struct in the proper format for the database

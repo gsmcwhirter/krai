@@ -196,6 +196,8 @@ abstract class Krai_Module_Action extends Krai
       include $_file;
     }
 
+    $this->AfterRender();
+
     throw new Krai_Module_Exception_Adone(Krai_Module_Exception_Adone::Rendered);
   }
 
@@ -303,6 +305,8 @@ abstract class Krai_Module_Action extends Krai
     {
       echo $_text;
     }
+
+    $this->AfterRender();
 
     throw new Krai_Module_Exception_Adone(Krai_Module_Exception_Adone::Rendered);
   }

@@ -133,7 +133,7 @@ class UserModule_EditAction extends Krai_Module_Action
                             "An e-mail change request has been initiated for the ".Krai::GetConfig("SYSTEM_NAME").
                             "To activate the new e-mail, please go to the following URL.\n".
                             "If you did NOT request this e-mail change, please do not visit the link.\n\n".
-                            "http://".Krai::GetConfig("DOMAIN").self::$ROUTER->UrlFor("user","confirm",array("id" => $this->_parent->USER->user_id,"code" => $thecode,"type"=>"email"), false)."\n\n";
+                            Krai::GetConfig("ROOTURL").self::$ROUTER->UrlFor("user","confirm",array("id" => $this->_parent->USER->user_id,"code" => $thecode,"type"=>"email"), false)."\n\n";
           if(Krai_Mail::Send($mail))
           {
             self::Notice("An e-mail confirmation was sent to the new address for your requested e-mail change.");

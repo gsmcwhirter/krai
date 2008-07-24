@@ -11,10 +11,6 @@
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
-/*Krai::Uses(
-  Krai::$FRAMEWORK."/Db/Querypdo.php"
-);*/
-
 /**
  * PDO database handler
  *
@@ -282,46 +278,6 @@ class Krai_Db_Handler_Pdo extends Krai_Db_Handler
     }
     return $row[0];
   }
-
-  /*public function Rows(Krai_Db_Query $qid)
-  {
-    return $qid->NumRows();
-  }*/
-
-  /*public function Error(Krai_Db_Query $qid, $ret)
-  {
-    $stmt = $qid->GetQuery();
-    $einfo = $stmt->errorInfo();
-    $einfo = (count($einfo) > 0) ? $einfo : $this->_dbc->errorInfo();
-
-    if($ret == "text")
-    {
-      return array_key_exists(2, $einfo) ? $einfo[2] : "Unknown error.";
-    }
-    elseif($ret == "number")
-    {
-      return array_key_exists(0, $einfo) ? $einfo[0] : "Unknown error.";
-    }
-    elseif($ret == "array")
-    {
-      return array(array_key_exists(2, $einfo) ? $einfo[2] : "Unknown error.", array_key_exists(1, $einfo) ? $einfo[1] : "Unknown error.");
-    }
-    else
-    {
-      throw new Krai_Db_Exception("Un-recognized return type option passed to Krai_Db_Handler_Pdo::Error.");
-    }
-  }*/
-
-  /*public function Affected(Krai_Db_Query $qid)
-  {
-    $stmt = $qid->GetQuery();
-    return $stmt->rowCount();
-  }*/
-
-  /*public function Inserted(Krai_Db_Query $qid)
-  {
-    return $this->_dbc->lastInsertId();
-  }*/
 
   /**
    * Generates DSN strings for a variety of databases from the $dbinfo

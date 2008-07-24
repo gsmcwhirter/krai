@@ -1,20 +1,71 @@
 <?xml version="1.0"?>
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
 <refentry id="{@id framework}">
-	<refnamediv>
-		<refname>Krai Manual</refname>
-		<refpurpose>This manual provides examples and explanations for functionality in the Krai Framework PHP application framework.</refpurpose>
-	</refnamediv>
-	<refsynopsisdiv>
-		<author>Greg McWhirter
-			<authorblurb>
-			{@link mailto:gsmcwhirter@gmail.com Greg McWhirter}
-			</authorblurb>
-		</author>
-	</refsynopsisdiv>
-	{@toc}
-	<refsect1 id="{@id framework_intro}">
-		<title>Introduction</title>
-		<para>The user manual and whatnot.</para>
-	</refsect1>
+  <refnamediv>
+    <refname>Krai Manual</refname>
+    <refpurpose>This manual provides examples and explanations for functionality in the Krai Framework PHP application framework.</refpurpose>
+  </refnamediv>
+  <refsynopsisdiv>
+    <author>Greg McWhirter
+      <authorblurb>{@link mailto:gsmcwhirter@gmail.com Greg McWhirter}</authorblurb>
+    </author>
+  </refsynopsisdiv>
+  {@toc}
+  <refsect1 id="{@id framework_intro}">
+    <title>Introduction</title>
+    <para>
+
+    </para>
+    <refsect2 id="{@id framework_intro_whatis}">
+      <title>What is Krai Framework?</title>
+      <para>
+        Krai Framework is a {@link http://www.php.net PHP} application
+        framework specifically for PHP5. The intention is to abstract from
+        the most nitty-gritty details of developing a web application in
+        order to focus on functionality and presentation.
+      </para>
+      <para>
+        Krai Framework started life as KvFramework 2.0 beta, which was also
+        being developed by the same person. The change of names occurred in
+        order to provide a concise naming scheme when the framework was
+        converted into a (nominally) {@link http://pear.php.net PEAR}
+        compatible format.
+      </para>
+    </refsect2>
+    <refsect2 id="{@id framework_intro_devs}">
+      <title>The Developers</title>
+      <para>
+        Krai Framework currently has a single developer by the name of Greg
+        McWhirter. He is a graduate student in Logic and the Philosophy of
+        Science at UC Irvine and a long-time hobbyist programmer. This is
+        actually the third framework he has developed, but the first that
+        has been publically released.
+      </para>
+    </refsect2>
+    <refsect2 id="{@id framework_intro_tech}">
+      <title>The Technology</title>
+      <para>
+        Krai Framework is developed for PHP5 and MySQL mainly, though some
+        support is available in an alpha state for other databases through
+        {@link http://www.php.net/pdo PDO}. It is entirely object oriented.
+      </para>
+    </refsect2>
+  </refsect1>
+  <refsect1 id="{@id framework_intro_phil}">
+    <title>Philosophy</title>
+    <para>
+      The developer was inspired by having developed applications using
+      frameworks such as Ruby on Rails. Such frameworks were easy to
+      develop in, but they seemed a bit too tied to certain libraries.
+      Additionally, database support was usually too rigid to easily
+      execute complex queries with a minimum of extraneous data returned.
+    </para>
+    <para>
+      As such, Krai Framework is intended to be a lightweight framework,
+      trying to provide a framework that changes some of those things.
+      While providing a core that allows for the development of
+      applications without the worry of low-level details, it still
+      provides extreme flexibility for developers.
+    </para>
+  </refsect1>
 </refentry>
