@@ -166,17 +166,17 @@ abstract class Krai_Mail
     switch($_backend->type)
     {
       case "internal":
-        self::$_MAILER = Mail::factory("mail", $_backend->args);
+        self::$_MAILER = @Mail::factory("mail", $_backend->args);
         break;
       case "sendmail":
-        self::$_MAILER = Mail::factory("sendmail",
+        self::$_MAILER = @Mail::factory("sendmail",
                                        array("sendmail_path" => $_backend->sendmail_path,
                                              "sendmail_args" => $_backend->args
                                             )
                                       );
         break;
       case "smtp":
-        self::$_MAILER = Mail::factory("smtp", array(
+        self::$_MAILER = @Mail::factory("smtp", array(
           "host" => $_backend->smtp_host,
           "port" => $_backend->smtp_port,
           "auth" => $_backend->smtp_auth,

@@ -24,10 +24,9 @@ $this->_parent for things in the module).
 
 1. tar xzf krai-XXXXX.tar.gz (you probably already did this if you are reading
     the README file)
-2. ./krai-XXXXX/script/newapp.sh [-l] [-w] [-p] -d /path/to/application/place -n appname
+2. ./krai-XXXXX/script/newapp.sh [-l] [-p] -d /path/to/application/place -n appname
 3. cd /path/to/application/place/appname
-4. Edit includes/configs/krai.yml to the correct settings (especially lines with
-    "#EDIT ME" at the end)
+4. Edit includes/configs/krai.yml to the correct settings
 5. Edit public/.htaccess to correct the RewriteBase (if necessary)
 6. ln -s /path/to/application/place/appname/public/ /path/to/public_html/appname
 7. Visit http://example.com/appname/ (should see "Yay! Online!)
@@ -44,8 +43,7 @@ an example (see below).
 3. cd /path/to/application/place/appname
 4. Create a database and import sql/schema.sql
 5. Edit the users table entry for "root" to have a valid e-mail address
-6. Edit includes/configs/krai.yml to the correct settings (especially lines with
-    "#EDIT ME" at the end)
+6. Edit includes/configs/krai.yml to the correct settings
 7. Edit includes/configs/application.config.php to the correct settings
 8. Edit public/.htaccess to correct the RewriteBase (if necessary)
 9. ln -s /path/to/application/place/appname/public/ /path/to/public_html/appname

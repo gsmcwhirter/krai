@@ -1,74 +1,25 @@
-= Krai Framework ChangeLog Version 1.0b3 =
+= Krai Framework ChangeLog Version 1.0 =
 
-commit ea33b4b2cdfe35cd495fa94139eeb68c65ee4b52
+commit 13d0b200ce6c7c902b1429de752600e1cf3c801e
 Author: Greg McWhirter <greg@hallofkvasir.org>
-Date:   Sat Jul 19 17:52:31 2008 -0400
+Date:   Wed Jul 23 23:47:38 2008 -0400
 
-    Updating default configurations
+    Clearing version information
 
-commit cc4ffacefb078c4f201b3baf3a0d7a9626deb0f9
+commit ff9f5655b9e7ea141c0fe4c8f1e9e6d14624c54d
 Author: Greg McWhirter <greg@hallofkvasir.org>
-Date:   Sat Jul 19 16:50:19 2008 -0400
+Date:   Wed Jul 23 20:49:23 2008 -0400
 
-    Doing some more bug fixes and removal of duplicate functionality
+    Update
 
-commit 0eca029d959182d1eabc96e6c5e4cc333eb4ab20
+commit 8b2ee879d8f210bb56aafe3a295d41446e84c3fb
 Author: Greg McWhirter <greg@hallofkvasir.org>
-Date:   Sat Jul 19 16:33:12 2008 -0400
+Date:   Tue Jul 22 21:40:52 2008 -0400
 
-    Fixing bugs in the demo application and removing a deprecated file
+    Updates
 
-commit d95c7e4fbc2e573341dde1ced953ad9325d3a409
+commit b4b9551e261711518c45ce29565d4935f20d68a8
 Author: Greg McWhirter <greg@hallofkvasir.org>
-Date:   Sat Jul 19 16:16:40 2008 -0400
+Date:   Sat Jul 19 23:53:55 2008 -0400
 
-    Refactoring some database things. Hopefully this makes PDO support more feasible again.
-
-commit 958211c017cb09695019db68a89d8fd13350202d
-Author: Greg McWhirter <greg@hallofkvasir.org>
-Date:   Sat Jul 19 12:58:25 2008 -0400
-
-    Bug fixes from the Krai_Base merger into Krai
-
-commit 1ce6813f19d6e89e03233770af81426cb2c78a78
-Author: Greg McWhirter <greg@hallofkvasir.org>
-Date:   Sat Jul 19 10:58:03 2008 -0400
-
-    Refactoring - merging Base with Krai proper.
-
-commit 3323e2dd5e444096615deddf2d2462176751a867
-Author: Greg McWhirter <greg@hallofkvasir.org>
-Date:   Thu Jul 17 19:11:02 2008 -0500
-
-    Updatig documentation
-
-commit 996539b8a39cb79a4623112659b3eb234e3a20ff
-Author: Greg McWhirter <greg@hallofkvasir.org>
-Date:   Thu Jul 17 18:47:55 2008 -0500
-
-    Updating documentation. Removing the chili javascript library since the removal of Text_Wiki modifications made it unnecessary.
-    Updated the database handlers. Added functionality for AfterRender, like BeforeRender.
-
-commit f89649803591f77c5cd1b1db116d4eb3850744d3
-Author: Greg McWhirter <greg@hallofkvasir.org>
-Date:   Wed Jul 16 20:09:15 2008 -0500
-
-    Fixing that I actually need autoloading for un-uglyness... using spl_autoload_register
-
-commit 3a5ca0de4868bdb4d6054cbd4207a884afe1d517
-Author: Greg McWhirter <greg@hallofkvasir.org>
-Date:   Wed Jul 16 17:58:45 2008 -0500
-
-    Improving documentation. Removing un-necessary variables and functions. Replacing __autoload so that applications can define that if they want. Adding SMTP support to the Mail class through PEAR dependency. Updating configuration options.
-
-commit 3d8ead11f6c7d34c33732b3525a617e7f8cf9b8f
-Author: Greg McWhirter <greg@hallofkvasir.org>
-Date:   Tue Jul 15 21:25:55 2008 -0500
-
-    Adding license tags to the code files and removing Text_Wiki from the demo app (load via PEAR now). Also adding a tag image to the distribution.
-
-commit 66ee0176971cae5b3b4d3ebf83181e5279d1b175
-Author: Greg McWhirter <greg@hallofkvasir.org>
-Date:   Tue Jul 15 19:02:14 2008 -0500
-
-    Updating documentation
+    Bug fixes for un-set indices and other such things
