@@ -155,7 +155,7 @@ abstract class Krai_Db_Handler
       $ljoins = implode(" ", $ljoins);
       $ijoins = implode(", ", $ijoins);
 
-      return $ijoins." ".$ljoins;
+      return "(".$ijoins.") ".$ljoins;
     }
   }
 

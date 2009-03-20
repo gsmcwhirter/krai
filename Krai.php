@@ -825,6 +825,10 @@ class Krai
    */
   public static function AutoLoad($_class)
   {
+    if(!self::$INFLECTOR instanceOf Krai_Lib_Inflector)
+    {
+      self::$INFLECTOR = new Krai_Lib_Inflector();
+    }
     $_class = self::$INFLECTOR->Camel2Underscore($_class);
     if(substr($_class,-6) == "module")
     {
