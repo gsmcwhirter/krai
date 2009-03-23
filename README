@@ -21,6 +21,7 @@ $this->_parent for things in the module).
 - The Demo Application depends on the PEAR Text_Wiki library
 
 == SETUP / USAGE - Blank Application Skeleton ==
+Note: The scripts don't seem to work on Mac OS X without some editing.
 
 1. tar xzf krai-XXXXX.tar.gz (you probably already did this if you are reading
     the README file)
