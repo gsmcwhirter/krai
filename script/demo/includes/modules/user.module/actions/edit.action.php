@@ -48,26 +48,26 @@ class UserModule_EditAction extends Krai_Module_Action
       //Check for required fields having content
       foreach($req_flds as $fld)
       {
-        if(!array_key_exists($fld, self::$POST) || empty(self::$POST[$fld]))
+        if(is_null(self::$REQUEST->Post($fld)) || self::$REQUEST->Post($fld) == "")
         {
           $this->_errorfields[$fld] = "cannot be empty.";
         }
       }
 
       //Check directory list
-      if(!array_key_exists("directory_list", $this->_errorfields) && !in_array(self::$POST["directory_list"], array("yes","no")))
+      if(!array_key_exists("directory_list", $this->_errorfields) && !in_array(self::$REQUEST->Post("directory_list"), array("yes","no")))
       {
         $this->_errorfields["directory_list"] = "has an invalid value.";
       }
 
       //Check display email
-      if(!array_key_exists("display_email", $this->_errorfields) && !in_array(self::$POST["display_email"], array("yes","no")))
+      if(!array_key_exists("display_email", $this->_errorfields) && !in_array(self::$REQUEST->Post("display_email"), array("yes","no")))
       {
         $this->_errorfields["display_email"] = "has an invalid value.";
       }
 
       //Check email format
-      if(!array_key_exists("email", $this->_errorfields) && !eregi(ApplicationModule::EMAIL_REGEXP, self::$POST["email"]))
+      if(!array_key_exists("email", $this->_errorfields) && !eregi(ApplicationModule::EMAIL_REGEXP, self::$REQUEST->Post("email")))
       {
         $this->_errorfields["email"] = "does not have a valid format.";
       }
@@ -77,7 +77,7 @@ class UserModule_EditAction extends Krai_Module_Action
       {
         $q = self::$DB->SelectQuery(array("users"));
         $q->conditions = "(email = ? OR new_email = ?) AND user_id != ?";
-        $q->parameters = array(self::$POST["email"], self::$POST["email"], $this->_parent->USER->user_id);
+        $q->parameters = array(self::$REQUEST->Post("email"), self::$REQUEST->Post("email"), $this->_parent->USER->user_id);
         $q->limit = "1";
         $q->fields = array("user_id");
 
@@ -113,21 +113,21 @@ class UserModule_EditAction extends Krai_Module_Action
       $q->conditions = "user_id = ?";
       $q->parameters = array($this->_parent->USER->user_id);
       $q->fields = array(
-        "displayname" => self::$POST["displayname"],
-        "directory_list" => self::$POST["directory_list"],
-        "display_email" => self::$POST["display_email"],
-        "new_email" => ($this->_parent->USER->email != self::$POST["email"]) ? self::$POST["email"] : null,
-        "confirmation_code" => ($this->_parent->USER->email != self::$POST["email"]) ? $thecode : null
+        "displayname" => self::$REQUEST->Post("displayname"),
+        "directory_list" => self::$REQUEST->Post("directory_list"),
+        "display_email" => self::$REQUEST->Post("display_email"),
+        "new_email" => ($this->_parent->USER->email != self::$REQUEST->Post("email")) ? self::$REQUEST->Post("email") : null,
+        "confirmation_code" => ($this->_parent->USER->email != self::$REQUEST->Post("email")) ? $thecode : null
       );
 
       $res = self::$DB->Process($q);
 
       if($res->IsSuccessful())
       {
-        if($this->_parent->USER->email != self::$POST["email"])
+        if($this->_parent->USER->email != self::$REQUEST->Post("email"))
         {
           $mail = Krai_Mail::NewMail();
-          $mail->recipients = array(self::$POST["email"]);
+          $mail->recipients = array(self::$REQUEST->Post("email"));
           $mail->subject = Krai::GetConfig("SYSTEM_NAME")." E-Mail Change";
           $mail->content =  "Greets.\n\n".
                             "An e-mail change request has been initiated for the ".Krai::GetConfig("SYSTEM_NAME").

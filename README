@@ -4,7 +4,6 @@ License: MIT License (see COPYING file)
 Author: Greg McWhirter <gsmcwhirter@gmail.com>
 Copyright: 2008 Greg McWhirter
 
-== DESCRIPTION ==
 
 Krai Framework is a MVC-inspired framework. The main concept is modularity.
 Modules are individual units of an appliation. The modules hold together

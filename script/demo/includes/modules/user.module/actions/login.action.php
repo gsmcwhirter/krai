@@ -49,25 +49,25 @@ class UserModule_LoginAction extends Krai_Module_Action
   {
     if($this->_RequestMethod == "POST")
     {
-      if(!array_key_exists("action", self::$POST))
+      if(is_null(self::$REQUEST->Post("action")))
       {
         throw new Krai_Module_Exception("Action not found in request.", Krai_Module_Exception::ValidationError);
       }
-      elseif(self::$POST["action"] == "login")
+      elseif(self::$REQUEST->Post("action") == "login")
       {
         $this->_referrer = $this->_parent->DetermineReferer("post");
 	$this->_processtype = self::ProcessLocal;
-        if(!array_key_exists("username", self::$POST) || !array_key_exists("password", self::$POST))
+        if(is_null(self::$REQUEST->Post("username")) || is_null(self::$REQUEST->Post("password")))
         {
           throw new Krai_Module_Exception("Username or password was not present.", Krai_Module_Exception::ValidationError);
         }
-	elseif(array_key_exists("remember_me", self::$POST) && !in_array(self::$POST["remember_me"],array("yes","no")))
+	elseif(!is_null(self::$REQUEST->Post("remember_me")) && !in_array(self::$REQUEST->Post("remember_me"),array("yes","no")))
 	{
 	  throw new Krai_Module_Exception("Remember option did not have a valid value.", Krai_Module_Exception::ValidationError);
 	}
-	elseif(array_key_exists("remember_me", self::$POST))
+	elseif(!is_null(self::$REQUEST->Post("remember_me")))
 	{
-	  $this->_shouldRemember = self::$POST["remember_me"];
+	  $this->_shouldRemember = self::$REQUEST->Post("remember_me");
 	}
 
         Krai::WriteLog(" RememberMe in Validate:login : ".serialize($this->_shouldRemember), Krai::LOG_DEBUG);
@@ -87,12 +87,12 @@ class UserModule_LoginAction extends Krai_Module_Action
   {
     if($this->_processtype == self::ProcessLocal)
     {
-      $password = "0x".bin2hex(sha1(self::$POST['password']));
+      $password = "0x".bin2hex(sha1(self::$REQUEST->Post('password')));
 
       $q = self::$DB->SelectQuery(array('users as u'));
       $q->fields = array('u.user_id');
       $q->conditions = "username = ? AND password = ?";
-      $q->parameters = array(self::$POST["username"], $password);
+      $q->parameters = array(self::$REQUEST->Post("username"), $password);
       $q->limit = "1";
 
       $res = self::$DB->Process($q);
@@ -170,8 +170,8 @@ class UserModule_LoginAction extends Krai_Module_Action
 			  "user_id" => $_user_id,
 			  "started" => time(),
 			  "lastact" => time(),
-			  "useragent" => $_SERVER["HTTP_USER_AGENT"],
-			  "ipaddr" => $_SERVER["REMOTE_ADDR"]
+			  "useragent" => self::$REQUEST->Server("HTTP_USER_AGENT"),
+			  "ipaddr" => self::$REQUEST->Server("REMOTE_ADDR")
 			);
 
       self::$DB->Process($q);

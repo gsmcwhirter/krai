@@ -49,13 +49,13 @@ class PageModule_RevisionsAction extends Krai_Module_Action
       throw new Krai_Module_Exception("Access Denied.", Krai_Module_Exception::ValidationError);
     }
 
-    if(!array_key_exists("id", self::$PARAMS))
+    if(is_null(self::$REQUEST->Param("id")))
     {
       throw new Krai_Module_Exception("No page ID was supplied.", Krai_Module_Exception::ValidationError);
     }
     else
     {
-      $this->_pageid = urldecode(self::$PARAMS["id"]);
+      $this->_pageid = urldecode(self::$REQUEST->Param("id"));
     }
 
     if(!$this->_parent->UserCanEdit($this->_pageid))
@@ -63,9 +63,9 @@ class PageModule_RevisionsAction extends Krai_Module_Action
       throw new Krai_Module_Exception("You are not allowed to edit that page", Krai_Module_Exception::ValidationError);
     }
 
-    if(array_key_exists("rid", self::$GET))
+    if(self::$REQUEST->Get("rid"))
     {
-      $this->_rev_id = self::$GET["rid"];
+      $this->_rev_id = self::$REQUEST->Get("rid");
     }
   }
 

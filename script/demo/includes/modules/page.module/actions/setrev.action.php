@@ -42,13 +42,13 @@ class PageModule_SetrevAction extends Krai_Module_Action
 
   public function Validate()
   {
-    if(!array_key_exists("id", self::$PARAMS))
+    if(is_null(self::$REQUEST->Param("id")))
     {
       throw new Krai_Module_Exception("No page ID was supplied.", Krai_Module_Exception::ValidationError);
     }
     else
     {
-      $this->_pageid = urldecode(self::$PARAMS["id"]);
+      $this->_pageid = urldecode(self::$REQUEST->Param("id"));
     }
 
     if(!$this->_parent->UserCanEdit($this->_pageid))
@@ -60,7 +60,7 @@ class PageModule_SetrevAction extends Krai_Module_Action
     {
       $this->_doprocess = true;
 
-      if(!array_key_exists("revision_select", self::$POST))
+      if(is_null(self::$REQUEST->Post("revision_select")))
       {
         throw new Krai_Module_Exception("Revision to set was not specified.", Krai_Module_Exception::ValidationError);
       }
@@ -76,7 +76,7 @@ class PageModule_SetrevAction extends Krai_Module_Action
       self::$DB->Transaction("start");
 
       $q = self::$DB->UpdateQuery(array("pages"));
-      $q->fields = array("page_revision" => self::$POST["revision_select"], "page_updated" => time());
+      $q->fields = array("page_revision" => self::$REQUEST->Post("revision_select"), "page_updated" => time());
       $q->conditions = "page_id = ?";
       $q->parameters = array($this->_pageid);
       $q->limit = "1";

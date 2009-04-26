@@ -26,9 +26,9 @@ class UserModule extends ApplicationModule
 
     Krai::WriteLog(" Session: ".serialize($_SESSION), Krai::LOG_DEBUG);
 
-    if($source == "post" && array_key_exists("referrer",self::$POST))
+    if($source == "post" && !is_null(self::$REQUEST->Post("referrer")))
     {
-      return urldecode(self::$POST["referrer"]);
+      return urldecode(self::$REQUEST->Post("referrer"));
     }
     elseif($source == "session" && array_key_exists("referrer", $_SESSION))
     {
@@ -36,15 +36,14 @@ class UserModule extends ApplicationModule
     }
     elseif($source != "post" && $source != "session")
     {
-      $parts = ((array_key_exists("HTTP_REFERER", $_SERVER) && $_SERVER["HTTP_REFERER"] != "")) ? parse_url($_SERVER["HTTP_REFERER"], PHP_URL_HOST) : null;
-      if(!is_null($parts) && preg_match("#".Krai::GetConfig("DOMAIN")."$#", $parts) && !preg_match("#user/login#", $_SERVER["HTTP_REFERER"]))
-      {
-        return $_SERVER["HTTP_REFERER"];
-      }
-      else
-      {
-        return self::$ROUTER->UrlFor("page","index",array(), false);
-      }
+		if(preg_match("#".Krai::GetConfig("DOMAIN")."$#", parse_url(self::$REQUEST->Referer(),PHP_URL_HOST)) && !preg_match("#user/login#", self::$REQUEST->Referer()))
+		{
+			return self::$REQUEST->Referer();
+		}
+		else
+		{
+			return self::$ROUTER->UrlFor("page","index",array(), false);
+		}
     }
 
   }

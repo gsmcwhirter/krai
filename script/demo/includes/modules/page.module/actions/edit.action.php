@@ -73,14 +73,14 @@ class PageModule_EditAction extends Krai_Module_Action
 
   public function Validate()
   {
-    if(!array_key_exists("id", self::$PARAMS))
+    if(is_null(self::$REQUEST->Param("id")))
     {
       $this->_milderrors = false;
       throw new Krai_Module_Exception("No page ID was supplied.", Krai_Module_Exception::ValidationError);
     }
     else
     {
-      $this->_pageid = urldecode(self::$PARAMS["id"]);
+      $this->_pageid = urldecode(self::$REQUEST->Param("id"));
     }
 
     if(!$this->_parent->UserCanEdit($this->_pageid))
@@ -92,22 +92,22 @@ class PageModule_EditAction extends Krai_Module_Action
     {
       $this->_doprocess = true;
 
-      if(!array_key_exists("postaction", self::$POST) || !in_array(self::$POST["postaction"], array("publish","preview","cancel")))
+      if(is_null(self::$REQUEST->Post("postaction")) || !in_array(self::$REQUEST->Post("postaction"), array("publish","preview","cancel")))
       {
         throw new Krai_Module_Exception("Unrecognized post-action was passed. Please file a bug report.", Krai_Module_Exception::ValidationError);
       }
-      elseif(self::$POST["postaction"] == "preview")
+      elseif(self::$REQUEST->Post("postaction") == "preview")
       {
         $this->_preview = true;
         $this->_postaction = "preview";
       }
-      elseif(self::$POST["postaction"] == "cancel")
+      elseif(self::$REQUEST->Post("postaction") == "cancel")
       {
         $this->_cancel = true;
       }
       else
       {
-        $this->_postaction = self::$POST["postaction"];
+        $this->_postaction = self::$REQUEST->Post("postaction");
       }
 
       if(!$this->_cancel)
@@ -115,7 +115,7 @@ class PageModule_EditAction extends Krai_Module_Action
         $req_flds = array("page_name","page_tagline","page_content");
         foreach($req_flds as $fld)
         {
-          if(!array_key_exists($fld, self::$POST) || empty(self::$POST[$fld]))
+          if(is_null(self::$REQUEST->Post($fld)) || self::$REQUEST->Post($fld) == "")
           {
             $this->_errorfields[$fld] = "cannot be empty.";
           }
@@ -157,9 +157,9 @@ class PageModule_EditAction extends Krai_Module_Action
             $q = self::$DB->InsertQuery(array("page_revisions"));
             $q->fields = array(
               "page_id" => $this->_pageid,
-              "rev_page_name" => self::$POST["page_name"],
-              "rev_page_tagline" => self::$POST["page_tagline"],
-              "rev_page_content" => self::$POST["page_content"],
+              "rev_page_name" => self::$REQUEST->Post("page_name"),
+              "rev_page_tagline" => self::$REQUEST->Post("page_tagline"),
+              "rev_page_content" => self::$REQUEST->Post("page_content"),
               "rev_date" => time(),
               "rev_user" => $this->_parent->USER->user_id
             );

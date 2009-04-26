@@ -37,7 +37,7 @@ include Krai::$MODULES."/page.module/views/entry.phtml";
         <?php } ?>
         <tr>
           <td class="label"><label for="page_name">Page Name</label></td>
-          <td class="field"><input type="text" name="page_name" id="page_name" class="txtbox" value="<?php echo (array_key_exists("page_name", self::$POST)) ? self::$POST["page_name"] : $this->_thepage->rev_page_name ?>" /></td>
+          <td class="field"><input type="text" name="page_name" id="page_name" class="txtbox" value="<?php echo (!is_null(self::$REQUEST->Post("page_name"))) ? self::$REQUEST->Post("page_name") : $this->_thepage->rev_page_name ?>" /></td>
         </tr>
         <?php if(array_key_exists("page_tagline", $this->_errorfields))
         { ?>
@@ -47,7 +47,7 @@ include Krai::$MODULES."/page.module/views/entry.phtml";
         <?php } ?>
         <tr>
           <td class="label"><label for="page_tagline">Page Tagline</label></td>
-          <td class="field"><input type="text" name="page_tagline" id="page_tagline" class="txtbox" value="<?php echo (array_key_exists("page_tagline", self::$POST)) ? self::$POST["page_tagline"] : $this->_thepage->rev_page_tagline ?>" /></td>
+          <td class="field"><input type="text" name="page_tagline" id="page_tagline" class="txtbox" value="<?php echo (!is_null(self::$REQUEST->Post("page_tagline"))) ? self::$REQUEST->Post("page_tagline") : $this->_thepage->rev_page_tagline ?>" /></td>
         </tr>
         <?php if(array_key_exists("page_content", $this->_errorfields))
         { ?>
@@ -57,7 +57,7 @@ include Krai::$MODULES."/page.module/views/entry.phtml";
         <?php } ?>
         <tr>
           <td class="label"><label for="page_content">Page Content</label><br /><a href="<?php echo Krai::$ROUTER->UrlFor("page","view",array("pid" => "wiki_markup")) ?>" rel="external" class="subfooter">markup help</a></td>
-          <td class="field"><textarea cols="40" rows="6" name="page_content" id="page_content" class="txtarea"><?php echo (array_key_exists("page_content", self::$POST)) ? self::$POST["page_content"] : $this->_thepage->rev_page_content ?></textarea></td>
+          <td class="field"><textarea cols="40" rows="6" name="page_content" id="page_content" class="txtarea"><?php echo (!is_null(self::$REQUEST->Post("page_content"))) ? self::$REQUEST->Post("page_content") : $this->_thepage->rev_page_content ?></textarea></td>
         </tr>
         <tr>
           <td colspan="2" class="action">
@@ -78,12 +78,12 @@ if($this->_preview && !self::IsErrors())
 { ?>
 <div class="content_box">
   <div class="cb_header">
-    <span class="text"><?php echo self::$POST["page_name"] ?></span>
+    <span class="text"><?php echo self::$REQUEST->Post("page_name") ?></span>
   </div>
-  <div class="cb_subheader"><span class="text"><?php echo self::$POST["page_tagline"] ?></span></div>
+  <div class="cb_subheader"><span class="text"><?php echo self::$REQUEST->Post("page_tagline") ?></span></div>
   <div class="cb_content">
     <div class="cb_content_actual">
-      <?php echo $this->_parent->WikiParser->transform(self::$POST["page_content"],'Xhtml') ?>
+      <?php echo $this->_parent->WikiParser->transform(self::$REQUEST->Post("page_content"),'Xhtml') ?>
       <div class="smalltext" style="float: right;">
       &nbsp;
       </div>

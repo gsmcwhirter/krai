@@ -150,18 +150,18 @@ final class Krai_Router
    * parameter. It can only be called once, and after that will throw a
    * Krai_Router_Exception.
    *
-   * @param string $request The requested uri
+   * @param Krai_Request $request The request object
    * @throws Krai_Router_Exception
    */
-  public function DoRoute($request)
+  public function DoRoute(Krai_Request &$request)
   {
     if(!$this->_routed)
     {
-      $request = preg_replace(array("#^[/]*#","#[/]*$#"),
-                              array("",""),
-                              $request);
+      $request2 = preg_replace(array("#^[/]*#","#[/]*$#"),
+                               array("",""),
+                               $request->Uri());
       //$request = preg_replace("#\.html$#","", $request);
-      $rparts = (empty($request)) ? array() : explode("/", $request);
+      $rparts = (empty($request2)) ? array() : explode("/", $request2);
       if(array_key_exists(count($rparts), $this->_routemap))
       {
         $found = null;
@@ -184,7 +184,8 @@ final class Krai_Router
         else
         {
           $this->_routed = true;
-          $this->ExecuteRoute($found["module"],
+          $this->ExecuteRoute($request,
+							  $found["module"],
                               $found["action"],
                               $found["params"]);
         }
@@ -211,19 +212,21 @@ final class Krai_Router
    * the required module and calling the module's
    * {@link Krai_Module::DoAction()} method.
    *
+   * @param Krai_Request $request The request object
    * @param string $_module The name of the module to instantiate
    * @param string $_action The name of the action to execute
    * @param array $_params The parameters of the request
    * @throws Krai_Router_Exception
    */
-  public function ExecuteRoute($_module, $_action, array $_params = array())
+  public function ExecuteRoute(Krai_Request &$request, $_module, $_action, array $_params = array())
   {
     if(!is_null($_module) && !empty($_action))
     {
-      Krai::$PARAMS = array_merge(Krai::$PARAMS, $_params);
-      $t = Krai::$INFLECTOR->Underscore2Camel($_module."_module");
-      $inst = new $t();
-      $inst->DoAction($_action, $_SERVER["REQUEST_METHOD"]);
+		$request->SetParams($params);
+      //Krai::$PARAMS = array_merge(Krai::$PARAMS, $_params);
+		$t = Krai::$INFLECTOR->Underscore2Camel($_module."_module");
+		$inst = new $t();
+		$inst->DoAction($_action, $request->RequestMethod());
     }
     else
     {
