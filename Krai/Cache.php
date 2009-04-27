@@ -2,8 +2,6 @@
 /**
  * Krai caching class
  *
- * Note: THIS IS NOT IMPLEMENTED CORRECTLY YET. DO NOT USE.
- *
  * @package Krai
  * @subpackage Cache
  * @author Greg McWhirter <gsmcwhirter@gmail.com>
@@ -17,8 +15,6 @@ Krai::Uses(
 
 /**
  * Caching class
- *
- * Note: THIS IS NOT IMPLEMENTED CORRECTLY YET. DO NOT USE.
  *
  * @package Krai
  * @subpackage Cache
@@ -87,6 +83,23 @@ class Krai_Cache
 
 	public function ExpireCache($file_or_dir)
 	{
-		//TODO
+		if(is_dir(Krai::$APPDIR."/".$this->_base_path."/".$file_or_dir))
+		{
+			$ford = new DirectoryIterator(Krai::$APPDIR."/".$this->_base_path."/".$file_or_dir);
+			foreach($ford as $file)
+			{
+				if($file->isDot())
+				{
+					continue;
+				}
+
+				$this->ExpireCache($file_or_dir."/".$file->getFilename());
+			}
+		}
+		else
+		{
+			unlink(Krai::$APPDIR."/".$this->_base_path."/".$file_or_dir);
+		}
+
 	}
 }
