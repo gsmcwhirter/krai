@@ -239,4 +239,3 @@ switch($generate)
 					break;
 	default:		help(); exit(0);
 }
-
