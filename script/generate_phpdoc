@@ -7,7 +7,9 @@ function gendoc($_conf, $_ver)
 		$_ver = 'edge';
 	}
 
-	system('phpdoc -c '.$_conf);
+	$dir = dirname(__FILE__);
+
+	system('phpdoc -c '.$dir."/phpdoc_".$_conf.".ini");
 	rename("doc", "krai-doc-".$_ver);
 	system('tar czf krai-doc-'.$_ver.'.tar.gz krai-doc-'.$_ver.'/');
 	remove_recursive("krai-doc-".$_ver);
@@ -38,7 +40,7 @@ function remove_recursive($file_or_dir)
 if(!array_key_exists(2, $argv) || is_null($argv[2]))
 {
 	echo "Missing configuration parameter. Using default.\n";
-	$conf = "phpdoc_archive.ini";
+	$conf = "archive";
 }
 else
 {
