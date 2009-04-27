@@ -1,0 +1,242 @@
+#!/usr/bin/env php
+<?php
+function help()
+{
+  echo "Krai Framework application component generator\n";
+  echo "Usage: generate.sh [-d application_root] [-g module -m module_name]|[-g action -m module_name -a action_name]|[-g view -m module_name -v view_name]\n";
+}
+
+function module($_name)
+{
+	if(is_null($_name))
+	{
+		echo "Error: Missing parameter in module generator.\n";
+		help();
+		return false;
+	}
+
+	if(chdir("includes/modules"))
+	{
+		echo "Directory ".getcwd()."/".$_name.".module\n";
+		mkdir($_name.".module");
+		if(chdir($_name.".module"))
+		{
+			echo "Directory ".getcwd()."/actions\n";
+			mkdir( "actions" );
+			echo "Directory ".getcwd()."/views\n";
+			mkdir( "views" );
+			echo "File ".getcwd()."/".$_name.".module.php\n";
+			touch($_name.".module.php");
+			return true;
+		}
+		else
+		{
+			echo "Error: Unable to generate module directory.\n";
+			help();
+			return false;
+		}
+	}
+	else
+	{
+		echo "Error: Could not change to modules directory.\n";
+		help();
+		return false;
+	}
+}
+
+function action($_module, $_name, $_retry = false)
+{
+	if(is_null($_module))
+	{
+		echo "Error: Missing module parameter in action generator.\n";
+		help();
+		return false;
+	}
+
+	if(is_null($_name))
+	{
+		echo "Error: Missing action parameter in action generator.\n";
+		help();
+		return false;
+	}
+
+	if(chdir("includes/modules/".$_module.".module"))
+	{
+		if(chdir("actions"))
+		{
+			echo "File ".getcwd()."/".$_name.".action.php\n";
+			touch($_name.".action.php");
+			return true;
+		}
+		else
+		{
+			echo "Actions directory missing. Generating.\n";
+			echo "Directory ".getcwd()."/actions\n";
+			mkdir("actions");
+			if(chdir("actions"))
+			{
+				echo "File ".getcwd()."/".$_name.".action.php\n";
+				touch($_name.".action.php");
+				return true;
+			}
+			else
+			{
+				echo "Error: Unable to generate actions directory.\n";
+				help();
+				return false;
+			}
+		}
+	}
+	elseif($_retry)
+	{
+		echo "Error: Retry failed.\n";
+		help();
+		return false;
+	}
+	else
+	{
+		echo "Module missing. Generating.\n";
+		$res = module($_module);
+		if($res)
+		{
+			action($_module, $_name, true);
+		}
+		else
+		{
+			echo "Error: Unable to generate module.\n";
+			help();
+			return false;
+		}
+	}
+}
+
+function view($_module, $_name, $_retry = false)
+{
+	if(is_null($_module))
+	{
+		echo "Error: Missing module parameter in view generator.\n";
+		help();
+		return false;
+	}
+
+	if(is_null($_name))
+	{
+		echo "Error: Missing view parameter in view generator.\n";
+		help();
+		return false;
+	}
+
+	if(chdir("includes/modules/".$_module.".module"))
+	{
+		if(chdir("views"))
+		{
+			echo "File ".getcwd()."/".$_name.".phtml\n";
+			touch($_name.".phtml");
+			return true;
+		}
+		else
+		{
+			echo "Views directory missing. Generating.\n";
+			echo "Directory ".getcwd()."/views\n";
+			mkdir("views");
+			if (chdir("views"))
+			{
+				echo "File ".getcwd()."/".$_name.".phtml\n";
+				touch($_name.".phtml");
+				return true;
+			}
+			else
+			{
+				echo "Error: Unable to generate views directory.\n";
+				help();
+				return false;
+			}
+		}
+	}
+	elseif($_retry)
+	{
+		echo "Error: Retry failed.\n";
+		help();
+		return false;
+	}
+	else
+	{
+		echo "Module missing. Generating.\n";
+		$res = module($_module);
+		if($res)
+		{
+			view($_module, $_name, true);
+		}
+		else
+		{
+			echo "Error: Unable to generate module.\n";
+			help();
+			return false;
+		}
+	}
+}
+
+function change_basedir($_dir)
+{
+	if(is_null($_dir))
+	{
+		echo "Error: Missing basedir value.\n";
+		help();
+		exit(0);
+	}
+
+	if(chdir($_dir))
+	{
+		echo "Using application basedir: ".getcwd()."\n";
+	}
+	else
+	{
+		echo "Error: Failed to change to application basedir: $_dir\n";
+		help();
+		exit(0);
+	}
+}
+
+$generate;
+$modname;
+$actname;
+$viewname;
+$basedir;
+
+$opts = $argv;
+array_shift($opts);
+
+while($opt = array_shift($opts))
+{
+	switch($opt)
+	{
+		case "-g": $generate = array_shift($opts); break;
+		case "-m": $modname = array_shift($opts); break;
+		case "-a": $actname = array_shift($opts); break;
+		case "-v": $viewname = array_shift($opts); break;
+		case "-d": $basedir = array_shift($opts); break;
+		case "-h":
+		case "-?":
+		default: help(); exit(0);
+	}
+}
+
+if(is_null($basedir))
+{
+	$basedir = getcwd();
+}
+
+switch($generate)
+{
+	case "module": 	change_basedir($basedir);
+					module($modname);
+					break;
+	case "view": 	change_basedir($basedir);
+					view($modname, $viewname);
+					break;
+	case "action": 	change_basedir($basedir);
+					action($modname, $actname);
+					break;
+	default:		help(); exit(0);
+}
+
