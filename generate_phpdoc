@@ -24,7 +24,7 @@ function remove_recursive($file_or_dir)
 			{
 				continue;
 			}
-			$this->ExpireCache($file_or_dir."/".$file->getFilename());
+			remove_recursive($file_or_dir."/".$file->getFilename());
 		}
 	}
 	else
