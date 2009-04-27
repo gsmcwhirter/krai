@@ -152,11 +152,14 @@ abstract class Krai_Module_Action extends Krai
    * @param string $_file The name of the file to be rendered
    * @param boolean $_templated The name of the layout to use or true to use the
    * default layout or false to use no layout
+   * @param boolean $_cached Whether to pass off the content to the cacher afterwards
+   * or not
    * @throws Krai_Module_Exception_Adone
    * @throws Krai_Module_Exception
    */
-  protected function Render($_file, $_templated = true)
+  protected function Render($_file, $_templated = true, $cached = false)
   {
+
     if(!self::$_RENDER_STARTED)
     {
       self::$_RENDER_STARTED = true;
@@ -169,36 +172,54 @@ abstract class Krai_Module_Action extends Krai
       throw new Krai_Module_Exception("Invalid path to view file. File must be within application root.", Krai_Module_Exception::FilePathError);
     }
 
-    if ($_templated)
+	if($_cached)
+	{ob_start();}
+
+	if ($_templated)
     {
-      $mconf = Krai::GetConfig("CONFIG_MODULE");
-      $layout = (is_string($_templated)) ? $_templated : $mconf["DEFAULT_LAYOUT"];
+		$mconf = Krai::GetConfig("CONFIG_MODULE");
+		$layout = (is_string($_templated)) ? $_templated : $mconf["DEFAULT_LAYOUT"];
 
-      if($layout)
-      {
-        $layout = realpath(Krai::$LAYOUTS."/".$layout);
-        if(strstr($layout, realpath(Krai::$APPDIR)) != 0)
-        {
-          throw new Krai_Module_Exception("Invalid path to layout. Layout file must be within application root.", Krai_Module_Exception::FilePathError);
-        }
+		if($layout)
+		{
+		  $layout = realpath(Krai::$LAYOUTS."/".$layout);
+		  if(strstr($layout, realpath(Krai::$APPDIR)) != 0)
+		  {
+			throw new Krai_Module_Exception("Invalid path to layout. Layout file must be within application root.", Krai_Module_Exception::FilePathError);
+		  }
 
-        include $layout."/header.phtml";
-        include $_file;
-        include $layout."/footer.phtml";
-      }
-      else
-      {
-        include $_file;
-      }
+		  include $layout."/header.phtml";
+		  include $_file;
+		  include $layout."/footer.phtml";
+		}
+		else
+		{
+		  include $_file;
+		}
     }
     else
     {
       include $_file;
     }
 
+	if($_cached)
+	{
+		$contents = ob_get_contents();
+		ob_end_flush();
+		Krai::CacheFile($contents);
+	}
+
     $this->AfterRender();
 
     throw new Krai_Module_Exception_Adone(Krai_Module_Exception_Adone::Rendered);
+  }
+
+	/**
+	 *{@see Krai_Module_Action::Render()}
+	 */
+  protected function RenderCached($_file, $_templated = true)
+  {
+	$this->Render($_file, $_templated, true);
   }
 
   /**
@@ -269,10 +290,12 @@ abstract class Krai_Module_Action extends Krai
    * @param string $_text The text to be rendered
    * @param boolean $_templated The name of the layout or true to use the default
    * layout or false to use no layout
+   * @param boolean $_cached Whether to pass off the content to the cacher afterwards
+   * or not
    * @throws Krai_Module_Exception_Adone
    * @throws Krai_Module_Exception
    */
-  protected function RenderText($_text, $_templated = true)
+  protected function RenderText($_text, $_templated = true, $_cached = false)
   {
     if(!self::$_RENDER_STARTED)
     {
@@ -280,7 +303,10 @@ abstract class Krai_Module_Action extends Krai
       $this->BeforeRender();
     }
 
-    if ($_templated)
+	if($_cached)
+	{ob_start();}
+
+	if ($_templated)
     {
       $mconf = Krai::GetConfig("CONFIG_MODULE");
       $layout = (is_string($_templated)) ? $_templated : $mconf["DEFAULT_LAYOUT"];
@@ -306,9 +332,24 @@ abstract class Krai_Module_Action extends Krai
       echo $_text;
     }
 
+	if($_cached)
+	{
+		$contents = ob_get_contents();
+		ob_end_flush();
+		Krai::CacheFile($contents);
+	}
+
     $this->AfterRender();
 
     throw new Krai_Module_Exception_Adone(Krai_Module_Exception_Adone::Rendered);
+  }
+
+	/**
+	 *{@see Krai_Module_Action::RenderText()}
+	 */
+  protected function RenderTextCached($_text, $_templated = true)
+  {
+	$this->RenderText($_text, $_templated, true);
   }
 
   /**

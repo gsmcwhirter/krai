@@ -472,14 +472,6 @@ class Krai
 
 			self::$_STARTED = true;
 
-			if(is_null($_uri))
-			{
-				$_uri = self::DetermineRequest();
-			}
-
-			//self::$REQUEST = urldecode($_uri);
-			self::$REQUEST = new Krai_Request($_GET, $_POST, $_SERVER, $_uri);
-
 			self::Uses(
 				self::$FRAMEWORK."/Struct.php"
 			);
@@ -514,6 +506,11 @@ class Krai
 			{
 				$cconf = self::GetConfig("CONFIG_CACHE");
 				self::Uses(self::$FRAMEWORK."/Cache.php");
+				self::$CACHE = new Krai_Cache($cconf);
+			}
+			else
+			{
+				self::$CACHE = null;
 			}
 
 			if(self::GetConfig("USE_DB"))
@@ -562,23 +559,35 @@ class Krai
 
 			}
 
-			if(is_null(self::$REQUEST))
-			{
-				self::$REQUEST = "/";
-			}
-
 			if(!self::$INFLECTOR instanceOf Krai_Lib_Inflector)
 			{
 				self::$INFLECTOR = new Krai_Lib_Inflector();
 			}
 
-			//self::$_NAKOR_CORE = new Nakor();
+			self::$_NAKOR_CORE = new Nakor();
 
-			/* scrub input etc */
-			//self::$POST = self::$_NAKOR_CORE->CleanInput("POST");
-			//self::$GET = self::$_NAKOR_CORE->CleanInput("GET");
-			//self::$PARAMS = array_merge(self::$GET, self::$POST);
-			self::$ROUTER = Krai_Router::Instance();
+			if(is_null($_uri))
+			{
+				$_uri = self::DetermineRequest();
+			}
+
+			if(is_null($_uri))
+			{
+				$_uri = "/";
+			}
+
+			self::$REQUEST = new Krai_Request(self::$_NAKOR_CORE->CleanInput("GET"), self::$_NAKOR_CORE->CleanInput("POST"), $_SERVER, $_uri);
+
+			try
+			{
+				self::$ROUTER = Krai_Router::Instance(self::GetConfig("DEFAULT_EXTENSION"));
+			}
+			catch(Exception $e)
+			{
+				self::$ROUTER = Krai_Router::Instance();
+			}
+
+
 
 			self::ReloadMessages();
 			self::$ROUTER->DoRoute(self::$REQUEST);
@@ -1018,5 +1027,34 @@ class Krai
 	{
 		self::$REQUEST = new Krai_Request($_GET, $_POST, $_SERVER, self::$REQUEST->Uri());
 		self::$ROUTER->ExecuteRoute(self::$REQUEST, $module, $action, $params);
+	}
+
+	public static function CacheFile($contents)
+	{
+		$qs = self::$REQUEST->Server("QUERY_STRING");
+		if ($qs != "" && $qs != "?")
+		{
+			return false;
+		}
+		elseif(is_null(self::$CACHE))
+		{
+			return true;
+		}
+		else
+		{
+			return self::$CACHE->CacheFile(self::$REQUEST->Uri(),$contents);
+		}
+	}
+
+	public static function ExpireCache($file_or_dir)
+	{
+		if(is_null(self::$CACHE))
+		{
+			return true;
+		}
+		else
+		{
+			return self::$CACHE->ExpireCache($file_or_dir);
+		}
 	}
 }

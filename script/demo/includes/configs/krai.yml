@@ -54,6 +54,7 @@ CONFIG_MAIL:
 #DISABLE_SESSION: false
 #DEFAULT_TIMEZONE: America/New_York
 #PEAR_PATH: /path/to/pear/lib/ #include trailing slash
+DEFAULT_EXTENSION: html
 USE_DB: true
 USE_LOG: true
 USE_MAIL: true
@@ -92,5 +93,5 @@ CONFIG_LOG:
   DEFAULT: requests
 
 CONFIG_CACHE:
-  DIR: .
-  TIMEOUT: 3600
+  #Directory relative to Krai::$APPDIR
+  DIR: public

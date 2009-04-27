@@ -70,16 +70,23 @@ final class Krai_Router
   private $_routed = false;
 
   /**
+   * This holds the default extension to use for files.
+   * @var string
+   */
+  private $_extension;
+
+  /**
    * Constructor - private to implement singleton pattern
    *
    * This function parses the routes configuration file and stores the route
    * objects.
    *
-   * @param string $kvfurl
+   * @param string $default_extension The default extension to use
    *
    */
-  private function __construct()
+  private function __construct($default_extension)
   {
+	$this->_extension = $default_extension;
     /* Load the route map */
     $lines = file(Krai::$INCLUDES."/configs/routes.config");
     foreach($lines as $line)
@@ -110,14 +117,25 @@ final class Krai_Router
         }
       }
 
+	  if(array_key_exists("extension", $forces))
+	  {
+		$extension = $forces["extension"];
+		unset($forces["extension"]);
+	  }
+	  else
+	  {
+		$extension = $this->_extension;
+	  }
+
       if(!array_key_exists(count($patparts), $this->_routemap))
       {
         $this->_routemap[count($patparts)] = array();
       }
 
       $this->_routemap[count($patparts)][] = new Krai_Router_Route($patparts,
-                                                                   $forces);
-      $this->_reconstrmap[] = new Krai_Router_Route($patparts, $forces);
+                                                                   $forces,
+																   $extension);
+      $this->_reconstrmap[] = new Krai_Router_Route($patparts, $forces, $extension);
     }
 
     $this->_baseuri = Krai::GetConfig("BASEURI") == "" ? "" : "/".
@@ -130,15 +148,16 @@ final class Krai_Router
    *
    * This function allows the retrieval of the singleton instance of the class.
    *
+   * @param string $default_extension The default file extension to use
    * @return Krai_Router The router instance
    */
-  public static function &Instance()
+  public static function &Instance($default_extension = "html")
   {
 
     if(!(self::$_instance instanceOf Krai_Router))
     {
       $c = "Krai_Router";
-      self::$_instance = new $c();
+      self::$_instance = new $c($default_extension);
     }
     return self::$_instance;
   }
@@ -164,10 +183,32 @@ final class Krai_Router
       $rparts = (empty($request2)) ? array() : explode("/", $request2);
       if(array_key_exists(count($rparts), $this->_routemap))
       {
+		if(count($rparts) > 0)
+		{
+			$fname = array_pop($rparts);
+			$fnameparts = explode(".", $fname);
+			if(count($fnameparts) > 1)
+			{
+				$extension = array_pop($fnameparts);
+				$fnamereal = implode(".",$fnameparts);
+			}
+			else
+			{
+				$extension = $this->_extension;
+				$fnamereal = $fnameparts[0];
+			}
+			array_push($rparts, $fnamereal);
+		}
+		else
+		{
+			$fnamereal = "index";
+			$extension = "html";
+		}
+
         $found = null;
         foreach($this->_routemap[count($rparts)] as $route)
         {
-          $t = $route->Matches($rparts);
+          $t = $route->Matches($rparts, $extension);
           if($t!==false)
           {
             $found = $t;

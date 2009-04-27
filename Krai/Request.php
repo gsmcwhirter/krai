@@ -11,6 +11,10 @@
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
+Krai::Uses(
+  Krai::$FRAMEWORK."/Request/Exception.php"
+);
+
 /**
  * A class representing the incoming request
  *

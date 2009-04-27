@@ -57,6 +57,18 @@ class Krai_Router_Route
   private $_reconstruct_requires = array();
 
   /**
+   * Holds the filename pattern for the route.
+   * @var string
+   */
+  private $_filename;
+
+  /**
+   * Holds the file extension for the route.
+   * @var string
+   */
+  private $_extension;
+
+  /**
    * Constructor
    *
    * This function creates the route instance and records the appropriate patterns
@@ -64,9 +76,18 @@ class Krai_Router_Route
    *
    * @param array $parts The parts of the route
    * @param array $forcemap The parts of the route after the "-->"
+   * @param string $_extension The extension to use for the route.
    */
-  public function __construct(array $parts, array $forcemap)
+  public function __construct(array $parts, array $forcemap, $_extension)
   {
+	$this->_extension = $_extension;
+	$this->_filename = array_pop($parts);
+	array_push($parts, $this->_filename);
+	if(preg_match("#^:([a-zA-Z_0-9]*)$#", $this->_filename))
+    {
+        $this->_filename = "*:".$this->_filename;
+    }
+
     foreach($parts as $part)
     {
       if(preg_match("#^:([a-zA-Z_0-9]*)$#", $part))
@@ -104,8 +125,13 @@ class Krai_Router_Route
    * @param array $str_parts The parts of the uri explosion
    * @return mixed Array of parameter values if matched or false if not matched
    */
-  public function Matches(array $str_parts)
+  public function Matches(array $str_parts, $extension)
   {
+	if($extension != $this->_extension)
+	{
+		return false;
+	}
+
     $max = count($this->_parts);
     if($max != count($str_parts))
     {
@@ -269,8 +295,12 @@ class Krai_Router_Route
         unset($_params[$fmk]);
       }
     }
+	if($str == "")
+	{
+		$str = "index";
+	}
 
-    return $str."/?".Krai::AssocImplode(($_forlink) ? "&amp;" : "&", "=", $_params);
+    return $str.".".$this->_extension."?".Krai::AssocImplode(($_forlink) ? "&amp;" : "&", "=", $_params);
   }
 
 }
