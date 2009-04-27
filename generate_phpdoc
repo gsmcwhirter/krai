@@ -26,6 +26,8 @@ function remove_recursive($file_or_dir)
 			}
 			remove_recursive($file_or_dir."/".$file->getFilename());
 		}
+
+		rmdir($file_or_dir);
 	}
 	else
 	{

@@ -95,6 +95,8 @@ class Krai_Cache
 
 				$this->ExpireCache($file_or_dir."/".$file->getFilename());
 			}
+
+			rmdir(Krai::$APPDIR."/".$this->_base_path."/".$file_or_dir);
 		}
 		else
 		{
