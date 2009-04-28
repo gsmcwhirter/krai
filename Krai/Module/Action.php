@@ -41,6 +41,7 @@ abstract class Krai_Module_Action extends Krai
    * action. It should be one of "GET" or "POST", as supplied by {@link Krai_Module::DoAction()}.
    *
    * @var string
+   * @deprecated
    */
   protected $_RequestMethod;
 
@@ -62,18 +63,21 @@ abstract class Krai_Module_Action extends Krai
    * other than that. Execution is managed within {@link Krai_Module::DoAction()}.
    *
    * @param Krai_Module $_parent The parent module of the action
-   * @param string $_rm The request method
+   * @param string $_rm The request method [DEPRECATED]
    * @throws Krai_Module_Exception
    */
-  public function __construct(Krai_Module &$_parent, $_rm)
+  public function __construct(Krai_Module &$_parent, $_rm = null)
   {
     $this->_parent = $_parent;
 
-    if (!in_array($_rm, array("GET","POST")))
+    /*if (!in_array($_rm, array("GET","POST")))
     {
       throw new Krai_Module_Exception("Request method ".$_rm." was not understood.", Krai_Module_Exception::UnknownRequestMethod);
     }
     $this->_RequestMethod = strtoupper($_rm);
+	*/
+	
+	$this->_RequestMethod = self::$REQUEST->RequestMethod();
 
   }
 
