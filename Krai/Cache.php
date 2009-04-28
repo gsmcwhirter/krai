@@ -83,6 +83,11 @@ class Krai_Cache
 
 	public function ExpireCache($file_or_dir)
 	{
+		if(!file_exists(Krai::$APPDIR."/".$this->_base_path."/".$file_or_dir))
+		{
+			return true;
+		}
+		
 		if(is_dir(Krai::$APPDIR."/".$this->_base_path."/".$file_or_dir))
 		{
 			$ford = new DirectoryIterator(Krai::$APPDIR."/".$this->_base_path."/".$file_or_dir);

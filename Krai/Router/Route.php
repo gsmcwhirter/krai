@@ -81,8 +81,7 @@ class Krai_Router_Route
   public function __construct(array $parts, array $forcemap, $_extension)
   {
 	$this->_extension = $_extension;
-	$this->_filename = array_pop($parts);
-	array_push($parts, $this->_filename);
+	$this->_filename = ($parts == array()) ? "index" : $parts[count($parts) -1];
 	if(preg_match("#^:([a-zA-Z_0-9]*)$#", $this->_filename))
     {
         $this->_filename = "*:".$this->_filename;
@@ -127,6 +126,9 @@ class Krai_Router_Route
    */
   public function Matches(array $str_parts, $extension)
   {
+	// for $str_parts = array(), $extension = "html"
+
+	//this should presumably be true
 	if($extension != $this->_extension)
 	{
 		return false;
@@ -295,9 +297,10 @@ class Krai_Router_Route
         unset($_params[$fmk]);
       }
     }
+
 	if($str == "")
 	{
-		$str = "index";
+		$str = "/index";
 	}
 
     return $str.".".$this->_extension."?".Krai::AssocImplode(($_forlink) ? "&amp;" : "&", "=", $_params);

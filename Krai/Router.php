@@ -179,10 +179,12 @@ final class Krai_Router
       $request2 = preg_replace(array("#^[/]*#","#[/]*$#"),
                                array("",""),
                                $request->Uri());
-      //$request = preg_replace("#\.html$#","", $request);
+      // on "/", $request2 is empty
       $rparts = (empty($request2)) ? array() : explode("/", $request2);
+	  // so $rparts = array()
       if(array_key_exists(count($rparts), $this->_routemap))
       {
+		//count($rparts) == 0, which should exist
 		if(count($rparts) > 0)
 		{
 			$fname = array_pop($rparts);
@@ -201,19 +203,22 @@ final class Krai_Router
 		}
 		else
 		{
+			//so we get here
 			$fnamereal = "index";
-			$extension = "html";
+			$extension = $this->_extension;
 		}
 
         $found = null;
-        foreach($this->_routemap[count($rparts)] as $route)
+		$count = count($rparts);
+        foreach($this->_routemap[$count] as $route)
         {
-          $t = $route->Matches($rparts, $extension);
-          if($t!==false)
-          {
-            $found = $t;
-            break;
-          }
+			// so the bug with $rparts = array() and the extension is in the Matches code
+			$t = $route->Matches($rparts, $extension);
+			if($t!==false)
+			{
+			  $found = $t;
+			  break;
+			}
         }
 
         if(is_null($found))
@@ -263,8 +268,7 @@ final class Krai_Router
   {
     if(!is_null($_module) && !empty($_action))
     {
-		$request->SetParams($params);
-      //Krai::$PARAMS = array_merge(Krai::$PARAMS, $_params);
+		$request->SetParams($_params);
 		$t = Krai::$INFLECTOR->Underscore2Camel($_module."_module");
 		$inst = new $t();
 		$inst->DoAction($_action, $request->RequestMethod());

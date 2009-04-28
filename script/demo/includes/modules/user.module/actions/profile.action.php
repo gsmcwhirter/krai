@@ -33,7 +33,7 @@ class UserModule_ProfileAction extends Krai_Module_Action
   {
     $q = self::$DB->SelectQuery(array("users as u"));
     $q->conditions = "u.username = ?";
-    $q->parameters = array(self::$PARAMS["id"]);
+    $q->parameters = array(self::$REQUEST->Param("id"));
     $q->limit = "1";
 
     $res = self::$DB->Process($q);

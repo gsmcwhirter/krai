@@ -130,6 +130,16 @@ class Krai
 	public static $REQUEST;
 
 	/**
+	 * The cache system
+	 *
+	 * This variable holds the {@link Krai_Cache} instance that the framework
+	 * will use.
+	 *
+	 * @var Krai_Cache
+	 */
+	private static $_CACHE;
+
+	/**
 	 * Flag for whether a MIME type has been set or not
 	 *
 	 * This is a flag representing whether or not a Content-Type header has been
@@ -201,7 +211,7 @@ class Krai
 	 *
 	 * @var Nakor
 	 */
-	//private static $_NAKOR_CORE;
+	private static $_NAKOR_CORE;
 
 	/**
 	 * Cleaned $_POST copy
@@ -434,6 +444,7 @@ class Krai
 
 			self::Uses(self::$FRAMEWORK."/Exception.php");
 
+
 			spl_autoload_register(array("Krai","AutoLoad"));
 			if(function_exists("__autoload"))
 			{
@@ -504,13 +515,14 @@ class Krai
 
 			if(self::GetConfig("USE_CACHE"))
 			{
-				$cconf = self::GetConfig("CONFIG_CACHE");
 				self::Uses(self::$FRAMEWORK."/Cache.php");
-				self::$CACHE = new Krai_Cache($cconf);
+
+				$cconf = self::GetConfig("CONFIG_CACHE");
+				self::$_CACHE = new Krai_Cache($cconf);
 			}
 			else
 			{
-				self::$CACHE = null;
+				self::$_CACHE = null;
 			}
 
 			if(self::GetConfig("USE_DB"))
@@ -575,6 +587,8 @@ class Krai
 			{
 				$_uri = "/";
 			}
+
+			self::Uses(self::$FRAMEWORK."/Request.php");
 
 			self::$REQUEST = new Krai_Request(self::$_NAKOR_CORE->CleanInput("GET"), self::$_NAKOR_CORE->CleanInput("POST"), $_SERVER, $_uri);
 
@@ -1036,25 +1050,25 @@ class Krai
 		{
 			return false;
 		}
-		elseif(is_null(self::$CACHE))
+		elseif(is_null(self::$_CACHE))
 		{
 			return true;
 		}
 		else
 		{
-			return self::$CACHE->CacheFile(self::$REQUEST->Uri(),$contents);
+			return self::$_CACHE->CacheFile(self::$REQUEST->Uri(),$contents);
 		}
 	}
 
 	public static function ExpireCache($file_or_dir)
 	{
-		if(is_null(self::$CACHE))
+		if(is_null(self::$_CACHE))
 		{
 			return true;
 		}
 		else
 		{
-			return self::$CACHE->ExpireCache($file_or_dir);
+			return self::$_CACHE->ExpireCache($file_or_dir);
 		}
 	}
 }

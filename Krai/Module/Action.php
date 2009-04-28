@@ -157,7 +157,7 @@ abstract class Krai_Module_Action extends Krai
    * @throws Krai_Module_Exception_Adone
    * @throws Krai_Module_Exception
    */
-  protected function Render($_file, $_templated = true, $cached = false)
+  protected function Render($_file, $_templated = true, $_cached = false)
   {
 
     if(!self::$_RENDER_STARTED)
