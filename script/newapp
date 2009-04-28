@@ -185,6 +185,7 @@ if(chdir($name))
 	if(!is_file("script/generate") || $clobber)
 	{
 		copy($fwdir."/script/generate", "script/generate");
+		chmod("script/generate", 0755);
 	}
 
 	if(is_null($chmodlog))
