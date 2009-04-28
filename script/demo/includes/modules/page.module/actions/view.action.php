@@ -30,13 +30,13 @@ class PageModule_ViewAction extends Krai_Module_Action
 
   public function Validate()
   {
-    if(!array_key_exists("pid", self::$PARAMS))
+    if(is_null(self::$REQUEST->Param("pid")))
     {
       throw new Krai_Module_Exception("Page ID was not provided.", Krai_Module_Exception::ValidationError);
     }
     else
     {
-      $this->_pid = self::$PARAMS["pid"];
+      $this->_pid = self::$REQUEST->Param("pid");
     }
   }
 

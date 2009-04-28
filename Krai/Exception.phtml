@@ -12,7 +12,7 @@
 <?php echo ($e instanceOf Krai_Exception && count($e->Errors) > 1) ? "<pre>".implode("\n\t", $e->Errors)."</pre>" : $e->getMessage() ?><br />
 <span style="font-weight: bold;">File</span>: <?php echo $e->getFile() ?><br />
 <span style="font-weight: bold;">Code</span>: <?php echo $e->getCode() ?><br />
-<span style="font-weight: bold;">Request</span>: <?php echo Krai::$REQUEST ?><br />
+<span style="font-weight: bold;">Request</span>: <?php echo Krai::$REQUEST->Uri() ?><br />
 <br />
 <a href="#krai_exception_bta" id="krai_exception_bta"
   onclick="document.getElementById('krai_exception_bt').style.display = (document.getElementById('krai_exception_bt').style.display == 'none') ? '' : 'none' ;">[backtrace]</a>

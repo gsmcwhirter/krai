@@ -2,8 +2,6 @@
 /**
  * Krai caching class
  *
- * Note: THIS IS NOT IMPLEMENTED CORRECTLY YET. DO NOT USE.
- *
  * @package Krai
  * @subpackage Cache
  * @author Greg McWhirter <gsmcwhirter@gmail.com>
@@ -18,101 +16,97 @@ Krai::Uses(
 /**
  * Caching class
  *
- * Note: THIS IS NOT IMPLEMENTED CORRECTLY YET. DO NOT USE.
- *
  * @package Krai
  * @subpackage Cache
  */
-abstract class Krai_Cache
+class Krai_Cache
 {
+	/**
+	 * The path to the cache directory, relative to the {@link Krai::$APPDIR}
+	 * @var string
+	 */
+	private $_base_path = "public";
 
-  /**
-   * Tries to get a saved cache
-   *
-   * @param string $_cachekey
-   * @throws Krai_Cache_Exception
-   * @return mixed
-   */
-  public static function GetCache($_cachekey)
-  {
-    if(!is_string($_cachekey))
-    {
-      throw new Krai_Cache_Exception("Cache key must be a string.");
-    }
+	public function __construct($cconf)
+	{
+		if(array_key_exists("DIR", $cconf))
+		{
+			$this->_base_path = $cconf["DIR"];
+		}
+	}
 
-    $cconf = Krai::GetConfig("CONFIG_CACHE");
-    if($ret = @unserialize(file_get_contents($cconf["DIR"]."/".base64_encode($_cachekey).".kvfcache")))
-    {
-      if(isset($ret["timeout"]) && isset($ret["data"]) && time() < $ret["timeout"])
-      {
-        return $ret["data"];
-      }
-      else
-      {
-        self::ExpireCache($_cachekey);
-        return null;
-      }
-    }
-    else
-    {
-      return null;
-    }
-  }
+	public function CacheFile($uri, $contents)
+	{
+		$request2 = preg_replace(array("#^[/]*#","#[/]*$#"),
+                               array("",""),
+                               $uri);
+		$rparts = (empty($request2)) ? array() : explode("/", $request2);
+		if(count($rparts) > 0)
+		{
+			$fname = array_pop($rparts);
+			$fnameparts = explode(".", $fname);
+			if(count($fnameparts) > 1)
+			{
+				$extension = array_pop($fnameparts);
+				$fnamereal = implode(".",$fnameparts);
+			}
+			else
+			{
+				$extension = $this->_extension;
+				$fnamereal = $fnameparts[0];
+			}
+		}
+		else
+		{
+			$fnamereal = "index";
+			$extension = "html";
+		}
 
-  /**
-   * Tries to save a cache
-   *
-   * @param string $_cachekey Key to cache under
-   * @param mixed $_cachevalue Value to cache
-   * @param integer $_cachetimeout Number of seconds to keep the cache
-   * @return boolean
-   */
-  public static function SaveCache($_cachekey, $_cachevalue, $_cachetimeout = null)
-  {
-    $cconf = Krai::GetConfig("CONFIG_CACHE");
+		$last_dir = Krai::$APPDIR."/".$this->_base_path;
+		foreach($rparts as $rpart)
+		{
+			if($rpart == ".." || $rpart == ".")
+			{
+				continue;
+			}
 
-    if(!is_string($_cachekey))
-    {
-      throw new Krai_Cache_Exception("Cache key must be a string.");
-    }
+			if(!is_dir($last_dir."/".$rpart))
+			{
+				mkdir($last_dir."/".$rpart);
+			}
 
-    if(is_null($_cachetimeout))
-    {
-      $_cachetimeout = $cconf["TIMEOUT"];
-    }
+			$last_dir .= "/".$rpart;
+		}
 
-    if(@file_put_contents($cconf["DIR"]."/".base64_encode($_cachekey).".kvfcache", serialize(array("timeout" => time() + $_cachetimeout, "data" => $_cachevalue))))
-    {
-      return true;
-    }
-    else
-    {
-      return false;
-    }
-  }
+		file_put_contents($last_dir."/".$fnamereal.".".$extension, $contents, LOCK_EX);
+	}
 
-  /**
-   * Tries to expire an existing cache
-   *
-   * @param string $_cachekey
-   * @return boolean
-   */
-  public static function ExpireCache($_cachekey)
-  {
-    if(!is_string($_cachekey))
-    {
-      throw new Krai_Cache_Exception("Cache key must be a string.");
-    }
+	public function ExpireCache($file_or_dir)
+	{
+		if(!file_exists(Krai::$APPDIR."/".$this->_base_path."/".$file_or_dir))
+		{
+			return true;
+		}
+		
+		if(is_dir(Krai::$APPDIR."/".$this->_base_path."/".$file_or_dir))
+		{
+			$ford = new DirectoryIterator(Krai::$APPDIR."/".$this->_base_path."/".$file_or_dir);
+			foreach($ford as $file)
+			{
+				if($file->isDot())
+				{
+					continue;
+				}
 
-    $cconf = Krai::GetConfig("CONFIG_CACHE");
-    $fn = $cconf["DIR"]."/".base64_encode($_cachekey).".kvfcache";
-    if(file_exists($fn))
-    {
-      return unlink($fn);
-    }
-    else
-    {
-      return true;
-    }
-  }
+				$this->ExpireCache($file_or_dir."/".$file->getFilename());
+			}
+
+			rmdir(Krai::$APPDIR."/".$this->_base_path."/".$file_or_dir);
+		}
+		else
+		{
+			unlink(Krai::$APPDIR."/".$this->_base_path."/".$file_or_dir);
+		}
+
+	}
 }

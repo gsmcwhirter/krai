@@ -47,24 +47,24 @@ class UserModule_ChangepassAction extends Krai_Module_Action
       //Check for required fields having content
       foreach($req_flds as $fld)
       {
-        if(!array_key_exists($fld, self::$POST) || empty(self::$POST[$fld]))
+        if(is_null(self::$REQUEST->Post($fld)) || self::$REQUEST->Post($fld) == "")
         {
           $this->_errorfields[$fld] = "cannot be empty.";
         }
       }
 
       //Check that the password and password confirm match if required
-      if(!array_key_exists("password", $this->_errorfields) && !array_key_exists("password_confirm", $this->_errorfields) && self::$POST["password"] != self::$POST["password_confirm"])
+      if(!array_key_exists("password", $this->_errorfields) && !array_key_exists("password_confirm", $this->_errorfields) && self::$REQUEST->Post("password") != self::$REQUEST->Post("password_confirm"))
       {
         $this->_errorfields["password_confirm"] = "must match the password entered.";
       }
 
-      if(!array_key_exists("oldpass", self::$POST) ||
-          ( array_key_exists("oldpass", self::$POST) &&
+      if(is_null(self::$REQUEST->Post("oldpass")) ||
+          (
             (
-             ($this->_parent->USER->password == "" && self::$POST["oldpass"] != "")
+             ($this->_parent->USER->password == "" && self::$REQUEST->Post("oldpass") != "")
              ||
-             ($this->_parent->USER->password != "" && $this->_parent->HashPass(self::$POST["oldpass"]) != $this->_parent->USER->password)
+             ($this->_parent->USER->password != "" && $this->_parent->HashPass(self::$REQUEST->Post["oldpass"]) != $this->_parent->USER->password)
             )
           )
         )
@@ -88,7 +88,7 @@ class UserModule_ChangepassAction extends Krai_Module_Action
       $q->conditions = "user_id = ?";
       $q->parameters = array($this->_parent->USER->user_id);
       $q->fields = array(
-        "password" => $this->_parent->HashPass(self::$POST["password"])
+        "password" => $this->_parent->HashPass(self::$REQUEST->Post("password"))
       );
 
       $res = self::$DB->Process($q);

@@ -162,7 +162,7 @@ abstract class Krai_Module extends Krai
    */
   public function RedirectSilent($module, $action, array $params = array())
   {
-    self::$ROUTER->ExecuteRoute($module, $action, $params);
+    self::InternalRedirect($module,$action,$params);
 
     throw new Krai_Module_Exception_Adone(Krai_Module_Exception_Adone::Redirected);
   }

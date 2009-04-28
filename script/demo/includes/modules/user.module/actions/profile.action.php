@@ -23,7 +23,7 @@ class UserModule_ProfileAction extends Krai_Module_Action
 
   public function Validate()
   {
-    if(!array_key_exists("id", self::$PARAMS) || empty(self::$PARAMS["id"]))
+    if(is_null(self::$REQUEST->Param("id")) || self::$REQUEST->Param("id") == "")
     {
       throw new Krai_Module_Exception("Username was not provided.", Krai_Module_Exception::ValidationError);
     }
@@ -33,7 +33,7 @@ class UserModule_ProfileAction extends Krai_Module_Action
   {
     $q = self::$DB->SelectQuery(array("users as u"));
     $q->conditions = "u.username = ?";
-    $q->parameters = array(self::$PARAMS["id"]);
+    $q->parameters = array(self::$REQUEST->Param("id"));
     $q->limit = "1";
 
     $res = self::$DB->Process($q);

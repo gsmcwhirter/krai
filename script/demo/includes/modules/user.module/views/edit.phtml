@@ -28,7 +28,7 @@
           <?php } ?>
           <tr>
             <td class="label"><label for="displayname">Display name<span style="color: #800000;">*</span></label></td>
-            <td class="field"><input type="text" name="displayname" id="displayname" class="txtbox" value="<?php echo array_key_exists("displayname",self::$POST) ? self::$POST["displayname"] : $this->_parent->USER->displayname ?>" /></td>
+            <td class="field"><input type="text" name="displayname" id="displayname" class="txtbox" value="<?php echo !is_null(self::$REQUEST->Post("displayname")) ? self::$REQUEST->Post("displayname") : $this->_parent->USER->displayname ?>" /></td>
           </tr>
           <?php if(array_key_exists("email", $this->_errorfields))
           { ?>
@@ -38,7 +38,7 @@
           <?php } ?>
           <tr>
             <td class="label"><label for="email">E-mail<span style="color: #800000;">*</span></label></td>
-            <td class="field"><input type="text" name="email" id="email" class="txtbox" value="<?php echo array_key_exists("email",self::$POST) ? self::$POST["email"] : $this->_parent->USER->email ?>" /></td>
+            <td class="field"><input type="text" name="email" id="email" class="txtbox" value="<?php echo !is_null(self::$REQUEST->Post("email")) ? self::$REQUEST->Post("email") : $this->_parent->USER->email ?>" /></td>
           </tr>
           <?php if($this->_parent->USER->new_email != ""){ ?>
           <tr>
@@ -59,8 +59,8 @@
             <td class="label"><label for="directory_list">User Directory<span style="color: #800000;">*</span></label></td>
             <td class="field">
               <select name="directory_list" id="directory_list" class="selectbox single">
-                <option value="yes" <?php echo (array_key_exists("directory_list", self::$POST) && in_array(self::$POST["directory_list"], array("yes","no"))) ? ((self::$POST["directory_list"] == "yes") ? "selected='selected'" : "") : (($this->_parent->USER->directory_list == "yes") ? "selected='selected'" : "") ?>>Please List Me</option>
-                <option value="no" <?php echo (array_key_exists("directory_list", self::$POST) && in_array(self::$POST["directory_list"], array("yes","no"))) ? ((self::$POST["directory_list"] == "no") ? "selected='selected'" : "") : (($this->_parent->USER->directory_list == "no") ? "selected='selected'" : "") ?>>Don't List Me</option>
+                <option value="yes" <?php echo (!is_null(self::$REQUEST->Post("directory_list")) && in_array(self::$REQUEST->Post("directory_list"), array("yes","no"))) ? ((self::$REQUEST->Post("directory_list") == "yes") ? "selected='selected'" : "") : (($this->_parent->USER->directory_list == "yes") ? "selected='selected'" : "") ?>>Please List Me</option>
+                <option value="no" <?php echo (!is_null(self::$REQUEST->Post("directory_list")) && in_array(self::$REQUEST->Post("directory_list"), array("yes","no"))) ? ((self::$REQUEST->Post("directory_list") == "no") ? "selected='selected'" : "") : (($this->_parent->USER->directory_list == "no") ? "selected='selected'" : "") ?>>Don't List Me</option>
               </select>
             </td>
           </tr>
@@ -74,8 +74,8 @@
             <td class="label"><label for="directory_list">E-Mail Display<span style="color: #800000;">*</span></label></td>
             <td class="field">
               <select name="display_email" id="display_email" class="selectbox single">
-                <option value="yes" <?php echo (array_key_exists("display_email", self::$POST) && in_array(self::$POST["display_email"], array("yes","no"))) ? ((self::$POST["display_email"] == "yes") ? "selected='selected'" : "") : (($this->_parent->USER->display_email == "yes") ? "selected='selected'" : "") ?>>Display my e-mail</option>
-                <option value="no" <?php echo (array_key_exists("display_email", self::$POST) && in_array(self::$POST["display_email"], array("yes","no"))) ? ((self::$POST["display_email"] == "no") ? "selected='selected'" : "") : (($this->_parent->USER->display_email == "no") ? "selected='selected'" : "") ?>>Hide my e-mail</option>
+                <option value="yes" <?php echo (!is_null(self::$REQUEST->Post("display_email")) && in_array(self::$REQUEST->Post("display_email"), array("yes","no"))) ? ((self::$REQUEST->Post("display_email") == "yes") ? "selected='selected'" : "") : (($this->_parent->USER->display_email == "yes") ? "selected='selected'" : "") ?>>Display my e-mail</option>
+                <option value="no" <?php echo (~is_null(self::$REQUEST->Post("display_email")) && in_array(self::$REQUEST->Post("display_email"), array("yes","no"))) ? ((self::$REQUEST->Post("display_email") == "no") ? "selected='selected'" : "") : (($this->_parent->USER->display_email == "no") ? "selected='selected'" : "") ?>>Hide my e-mail</option>
               </select>
             </td>
           </tr>

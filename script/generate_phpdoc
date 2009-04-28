@@ -1,0 +1,60 @@
+#!/usr/bin/env php
+<?php
+function gendoc($_conf, $_ver)
+{
+	if(is_null($_ver))
+	{
+		$_ver = 'edge';
+	}
+
+	$dir = dirname(__FILE__);
+
+	system('phpdoc -c '.$dir."/phpdoc_".$_conf.".ini");
+	rename("doc", "krai-doc-".$_ver);
+	system('tar czf krai-doc-'.$_ver.'.tar.gz krai-doc-'.$_ver.'/');
+	remove_recursive("krai-doc-".$_ver);
+}
+
+function remove_recursive($file_or_dir)
+{
+	if(is_dir($file_or_dir))
+	{
+		$ford = new DirectoryIterator($file_or_dir);
+		foreach($ford as $file)
+		{
+			if($file->isDot())
+			{
+				continue;
+			}
+			remove_recursive($file_or_dir."/".$file->getFilename());
+		}
+
+		rmdir($file_or_dir);
+	}
+	else
+	{
+		unlink($file_or_dir);
+	}
+}
+
+if(!array_key_exists(2, $argv) || is_null($argv[2]))
+{
+	echo "Missing configuration parameter. Using default.\n";
+	$conf = "archive";
+}
+else
+{
+	$conf = $argv[2];
+}
+
+if(!array_key_exists(1, $argv) || is_null($argv[1]))
+{
+	echo "Missing version parameter. Using default.\n";
+	$ver = 'edge';
+}
+else
+{
+	$ver = $argv[1];
+}
+
+gendoc($conf, $ver);

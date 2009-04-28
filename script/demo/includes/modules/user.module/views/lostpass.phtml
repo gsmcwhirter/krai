@@ -20,7 +20,7 @@
           <?php } ?>
           <tr>
             <td class="label"><label for="username">Username<span style="color: #800000;">*</span></label></td>
-            <td class="field"><input type="text" name="username" id="username" class="txtbox" value="<?php echo array_key_exists("username", self::$POST) ? self::$POST["username"] : "" ?>" /></td>
+            <td class="field"><input type="text" name="username" id="username" class="txtbox" value="<?php echo !is_null(self::$REQUEST->Post("username")) ? self::$REQUEST->Post("username") : "" ?>" /></td>
           </tr>
           <tr>
             <td colspan="2" class="action"><input type="submit" value="reset password" class="submit" /></td>

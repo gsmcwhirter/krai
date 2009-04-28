@@ -1,0 +1,212 @@
+#!/usr/bin/env php
+<?php
+
+function help()
+{
+  echo "Krai Framework application skeleton generator.\n";
+  echo "Usage: newapp.sh [-l] [-w] [-p] [-u] -d application_root -n application_name\n";
+  echo "    -l  Chmod log files a+w\n";
+  echo "    -w  Use the demo application code instead of the skeleton\n";
+  echo "    -p  Use a pear-style package of the framework (copy only application and skeleton)\n";
+  echo "    -d  The path of the directory in which the application directory will live\n";
+  echo "    -n  The name of the directory in which the application will live\n";
+  echo "    -u  Clobber existing files\n";
+}
+
+function change_basedir($_basedir)
+{
+	if (is_null($_basedir))
+	{
+	  echo "Error: Missing basedir value.\n";
+	  help();
+	  exit(0);
+	}
+
+	if (chdir($_basedir))
+	{
+		echo "Using application basedir: ".getcwd()."\n";
+	}
+	else
+	{
+		echo "Error: Failed to change to application basedir: $_basedir\n";
+		help();
+		exit(0);
+	}
+}
+
+function copy_recursive($clobber, $source, $target)
+{
+	if(preg_match("#/\*$#", $source))
+	{
+		$source = substr($source,0, -2);
+		$selffirst = false;
+	}
+	else
+	{
+		$selffirst = true;
+	}
+
+	if($selffirst)
+	{
+		if(is_dir($source) && !is_dir($target))
+		{
+			mkdir($target);
+		}
+	}
+
+	$dir = new DirectoryIterator($source);
+	foreach($dir as $file)
+	{
+		if($file->isDot())
+		{
+			continue;
+		}
+
+		if($file->isFile())
+		{
+			if(!file_exists($target."/".$file->getFilename()) || $clobber)
+			{
+				copy($file->getPathname(), $target."/".$file->getFilename());
+			}
+		}
+
+		if($file->isDir())
+		{
+			copy_recursive($clobber, $file->getPathname(), $target."/".$file->getFilename());
+		}
+
+		if($file->isLink())
+		{
+			//ignore for now
+		}
+	}
+
+}
+
+$name;
+$basedir;
+$chmodlog;
+$usedemo;
+$usepear;
+$clobber;
+
+$opts = $argv;
+array_shift($opts);
+while($option = array_shift($opts))
+{
+	switch($option)
+	{
+		case "-n": $name = array_shift($opts); break;
+		case "-d": $basedir = array_shift($opts); break;
+		case "-l": $chmodlog = true; break;
+		case "-w": $usedemo = true; break;
+		case "-p": $usepear = true; break;
+		case "-u": $clobber = true; break;
+		case "-h":
+		case "-?":
+		default: help(); exit(0);
+	}
+}
+
+if(is_null($basedir))
+{
+  $basedir = getcwd();
+  echo "Warning: No application root specified. Using current working directory: $basedir\n";
+}
+
+if(is_null($name))
+{
+  echo "Error: Application name is required.\n";
+  help();
+  exit(0);
+}
+
+$scrname = __FILE__;
+echo "Script name: ".$scrname."\n";
+//$scrdir = readlink($scrname); //`readlink -fv $argv[0]`
+//echo "Script directory is: $scrdir\n";
+$fwdir = dirname($scrname)."/.."; //`dirname $scrdir`/..
+echo "Framework directory is: $fwdir\n";
+
+change_basedir($basedir);
+
+if(is_file($name) || (is_link($name) && !is_dir(readlink($name))))
+{
+	echo "Error: Application directory exists as a regular file already.\n";
+	help();
+	exit(0);
+}
+elseif(is_dir($name) || (is_link($name) && is_dir(readlink($name))))
+{
+	echo "Warning: Application directory already exists.\n";
+}
+else
+{
+	mkdir($name);
+}
+
+
+if(chdir($name))
+{
+	echo "Changing to application directory.\n";
+	if(is_null($usepear))
+	{
+		echo "Copying framework files.\n";
+		copy_recursive($clobber, $fwdir."/Krai", getcwd()."/Krai");
+		copy($fwdir."/Krai.php", getcwd()."/Krai.php");
+	}
+	else
+	{
+		echo "Ignoring framework files.\n";
+	}
+
+	if(is_null($usedemo))
+	{
+		echo "Copying application skeleton files.\n";
+		copy_recursive($clobber, $fwdir."/script/defaults/*", getcwd());
+	}
+	else
+	{
+		echo "Copying demo application files.\n";
+		copy_recursive($clobber, $fwdir."/script/demo/*", getcwd());
+	}
+
+	if(is_dir("script"))
+	{
+		echo "Warning: script directory already exists.\n";
+	}
+	else
+	{
+		mkdir("script");
+	}
+
+
+	echo "Copying component generator to script directory.\n";
+	if(!is_file("script/generate") || $clobber)
+	{
+		copy($fwdir."/script/generate", "script/generate");
+	}
+
+	if(is_null($chmodlog))
+	{
+		echo "Not chmodding the log files.\n";
+	}
+	else
+	{
+		echo "Chmodding the log files.\n";
+		$logs = new DirectoryIterator("log");
+		foreach($logs as $log)
+		{
+			if(!$log->isDot() && $log->isFile() && preg_match("#\.log$#", $log->getFilename))
+			{
+				chmod($log->getFilename(), 0666);
+			}
+		}
+	}
+}
+else
+{
+  echo "Error: Unable to change to application directory.\n";
+  help();
+  exit(0);
+}

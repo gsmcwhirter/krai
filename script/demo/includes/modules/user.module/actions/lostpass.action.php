@@ -40,7 +40,7 @@ class UserModule_LostpassAction extends Krai_Module_Action
       //Check for required fields having content
       foreach($req_flds as $fld)
       {
-        if(!array_key_exists($fld, self::$POST) || empty(self::$POST[$fld]))
+        if(is_null(self::$REQUEST->Post($fld)) || self::$REQUEST->Post($fld) == "")
         {
           $this->_errorfields[$fld] = "cannot be empty.";
         }
@@ -67,7 +67,7 @@ class UserModule_LostpassAction extends Krai_Module_Action
 
       $q = self::$DB->SelectQuery(array("users"));
       $q->conditions = "username = ?";
-      $q->parameters = array(self::$POST["username"]);
+      $q->parameters = array(self::$REQUEST->Post("username"));
       $q->fields = array("user_id","email");
       $q->limit = "1";
 
