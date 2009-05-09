@@ -303,7 +303,8 @@ class Krai_Router_Route
 		$str = "/index";
 	}
 
-    return $str.".".$this->_extension."?".Krai::AssocImplode(($_forlink) ? "&amp;" : "&", "=", $_params);
+	$qs = Krai::AssocImplode(($_forlink) ? "&amp;" : "&", "=", $_params);
+    return $str.".".$this->_extension.($qs != "" ? "?".$qs : "");
   }
 
 }

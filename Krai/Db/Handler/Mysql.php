@@ -91,17 +91,17 @@ class Krai_Db_Handler_Mysql extends Krai_Db_Handler
         else
         {
           $count = 0;
-          foreach($query->fields as $k => $flds)
+		  foreach(array_keys($query->fields[0]) as $fk)
           {
-            foreach(array_keys($flds[0]) as $fk)
-            {
               $ks[] = $fk;
               $vs[] = "?";
-            }
+          }
 
-            foreach($flds as $fk => $fv)
+          foreach($query->fields as $flds)
+          {
+			$count += 1;
+            foreach($flds as $fv)
             {
-              $count += 1;
               $vals[] = $fv;
             }
           }
