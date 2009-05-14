@@ -66,7 +66,7 @@ class Krai_Request
 	 * Holds an input scrubbing instance
 	 * @var Nakor
 	 */
-	private static $_NAKOR;
+	protected static $_NAKOR;
 
 	/**
 	 * Whether the input scrubber has been initialized or not.
@@ -109,7 +109,7 @@ class Krai_Request
 
 	public function Clean($value)
 	{
-		self::$_NAKOR->CleanInput($value);
+		return self::$_NAKOR->CleanInput($value);
 	}
 
 	/**
@@ -207,6 +207,7 @@ class Krai_Request
 	public function Param($name)
 	{
 		return $this->Clean($this->ParamRaw($name));
+		//return $this->ParamRaw($name);
 	}
 
 	/**

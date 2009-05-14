@@ -88,6 +88,8 @@ class Nakor
 
 	public function CleanInput($input)
 	{
+		$this->get_magic_quotes = get_magic_quotes_gpc();
+
 		if(is_array($input))
 		{
 			return $this->CleanArrayRec($input);
