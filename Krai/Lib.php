@@ -16,6 +16,6 @@
 
 Krai::Uses(
   Krai::$FRAMEWORK."/Lib/Inflector.php",
-  Krai::$FRAMEWORK."/Lib/Nakor.php",
+//  Krai::$FRAMEWORK."/Lib/Nakor.php",
   Krai::$FRAMEWORK."/Lib/Spyc.php"
 );

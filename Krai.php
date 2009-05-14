@@ -211,38 +211,7 @@ class Krai
 	 *
 	 * @var Nakor
 	 */
-	private static $_NAKOR_CORE;
-
-	/**
-	 * Cleaned $_POST copy
-	 *
-	 * This is a copy of the $_POST data having been run through the input
-	 * scrubber.
-	 *
-	 * @var array
-	 */
-	//public static $POST = array();
-
-	/**
-	 * Cleaned $_GET copy
-	 *
-	 * This is a copy of the $_GET data having been run through the input
-	 * scrubber.
-	 *
-	 * @var array
-	 */
-	//public static $GET = array();
-
-	/**
-	 * Holds a merger of self::$GET, self::$POST, and some things the router finds
-	 *
-	 * This is a merger of {@link Krai::$GET}, {@link Krai::$POST}, and
-	 * some other values as may be determined by {@link Krai_Router} in routing a
-	 * request.
-	 *
-	 * @var array
-	 */
-	//public static $PARAMS = array();
+	//private static $_NAKOR_CORE;
 
 	/**
 	 * Holds the database connections
@@ -576,7 +545,7 @@ class Krai
 				self::$INFLECTOR = new Krai_Lib_Inflector();
 			}
 
-			self::$_NAKOR_CORE = new Nakor();
+			//self::$_NAKOR_CORE = new Nakor();
 
 			if(is_null($_uri))
 			{
@@ -590,7 +559,9 @@ class Krai
 
 			self::Uses(self::$FRAMEWORK."/Request.php");
 
-			self::$REQUEST = new Krai_Request(self::$_NAKOR_CORE->CleanInput("GET"), self::$_NAKOR_CORE->CleanInput("POST"), $_SERVER, $_uri);
+			Krai_Request::Init();
+			self::$REQUEST = new Krai_Request($_GET, $_POST, $_SERVER, $_uri);
+			//self::$REQUEST = new Krai_Request(self::$_NAKOR_CORE->CleanInput("GET"), self::$_NAKOR_CORE->CleanInput("POST"), $_SERVER, $_uri);
 
 			try
 			{

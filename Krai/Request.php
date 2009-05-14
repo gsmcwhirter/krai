@@ -12,7 +12,8 @@
  */
 
 Krai::Uses(
-  Krai::$FRAMEWORK."/Request/Exception.php"
+  Krai::$FRAMEWORK."/Request/Exception.php",
+  Krai::$FRAMEWORK."/Lib/Nakor.php"
 );
 
 /**
@@ -62,6 +63,34 @@ class Krai_Request
 	private $_server;
 
 	/**
+	 * Holds an input scrubbing instance
+	 * @var Nakor
+	 */
+	private static $_NAKOR;
+
+	/**
+	 * Whether the input scrubber has been initialized or not.
+	 * @var boolean
+	 */
+	private static $_INIT = false;
+
+	/**
+	 * Initializes the input scrubber mechanism.
+	 *
+	 */
+	public static function Init()
+	{
+		if(self::$_INIT)
+		{
+			throw new Krai_Request_Exception("Krai_Request has already been initialized.");
+		}
+
+		self::$_INIT = true;
+
+		self::$_NAKOR = new Nakor();
+	}
+
+	/**
 	 * The constuctor
 	 * @param array $_get The $_GET contents
 	 * @param array $_post The $_POST contents
@@ -76,6 +105,11 @@ class Krai_Request
 		$this->_post = $_post;
 		$this->_server = $_server;
 		$this->_uri = $_uri;
+	}
+
+	public function Clean($value)
+	{
+		self::$_NAKOR->CleanInput($value);
 	}
 
 	/**
@@ -101,6 +135,16 @@ class Krai_Request
 	 */
 	public function Get($name)
 	{
+		return $this->Clean($this->GetRaw($name));
+	}
+
+	/**
+	 * Retrieves a value from the $_GET variables
+	 * @param string $name The name of the variable key to retrieve
+	 * @return mixed The variable value
+	 */
+	public function GetRaw($name)
+	{
 		if (array_key_exists($name, $this->_get))
 		{
 			return $this->_get[$name];
@@ -117,6 +161,16 @@ class Krai_Request
 	 * @return mixed The variable value
 	 */
 	public function Post($name)
+	{
+		return $this->Clean($this->PostRaw($name));
+	}
+
+	/**
+	 * Retrieves a value from the $_POST variables
+	 * @param string $name The name of the variable key to retrieve
+	 * @return mixed The variable value
+	 */
+	public function PostRaw($name)
 	{
 		if (array_key_exists($name, $this->_post))
 		{
@@ -151,6 +205,16 @@ class Krai_Request
 	 * @return mixed The variable value
 	 */
 	public function Param($name)
+	{
+		return $this->Clean($this->ParamRaw($name));
+	}
+
+	/**
+	 * Retrieves a value from the other variables
+	 * @param string $name The name of the variable key to retrieve
+	 * @return mixed The variable value
+	 */
+	public function ParamRaw($name)
 	{
 		if (!$this->_params_set)
 		{
@@ -196,5 +260,3 @@ class Krai_Request
 	}
 
 }
-
-?>

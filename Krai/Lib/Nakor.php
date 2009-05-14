@@ -56,7 +56,7 @@ class Nakor
     * @param string $type One of "GET" or "POST" representing which array to clean.
     * @return array A sanitized copy of the array
     */
-    public function CleanInput($type)
+    public function CleanInputAuto($type)
     {
         $this->get_magic_quotes = get_magic_quotes_gpc();
         $return = array();
@@ -85,6 +85,18 @@ class Nakor
 
       return $return;
     }
+
+	public function CleanInput($input)
+	{
+		if(is_array($input))
+		{
+			return $this->CleanArrayRec($input);
+		}
+		else
+		{
+			return $this->CleanValue($input);
+		}
+	}
 
     /**
      * Recursively clean an array
@@ -138,7 +150,7 @@ class Nakor
      * @param    string $val The value to clean
      * @return    string The cleaned value
      */
-    public function CleanValue($val)
+    private function CleanValue($val)
     {
         if ($val == "")
         {
@@ -178,7 +190,7 @@ class Nakor
      * @param string $val The value to un-sanitize
      * @return string The unsanitized value
      */
-    public function UncleanValue($val){
+    private function UncleanValue($val){
       if ($val == "")
         {
             return "";
